@@ -1,0 +1,9 @@
+Bank card test
+Visa: 4242 4242 4242 4242
+MM/YY: 12/24
+CVV: 123
+mastercard: 5555 5555 5555 4444
+MM/YY: 12/24
+CVV: 123
+MoMo test: Momo UTA
+amount test: 2000

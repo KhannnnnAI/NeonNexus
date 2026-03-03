@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Debug Steam Session</title>
+  </head>
+  <body>
+    <h1>Steam Session Debug</h1>
+    <button onclick="checkSession()">Check LocalStorage</button>
+    <button onclick="clearSession()">Clear Session</button>
+    <pre id="output"></pre>
+
+    <script>
+      function checkSession() {
+        const output = document.getElementById("output");
+        const steamUser = localStorage.getItem("steam_user");
+
+        output.textContent = `Steam User in localStorage:\n${steamUser ? JSON.stringify(JSON.parse(steamUser), null, 2) : "NOT FOUND"}`;
+      }
+
+      function clearSession() {
+        localStorage.removeItem("steam_user");
+        alert("Session cleared!");
+        checkSession();
+      }
+
+      // Auto-check on load
+      checkSession();
+    </script>
+  </body>
+</html>

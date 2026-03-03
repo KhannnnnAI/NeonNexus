@@ -1,0 +1,287 @@
+/* ===================================
+   CHECKOUT MODAL - LIGHT MODE OVERRIDES
+   =================================== */
+
+[data-theme="light"] .checkout-modal-container {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-color: #0891b2;
+  box-shadow: 0 0 40px rgba(8, 145, 178, 0.3), 0 0 80px rgba(8, 145, 178, 0.15);
+}
+
+[data-theme="light"] .checkout-header {
+  border-bottom-color: rgba(8, 145, 178, 0.3);
+  background: linear-gradient(90deg, rgba(8, 145, 178, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+}
+
+[data-theme="light"] .checkout-title {
+  color: #0891b2;
+  text-shadow: 0 0 20px rgba(8, 145, 178, 0.4);
+}
+
+[data-theme="light"] .checkout-close-btn {
+  border-color: #0891b2;
+  color: #0891b2;
+}
+
+[data-theme="light"] .checkout-close-btn:hover {
+  background: #0891b2;
+  color: white;
+  box-shadow: 0 0 20px rgba(8, 145, 178, 0.5);
+}
+
+/* Step Indicator */
+[data-theme="light"] .step-circle {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+[data-theme="light"] .checkout-step.completed .step-circle {
+  border-color: #0891b2;
+  background: rgba(8, 145, 178, 0.15);
+  color: #0891b2;
+  box-shadow: 0 0 15px rgba(8, 145, 178, 0.3);
+}
+
+[data-theme="light"] .checkout-step.active .step-circle {
+  border-color: #0891b2;
+  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+  color: white;
+  box-shadow: 0 0 25px rgba(8, 145, 178, 0.6);
+}
+
+[data-theme="light"] .step-label {
+  color: #64748b;
+}
+
+[data-theme="light"] .checkout-step.active .step-label,
+[data-theme="light"] .checkout-step.completed .step-label {
+  color: #0891b2;
+}
+
+[data-theme="light"] .step-connector {
+  background: #cbd5e1;
+}
+
+[data-theme="light"] .step-connector.completed {
+  background: linear-gradient(90deg, #0891b2 0%, #06b6d4 100%);
+  box-shadow: 0 0 10px rgba(8, 145, 178, 0.3);
+}
+
+/* Payment Method Cards */
+[data-theme="light"] .payment-method-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .payment-method-card:hover {
+  border-color: #0891b2;
+  box-shadow: 0 0 25px rgba(8, 145, 178, 0.2);
+}
+
+[data-theme="light"] .payment-icon {
+  color: #0891b2;
+}
+
+[data-theme="light"] .payment-name {
+  color: #0891b2;
+}
+
+[data-theme="light"] .payment-desc {
+  color: #64748b;
+}
+
+/* Checkout Total */
+[data-theme="light"] .checkout-total {
+  background: linear-gradient(90deg, rgba(8, 145, 178, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+  border-color: #0891b2;
+}
+
+[data-theme="light"] .total-label,
+[data-theme="light"] .total-amount {
+  color: #0891b2;
+  text-shadow: 0 0 20px rgba(8, 145, 178, 0.4);
+}
+
+/* Method Badge */
+[data-theme="light"] .method-badge {
+  background: linear-gradient(90deg, #0891b2 0%, #06b6d4 100%);
+  color: white;
+}
+
+[data-theme="light"] .method-badge.vietqr-badge {
+  background: linear-gradient(90deg, #dc2626 0%, #b91c1c 100%);
+}
+
+[data-theme="light"] .method-badge.momo-badge {
+  background: linear-gradient(90deg, #ec4899 0%, #db2777 100%);
+}
+
+[data-theme="light"] .method-badge.zalopay-badge {
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+}
+
+/* Form Elements */
+[data-theme="light"] .input-with-icon input {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+[data-theme="light"] .input-with-icon input:focus {
+  border-color: #0891b2;
+  box-shadow: 0 0 20px rgba(8, 145, 178, 0.2);
+}
+
+[data-theme="light"] .input-with-icon svg {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .input-with-icon input:focus ~ svg {
+  color: #0891b2;
+}
+
+/* Security Note */
+[data-theme="light"] .security-note {
+  color: #475569;
+  background: rgba(8, 145, 178, 0.05);
+  border-left-color: #0891b2;
+}
+
+[data-theme="light"] .security-note svg {
+  color: #0891b2;
+}
+
+/* Payment Info Box */
+[data-theme="light"] .payment-info-box,
+[data-theme="light"] .transaction-details {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-color: #cbd5e1;
+}
+
+[data-theme="light"] .payment-info-box h4 {
+  color: #0891b2;
+}
+
+[data-theme="light"] .info-row {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .info-row.highlight {
+  background: rgba(8, 145, 178, 0.05);
+}
+
+[data-theme="light"] .info-label,
+[data-theme="light"] .detail-label {
+  color: #64748b;
+}
+
+[data-theme="light"] .info-value {
+  color: #1e293b;
+}
+
+[data-theme="light"] .info-row.highlight .info-value,
+[data-theme="light"] .detail-value {
+  color: #0891b2;
+}
+
+/* Instructions Box */
+[data-theme="light"] .instructions-box {
+  background: rgba(8, 145, 178, 0.05);
+  border-left-color: #0891b2;
+}
+
+[data-theme="light"] .instruction-item {
+  color: #1e293b;
+}
+
+[data-theme="light"] .instruction-item svg {
+  color: #0891b2;
+}
+
+[data-theme="light"] .momo-instructions,
+[data-theme="light"] .zalopay-instructions {
+  background: rgba(236, 72, 153, 0.05);
+  border-left-color: #ec4899;
+}
+
+[data-theme="light"] .zalopay-instructions {
+  background: rgba(59, 130, 246, 0.05);
+  border-left-color: #3b82f6;
+}
+
+[data-theme="light"] .momo-instructions h4,
+[data-theme="light"] .zalopay-instructions h4,
+[data-theme="light"] .momo-instructions ol,
+[data-theme="light"] .zalopay-instructions ol,
+[data-theme="light"] .momo-instructions li,
+[data-theme="light"] .zalopay-instructions li {
+  color: #1e293b;
+}
+
+/* QR Code */
+[data-theme="light"] .qr-code-box {
+  border-color: #0891b2;
+  box-shadow: 0 0 30px rgba(8, 145, 178, 0.3);
+}
+
+[data-theme="light"] .qr-instruction {
+  color: #64748b;
+}
+
+/* Security Badge */
+[data-theme="light"] .security-badge {
+  background: rgba(8, 145, 178, 0.05);
+  border-color: #0891b2;
+  color: #0891b2;
+}
+
+[data-theme="light"] .momo-security {
+  background: rgba(236, 72, 153, 0.05);
+  border-color: #ec4899;
+  color: #ec4899;
+}
+
+[data-theme="light"] .zalopay-security {
+  background: rgba(59, 130, 246, 0.05);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+/* Footer */
+[data-theme="light"] .checkout-footer {
+  border-top-color: rgba(8, 145, 178, 0.3);
+  background: linear-gradient(90deg, rgba(8, 145, 178, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+}
+
+[data-theme="light"] .checkout-btn-secondary {
+  background: transparent;
+  border-color: #0891b2;
+  color: #0891b2;
+}
+
+[data-theme="light"] .checkout-btn-secondary:hover {
+  background: rgba(8, 145, 178, 0.1);
+}
+
+[data-theme="light"] .checkout-btn-primary {
+  background: linear-gradient(90deg, #0891b2 0%, #06b6d4 100%);
+  color: white;
+  box-shadow: 0 0 20px rgba(8, 145, 178, 0.4);
+}
+
+[data-theme="light"] .checkout-btn-primary:hover {
+  box-shadow: 0 0 30px rgba(8, 145, 178, 0.6);
+}
+
+/* Summary */
+[data-theme="light"] .form-summary {
+  background: rgba(8, 145, 178, 0.05);
+  border-top-color: #cbd5e1;
+  color: #64748b;
+}
+
+[data-theme="light"] .summary-label,
+[data-theme="light"] .summary-amount {
+  color: #0891b2;
+}

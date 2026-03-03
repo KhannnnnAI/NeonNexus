@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta name="description" content="NeonNexus - Steam Game Store - Kho game bản quyền giá tốt">
+  <title>Steam Store - Premium Game Keys</title>
+  <link rel="stylesheet" href="css/index.css?v=4">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <div id="app" class="min-h-screen bg-dark text-gray-100 overflow-x-hidden relative">
+    
+    <!-- Tech Background -->
+    <div class="tech-bg"></div>
+    <div class="tech-gradient"></div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-content">
+        <!-- Logo -->
+        <div id="logo-btn" class="logo">
+        <div class="logo-icon-wrapper">
+            <div class="logo-glow"></div>
+            <i data-lucide="zap" class="logo-icon"></i>
+          </div>
+          <div class="logo-text-wrapper">
+            <span class="logo-text">NEON<span class="logo-accent">NEXUS</span></span>
+            <span class="logo-subtitle">INFINITE STORE :: STEAM DEALS</span>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-wrapper">
+          <div class="search-glow"></div>
+          <div class="search-container">
+            <i data-lucide="search" class="search-icon"></i>
+            <input 
+              type="text"
+              id="search-input"
+              placeholder="SEARCH FOR YOUR FAVORITE GAME..."
+              class="search-input"
+            />
+          </div>
+        </div>
+
+        <!-- NeonNexus Logo Link -->
+        <a href="https://store.steampowered.com/account/redeemwalletcode" target="_blank" class="header-logo-link" title="Redeem Steam Wallet Code">
+          <img src="Image/steam-redeem-logo.svg" alt="NeonNexus" class="header-logo-image">
+        </a>
+
+        <!-- Currency Selector -->
+        <div class="header-actions">
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <i data-lucide="sun" class="theme-icon" id="theme-icon"></i>
+          </button>
+          
+          <!-- Currency fixed to VND -->
+
+          <!-- Login Button / User Profile -->
+          <div class="user-section">
+            <button id="login-btn" class="login-btn">
+              <i data-lucide="user" class="login-icon"></i>
+              <span class="login-text">LOGIN</span>
+            </button>
+            
+            <!-- User Dropdown (Hidden by default) -->
+            <div id="user-dropdown" class="user-dropdown" style="display: none;">
+              <div class="user-dropdown-header">
+                <img id="user-dropdown-avatar" src="" alt="Avatar" class="user-dropdown-avatar">
+                <div class="user-dropdown-info">
+                  <span id="user-dropdown-name" class="user-dropdown-name">User</span>
+                  <span class="user-dropdown-status">● ONLINE</span>
+                </div>
+              </div>
+              <div class="user-dropdown-divider"></div>
+            <a href="html/account.html" class="user-dropdown-item" style="text-decoration: none; color: inherit;">
+              <i data-lucide="key" class="user-dropdown-icon"></i>
+              <span>My Keys</span>
+            </a>
+            <button id="logout-btn" class="user-dropdown-item">
+              <i data-lucide="log-out" class="user-dropdown-icon"></i>
+              <span>Logout</span>
+            </button>
+            </div>
+          </div>
+
+        <!-- Cart Button -->
+        <button id="cart-btn" class="cart-button">
+          <i data-lucide="shopping-cart" class="cart-icon"></i>
+          <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container main-content">
+      
+      <!-- Hero Banner -->
+      <div class="hero-banner">
+        <img 
+          src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1600" 
+          alt="Hero" 
+          class="hero-image"
+        />
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-content">
+          <div class="hero-badge">
+            <i data-lucide="activity" class="hero-badge-icon"></i>
+            <span>LIVE DEALS</span>
+          </div>
+          <div class="hero-line"></div>
+          
+          <h2 class="hero-title">
+            SĂN SALE <span class="hero-title-accent">VÔ TẬN</span>
+          </h2>
+          <p class="hero-description">
+            Kho game bản quyền lớn nhất. Cập nhật liên tục. <br/>
+            Khám phá hàng ngàn ưu đãi từ Steam ngay hôm nay.
+          </p>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <div class="categories" id="categories"></div>
+        
+        <div class="game-count">
+          <span id="game-count-text">SHOWING: 0 GAMES</span>
+          <div id="status-dot" class="status-dot"></div>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div id="error-state" class="error-state" style="display: none;">
+        <i data-lucide="alert-circle" class="error-icon"></i>
+        <p id="error-message"></p>
+        <button onclick="location.reload()" class="error-retry-btn">Thử tải lại</button>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-state" class="loading-state">
+        <i data-lucide="loader-2" class="loading-spinner"></i>
+        <p class="loading-text">CONNECTING_TO_SERVER...</p>
+      </div>
+
+      <!-- Products Grid -->
+      <div id="products-grid" class="products-grid" style="display: none;"></div>
+
+      <!-- Load More Button -->
+      <div id="load-more-container" class="load-more-container" style="display: none;">
+        <button id="load-more-btn" class="load-more-btn">
+          <i data-lucide="arrow-down-circle" class="load-more-icon"></i>
+          <span id="load-more-text">Load_More_Games</span>
+        </button>
+        <p id="filter-notice" class="filter-notice" style="display: none;">
+          :: LOAD MORE DISABLED WHILE FILTERING ::
+        </p>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-line"></div>
+      
+      <div class="container">
+        <!-- Top Grid -->
+        <div class="footer-grid">
+          <!-- Column 1: Logo & Info -->
+          <div class="footer-column">
+            <div class="footer-brand">
+              <i data-lucide="zap" class="footer-brand-icon"></i>
+              <span class="footer-brand-text">NEON<span class="footer-brand-accent">NEXUS</span></span>
+            </div>
+            <div class="footer-info">
+              <p>System Status: <span class="text-white">ONLINE</span></p>
+              <p>Version: <span class="text-white">1.0.4</span></p>
+              <p>Server: <span class="text-white">Asia-Pacific (VietNam)</span></p>
+            </div>
+          </div>
+
+          <!-- Column 2: Navigation -->
+          <div class="footer-column">
+            <h4 class="footer-heading footer-heading-cyan">Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="index.html" class="footer-link" style="text-decoration: none; color: inherit;">:: STORE</a></li>
+              <li><a href="html/community.html" class="footer-link" style="text-decoration: none; color: inherit;">:: COMMUNITY</a></li>
+              <li class="footer-link">:: SUPPORT</li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Legal -->
+          <div class="footer-column">
+            <h4 class="footer-heading footer-heading-purple">Legal</h4>
+            <ul class="footer-links">
+              <li><a href="html/privacy_policy.html" class="footer-link" style="text-decoration: none; color: inherit;">PRIVACY_POLICY</a></li>
+              <li>
+  <a
+    href="html/terms_of_service.html"
+    class="footer-link"
+    style="text-decoration: none; color: inherit"
+    >TERMS_OF_SERVICE</a
+  >
+</li>
+
+            </ul>
+          </div>
+
+          <!-- Column 4: Secure Payment -->
+          <div class="footer-column">
+            <h4 class="footer-heading footer-heading-gray">Secure Payment</h4>
+            <div class="payment-icons">
+              <div class="payment-icon payment-card">
+                <i data-lucide="credit-card"></i>
+              </div>
+              <div class="payment-icon payment-bank">
+                <i data-lucide="building-2"></i>
+              </div>
+              <div class="payment-icon payment-momo">
+                <img src="Image/MOMO-Logo-App.png" alt="MoMo" class="payment-logo">
+              </div>
+              <div class="payment-icon payment-zalopay">
+                <img src="Image/idv2DAbjER_1769330590719.jpeg" alt="ZaloPay" class="payment-logo">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support Info Grid -->
+        <div class="support-grid">
+          <!-- Contact Support -->
+          <div class="support-card support-card-cyan">
+            <div class="support-glow support-glow-cyan"></div>
+            <div class="support-header">
+              <i data-lucide="phone" class="support-icon"></i>
+              <h4 class="support-title">CONTACT_SUPPORT</h4>
+            </div>
+            <div class="support-content">
+              <p class="support-item">
+                <i data-lucide="phone" class="support-item-icon"></i>
+                <span>Hotline: <span class="text-white">1900-9679</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="globe" class="support-item-icon"></i>
+                <span>International: <span class="text-white">+84 28 3910 9679</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="mail" class="support-item-icon"></i>
+                <span>Email: <span class="text-white">support@neonnexus.com</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="message-circle" class="support-item-icon"></i>
+                <span>Live Chat: <span class="text-white">24/7</span></span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Support Hours -->
+          <div class="support-card support-card-purple">
+            <div class="support-glow support-glow-purple"></div>
+            <div class="support-header">
+              <i data-lucide="clock" class="support-icon"></i>
+              <h4 class="support-title">SUPPORT_HOURS</h4>
+            </div>
+            <div class="support-content">
+              <p class="support-item">
+                <i data-lucide="clock" class="support-item-icon"></i>
+                <span>Mon - Fri: <span class="text-white">08:00 - 22:00</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="clock" class="support-item-icon"></i>
+                <span>Sat - Sun: <span class="text-white">09:00 - 20:00</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="zap" class="support-item-icon"></i>
+                <span>Response: <span class="text-white">&lt; 1 hour</span></span>
+              </p>
+            </div>
+          </div>
+
+          <!-- Social Connect -->
+          <div class="support-card support-card-cyan">
+            <div class="support-glow support-glow-cyan"></div>
+            <div class="support-header">
+              <i data-lucide="message-square" class="support-icon"></i>
+              <h4 class="support-title">SOCIAL_CONNECT</h4>
+            </div>
+            <div class="social-icons">
+              <a href="https://www.facebook.com/NeonNexuss" target="_blank" class="social-icon social-facebook">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon social-x">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon social-discord">
+                <svg width="20" height="20" fill="white" viewBox="0 0 71 55">
+                  <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718  48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon social-youtube">
+                <svg width="20" height="20" fill="#FF0000" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="footer-copyright">
+          <p>
+            © 2026 Neon<span class="footer-brand-accent">Nexus</span> DIGITAL STORE. ALL_RIGHTS_RESERVED.
+            <span class="footer-separator">|</span>
+            POWERED_BY_<span class="text-cyan">CHEAPSHARK</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div id="cart-drawer" class="cart-drawer" style="display: none;">
+      <div class="cart-backdrop"></div>
+      
+      <div class="cart-panel">
+        <div class="cart-header">
+          <h2 class="cart-title">
+            <i data-lucide="tag" class="cart-title-icon"></i>
+            <span>CART_CONTENTS [<span id="cart-header-count">0</span>]</span>
+          </h2>
+          <button id="close-cart-btn" class="cart-close-btn">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <div id="cart-items" class="cart-items"></div>
+
+        <div class="cart-footer">
+          <div class="cart-total">
+            <span class="cart-total-label">TOTAL_ESTIMATE</span>
+            <span id="cart-total-amount" class="cart-total-amount">0₫</span>
+          </div>
+          <button class="cart-checkout-btn">
+            Checkout
+            <i data-lucide="chevron-right" class="cart-checkout-icon"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="login-modal" style="display: none;">
+      <div class="login-modal-backdrop"></div>
+      <div class="login-modal-content">
+        <button id="close-login-btn" class="modal-close-btn">
+          <i data-lucide="x"></i>
+        </button>
+        
+        <div class="login-header">
+          <div class="login-logo">
+            <i data-lucide="zap" class="text-cyan"></i>
+            <span class="text-white">NEON<span class="text-cyan">NEXUS</span></span>
+          </div>
+          <h3 class="login-title">UNLIMITED GAMING</h3>
+          <p class="login-subtitle">Connect your experience</p>
+        </div>
+
+        <div class="login-options">
+          <!-- Google Login -->
+          <button id="google-login-btn" class="social-login-btn google-btn">
+            <div class="social-icon-wrapper">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/512px-Google_Favicon_2025.svg.png" alt="Google logo">
+            </div>
+            <span>Sign in with Google</span>
+          </button>
+
+          <!-- Steam Login -->
+          <button id="steam-login-btn" class="social-login-btn steam-btn">
+            <div class="social-icon-wrapper">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/512px-Steam_icon_logo.svg.png" alt="Steam logo">
+            </div>
+            <span>Sign in with Steam</span>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p>By logging in, you agree to our <a href="#" class="text-cyan hover:underline">Terms</a> & <a href="html/privacy_policy.html" class="text-cyan hover:underline">Privacy Policy</a></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login Required Notification -->
+    <div id="login-required-modal" class="login-modal" style="display: none;">
+      <div class="login-modal-backdrop"></div>
+      <div class="login-modal-content">
+        <button id="close-login-required-btn" class="modal-close-btn">
+          <i data-lucide="x"></i>
+        </button>
+        
+        <div class="login-header">
+          <div class="login-logo" style="color: #fbbf24;">
+            <i data-lucide="zap" class="text-yellow-500" style="color: #fbbf24;"></i>
+          </div>
+          <h3 class="login-title" style="color: #fbbf24;">LOGIN REQUIRED</h3>
+          <p class="login-subtitle">Please sign in to add items to your cart</p>
+        </div>
+
+        <div class="login-options">
+          <!-- Google Login -->
+          <button id="login-required-google-btn" class="social-login-btn google-btn">
+            <div class="social-icon-wrapper">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/512px-Google_Favicon_2025.svg.png" alt="Google logo">
+            </div>
+            <span>Sign in with Google</span>
+          </button>
+
+          <!-- Steam Login -->
+          <button id="login-required-steam-btn" class="social-login-btn steam-btn">
+            <div class="social-icon-wrapper">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/512px-Steam_icon_logo.svg.png" alt="Steam logo">
+            </div>
+            <span>Sign in with Steam</span>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p style="color: #9ca3af;">Cart functionality requires authentication</p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="checkout-modal">
+      <div class="checkout-modal-overlay"></div>
+      <div class="checkout-modal-container">
+        <div class="checkout-header">
+          <h2 class="checkout-title">CHECKOUT</h2>
+          <button id="close-checkout-btn" class="checkout-close-btn">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="checkout-steps">
+          <div class="checkout-step completed">
+            <div class="step-circle">
+              <i data-lucide="shopping-cart"></i>
+            </div>
+            <span class="step-label">Cart</span>
+          </div>
+          <div class="step-connector completed"></div>
+          <div class="checkout-step active">
+            <div class="step-circle">
+              <i data-lucide="credit-card"></i>
+            </div>
+            <span class="step-label">Payment</span>
+          </div>
+          <div class="step-connector"></div>
+          <div class="checkout-step">
+            <div class="step-circle">
+              <i data-lucide="check-circle"></i>
+            </div>
+            <span class="step-label">Confirm</span>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="checkout-content">
+          
+          <!-- Step 1: Payment Method Selection -->
+          <div id="payment-selection" class="checkout-section active">
+            <h3 class="section-title">Select Payment Method</h3>
+            
+            <div class="payment-methods-grid">
+              <!-- International Card -->
+              <div class="payment-method-card" data-method="card">
+                <div class="payment-icon">
+                  <img src="Image/11078490.png" alt="Card" class="payment-method-logo">
+                </div>
+                <h4 class="payment-name">BANK CARD</h4>
+                <p class="payment-desc">Fast payment with international credit/debit cards</p>
+                <div class="payment-logos">
+                  <img src="Image/visa.svg" alt="VISA" class="card-logo-img">
+                  <img src="Image/mastercard.svg" alt="Mastercard" class="card-logo-img">
+                </div>
+              </div>
+
+              <!-- VietQR -->
+              <div class="payment-method-card" data-method="vietqr">
+                <div class="payment-icon">
+                  <img src="Image/viet_qr_1.png" alt="VietQR" class="payment-method-logo">
+                </div>
+                <h4 class="payment-name">VIETQR</h4>
+                <p class="payment-desc">Scan QR code for direct bank transfer</p>
+                <div class="payment-logos">
+                  <span class="bank-logo">QR CODE</span>
+                </div>
+              </div>
+
+              <!-- Momo -->
+              <div class="payment-method-card" data-method="momo">
+                <div class="payment-icon">
+                  <img src="Image/MOMO-Logo-App.png" alt="MoMo" class="payment-method-logo">
+                </div>
+                <h4 class="payment-name">MOMO</h4>
+                <p class="payment-desc">Popular e-wallet, convenient payment</p>
+                <div class="payment-logos">
+                  <span class="momo-logo">MOMO</span>
+                </div>
+              </div>
+
+              <!-- ZaloPay -->
+              <div class="payment-method-card" data-method="zalopay">
+                <div class="payment-icon">
+                  <img src="Image/idv2DAbjER_1769330590719.jpeg" alt="ZaloPay" class="payment-method-logo">
+                </div>
+                <h4 class="payment-name">ZALOPAY</h4>
+                <p class="payment-desc">Direct payment using the Zalo app</p>
+                <div class="payment-logos">
+                  <span class="zalopay-logo">ZALOPAY</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total Amount -->
+            <!-- Total Amount -->
+            <div class="checkout-total" style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div id="checkout-subtotal-row" style="display: none; justify-content: space-between; color: #9ca3af; font-size: 0.9rem;">
+                 <span>Subtotal:</span>
+                 <span id="checkout-subtotal">0</span>
+              </div>
+              <div id="checkout-discount-row" style="display: none; justify-content: space-between; color: #fbbf24; font-size: 0.9rem;">
+                 <span id="checkout-discount-label">Member Discount (0%):</span>
+                 <span id="checkout-discount-amount">-0</span>
+              </div>
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <span class="total-label">TOTAL:</span>
+                <span id="checkout-total-amount" class="total-amount">0₫</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Card Payment Form -->
+          <div id="card-form" class="checkout-section payment-form">
+            <div class="selected-method">
+              <div class="method-badge card-badge">
+                <i data-lucide="credit-card"></i>
+                <span>BANK CARD</span>
+                <div class="badge-logos">
+                  <img src="Image/visa.svg" alt="VISA" class="badge-logo-img">
+                  <img src="Image/mastercard.svg" alt="MC" class="badge-logo-img">
+                </div>
+              </div>
+            </div>
+
+            <form class="payment-form-content">
+              <div class="form-group">
+                <label for="card-number">Card Number</label>
+                <div class="input-with-icon header-search-input">
+                  <i data-lucide="credit-card"></i>
+                  <div id="card-number" class="stripe-element-container"></div>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="card-expiry">Expiration Date</label>
+                  <div class="input-with-icon header-search-input">
+                    <i data-lucide="calendar"></i>
+                    <div id="card-expiry" class="stripe-element-container"></div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="card-cvv">CVV</label>
+                  <div class="input-with-icon header-search-input">
+                    <i data-lucide="shield"></i>
+                    <div id="card-cvv" class="stripe-element-container"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="card-holder">Card Holder Name</label>
+                <div class="input-with-icon">
+                  <i data-lucide="user"></i>
+                  <input type="text" id="card-holder" placeholder="Full name">
+                </div>
+              </div>
+
+              <div class="security-note">
+                <i data-lucide="lock"></i>
+                <span>SSL Secured Payment</span>
+              </div>
+            </form>
+
+            <div class="form-summary">
+              <span id="card-items-count">0 items</span>
+              <span> - </span>
+              <span class="summary-label">TOTAL:</span>
+              <span id="card-total" class="summary-amount">0₫</span>
+            </div>
+          </div>
+
+          <!-- Step 3: VietQR Payment -->
+          <div id="vietqr-form" class="checkout-section payment-form">
+            <div class="selected-method">
+              <div class="method-badge vietqr-badge">
+                <i data-lucide="qr-code"></i>
+                <span>VIETQR</span>
+              </div>
+            </div>
+
+            <div class="qr-container">
+              <div class="qr-code-box">
+                <div id="qr-code-image" class="qr-code-placeholder">
+                  <i data-lucide="qr-code"></i>
+                  <p>QR code will appear here</p>
+                </div>
+              </div>
+              <p class="qr-instruction">Scan QR code to pay</p>
+            </div>
+
+            <div class="payment-info-box">
+              <h4>TRANSFER INFORMATION</h4>
+              <div class="info-row">
+                <span class="info-label">Bank:</span>
+                <span class="info-value">MB Bank</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Account Number:</span>
+                <span class="info-value">0123456789</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Account Holder:</span>
+                <span class="info-value">NEONNEXUS</span>
+              </div>
+              <div class="info-row highlight">
+                <span class="info-label">Amount:</span>
+                <span id="vietqr-amount" class="info-value">0₫</span>
+              </div>
+              <div class="info-row highlight">
+                <span class="info-label">Message:</span>
+                <span id="vietqr-content" class="info-value">NEONORDER123456</span>
+              </div>
+            </div>
+
+            <div class="instructions-box">
+              <div class="instruction-item">
+                <i data-lucide="smartphone"></i>
+                <span>Step 1: Open bank app</span>
+              </div>
+              <div class="instruction-item">
+                <i data-lucide="scan"></i>
+                <span>Step 2: Scan QR code</span>
+              </div>
+              <div class="instruction-item">
+                <i data-lucide="check-circle"></i>
+                <span>Step 3: Confirm payment</span>
+              </div>
+            </div>
+
+            <div class="form-summary">
+              <span class="summary-label">TOTAL:</span>
+              <span id="vietqr-total" class="summary-amount">0₫</span>
+            </div>
+          </div>
+
+          <!-- Step 4: Momo Payment -->
+          <div id="momo-form" class="checkout-section payment-form">
+            <div class="selected-method">
+              <div class="method-badge momo-badge">
+                <i data-lucide="smartphone"></i>
+                <span>MOMO E-Wallet</span>
+              </div>
+            </div>
+
+            <div class="ewallet-logo-display">
+              <div class="momo-logo-large">MoMo</div>
+            </div>
+
+            <form class="payment-form-content">
+              <div class="form-group">
+                <label for="momo-phone">Momo Phone Number</label>
+                <div class="input-with-icon">
+                  <i data-lucide="phone"></i>
+                  <input type="tel" id="momo-phone" placeholder="0912 345 678" maxlength="12">
+                </div>
+              </div>
+            </form>
+
+
+
+            <div class="transaction-details">
+              <div class="detail-row">
+                <span class="detail-label">Payment Amount:</span>
+                <span id="momo-amount" class="detail-value">0₫</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Transaction ID:</span>
+                <span id="momo-transaction-id" class="detail-value">TRANS_NX123456</span>
+              </div>
+            </div>
+
+            <div class="security-badge momo-security">
+              <i data-lucide="shield-check"></i>
+              <span>Secured by Momo</span>
+            </div>
+
+            <div class="form-summary">
+              <span id="momo-items-count">0 items</span>
+              <span> - </span>
+              <span class="summary-label">TOTAL:</span>
+              <span id="momo-total" class="summary-amount">0₫</span>
+            </div>
+          </div>
+
+          <!-- Step 5: ZaloPay Payment -->
+          <div id="zalopay-form" class="checkout-section payment-form">
+            <div class="selected-method">
+              <div class="method-badge zalopay-badge">
+                <i data-lucide="wallet"></i>
+                <span>ZALOPAY E-Wallet</span>
+              </div>
+            </div>
+
+            <div class="ewallet-logo-display">
+              <div class="zalopay-logo-large">ZaloPay</div>
+            </div>
+
+            <div class="zalopay-redirect-message" style="text-align: center; margin: 2rem 0; color: #22d3ee;">
+              <i data-lucide="loader-2" class="spin-animation" style="width: 40px; height: 40px; margin-bottom: 1rem;"></i>
+              <p>Redirecting to ZaloPay payment gateway...</p>
+            </div>
+
+            <div class="transaction-details">
+              <div class="detail-row">
+                <span class="detail-label">Payment Amount:</span>
+                <span id="zalopay-amount" class="detail-value">0₫</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Transaction ID:</span>
+                <span id="zalopay-transaction-id" class="detail-value">TRANS_ZP123456</span>
+              </div>
+            </div>
+
+            <div class="security-badge zalopay-security">
+              <i data-lucide="shield-check"></i>
+              <span>Secured by ZaloPay</span>
+            </div>
+
+            <div class="form-summary">
+              <span id="zalopay-items-count">0 items</span>
+              <span> - </span>
+              <span class="summary-label">TOTAL:</span>
+              <span id="zalopay-total" class="summary-amount">0₫</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="checkout-footer">
+          <button id="checkout-back-btn" class="checkout-btn-secondary">
+            <i data-lucide="chevron-left"></i>
+            BACK
+          </button>
+          <button id="checkout-continue-btn" class="checkout-btn-primary">
+            <span id="continue-btn-text">CONTINUE</span>
+            <i data-lucide="chevron-right"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- Trailer Modal -->
+    <div id="trailer-modal" class="trailer-modal" style="display: none;">
+      <div class="trailer-modal-backdrop"></div>
+      <div class="trailer-modal-content">
+        <button id="close-trailer-btn" class="trailer-close-btn">
+          <i data-lucide="x"></i>
+        </button>
+        <div class="trailer-header">
+          <h3 id="trailer-title" class="trailer-title">GAME TRAILER</h3>
+        </div>
+        <div class="trailer-video-container">
+            <iframe 
+                id="trailer-iframe"
+                src="" 
+                frameborder="0" 
+                allowfullscreen="true" 
+                scrolling="no" 
+                height="378" 
+                width="620">
+            </iframe>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="API/giftcodes.js"></script>
+  <script src="API/cheapshark-api.js"></script>
+  <script src="API/trailer-api.js"></script>
+  <script type="module" src="API/auth.js"></script>
+  <script src="API/index.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

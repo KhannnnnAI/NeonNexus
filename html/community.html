@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="vi" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
+    <meta
+      name="description"
+      content="NeonNexus Community - Tin tức game mới nhất"
+    />
+    <title>Gaming News | NeonNexus</title>
+    <link rel="stylesheet" href="../css/index.css?v=4" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+      /* News Section Styles */
+      .news-section {
+        padding: 2rem 0;
+      }
+
+      .news-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .news-title {
+        font-family: "ROG Viet", sans-serif;
+        font-size: 1.75rem;
+        color: var(--accent-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .hero-title {
+        font-family: "ROG Viet", sans-serif !important;
+      }
+
+      .news-title i {
+        color: var(--accent-secondary);
+      }
+
+      .news-filters {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .filter-btn {
+        padding: 0.75rem 1.75rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-primary);
+        border-radius: 0.5rem;
+        color: var(--text-muted);
+        font-family: "ROG Viet", sans-serif;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: var(--accent-primary);
+        color: #000;
+        border-color: var(--accent-primary);
+      }
+
+      .news-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .news-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        border-radius: 0.75rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .news-card:hover {
+        border-color: var(--accent-secondary);
+        transform: translateY(-4px);
+        box-shadow: 0 10px 30px rgba(34, 211, 238, 0.15);
+      }
+
+      .news-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        transition: transform 0.3s;
+      }
+
+      .news-card:hover .news-image {
+        transform: scale(1.05);
+      }
+
+      .news-image-wrapper {
+        overflow: hidden;
+        position: relative;
+      }
+
+      .news-source-badge {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px);
+        border-radius: 0.25rem;
+        font-size: 0.65rem;
+        font-family: "ROG Viet", sans-serif;
+        color: var(--accent-primary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .news-lang-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        background: rgba(147, 51, 234, 0.9);
+        border-radius: 0.25rem;
+        font-size: 0.6rem;
+        font-weight: bold;
+        color: white;
+      }
+
+      .news-content {
+        padding: 1.25rem;
+      }
+
+      .news-card-title {
+        font-family: "ROG Viet", sans-serif;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .news-snippet {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+
+      .news-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        border-top: 1px solid var(--border-primary);
+        padding-top: 0.75rem;
+      }
+
+      .news-date {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .news-date i {
+        width: 14px;
+        height: 14px;
+      }
+
+      .read-more-link {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: var(--accent-secondary);
+        transition: color 0.3s;
+      }
+
+      .news-card:hover .read-more-link {
+        color: var(--accent-primary);
+      }
+
+      .read-more-link i {
+        width: 14px;
+        height: 14px;
+        transition: transform 0.3s;
+      }
+
+      .news-card:hover .read-more-link i {
+        transform: translateX(4px);
+      }
+
+      /* Loading State */
+      .news-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem;
+        color: var(--text-muted);
+      }
+
+      .news-loading i {
+        width: 48px;
+        height: 48px;
+        animation: spin 1s linear infinite;
+        color: var(--accent-primary);
+      }
+
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Empty State */
+      .news-empty {
+        text-align: center;
+        padding: 4rem;
+        color: var(--text-muted);
+      }
+
+      .news-empty i {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+
+      /* Light Mode */
+      [data-theme="light"] .news-card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      }
+
+      [data-theme="light"] .news-card:hover {
+        box-shadow: 0 10px 30px rgba(8, 145, 178, 0.15);
+      }
+
+      [data-theme="light"] .filter-btn.active {
+        background: var(--accent-primary);
+        color: white;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .news-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .news-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      /* Load More Button */
+      .load-more-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      .load-more-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 2rem;
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
+        color: #000;
+        border: none;
+        border-radius: 0.5rem;
+        font-family: "ROG Viet", sans-serif;
+        font-size: 0.85rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+      }
+
+      .load-more-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(34, 211, 238, 0.4);
+      }
+
+      .load-more-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .load-more-btn i {
+        width: 18px;
+        height: 18px;
+      }
+
+      .load-more-btn.loading i {
+        animation: spin 1s linear infinite;
+      }
+
+      .news-count {
+        text-align: center;
+        margin-top: 1rem;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="app"
+      class="min-h-screen bg-dark text-gray-100 overflow-x-hidden relative"
+    >
+      <!-- Tech Background -->
+      <div class="tech-bg"></div>
+      <div class="tech-gradient"></div>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="container header-content">
+          <!-- Logo -->
+          <a href="../index.html" class="logo" style="text-decoration: none">
+            <div class="logo-icon-wrapper">
+              <div class="logo-glow"></div>
+              <i data-lucide="zap" class="logo-icon"></i>
+            </div>
+            <div class="logo-text-wrapper">
+              <span class="logo-text"
+                >NEON<span class="logo-accent">NEXUS</span></span
+              >
+              <span class="logo-subtitle">COMMUNITY :: NEWS</span>
+            </div>
+          </a>
+
+          <!-- Right Actions -->
+          <div class="header-actions">
+            <!-- Theme Toggle -->
+            <button
+              id="theme-toggle"
+              class="theme-toggle"
+              aria-label="Toggle theme"
+            >
+              <i data-lucide="sun" class="theme-icon" id="theme-icon"></i>
+            </button>
+
+            <!-- Back to Store -->
+            <a
+              href="../index.html"
+              class="login-btn"
+              style="text-decoration: none"
+            >
+              <i data-lucide="store" class="login-icon"></i>
+              <span class="login-text">STORE</span>
+            </a>
+
+            <!-- Login Button / User Profile -->
+            <div class="user-section">
+              <button id="login-btn" class="login-btn">
+                <i data-lucide="user" class="login-icon"></i>
+                <span class="login-text">LOGIN</span>
+              </button>
+              
+              <!-- User Dropdown (Hidden by default) -->
+              <div id="user-dropdown" class="user-dropdown" style="display: none;">
+                <div class="user-dropdown-header">
+                  <img id="user-dropdown-avatar" src="" alt="Avatar" class="user-dropdown-avatar">
+                  <div class="user-dropdown-info">
+                    <span id="user-dropdown-name" class="user-dropdown-name">User</span>
+                    <span class="user-dropdown-status">● ONLINE</span>
+                  </div>
+                </div>
+                <div class="user-dropdown-divider"></div>
+              <a href="../html/account.html" class="user-dropdown-item" style="text-decoration: none; color: inherit;">
+                <i data-lucide="key" class="user-dropdown-icon"></i>
+                <span>My Keys</span>
+              </a>
+              <button id="logout-btn" class="user-dropdown-item">
+                <i data-lucide="log-out" class="user-dropdown-icon"></i>
+                <span>Logout</span>
+              </button>
+              </div>
+            </div>
+        </div>
+      </header>
+
+      <main class="container main-content">
+        <!-- Hero Section -->
+        <div class="hero-banner" style="margin-bottom: 2rem">
+          <img
+            src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=1600"
+            alt="Gaming News"
+            class="hero-image"
+          />
+          <div class="hero-overlay"></div>
+
+          <div class="hero-content">
+            <div class="hero-badge">
+              <i data-lucide="newspaper" class="hero-badge-icon"></i>
+              <span>GAMING NEWS</span>
+            </div>
+            <div class="hero-line"></div>
+
+            <h2 class="hero-title">
+              TIN TỨC <span class="hero-title-accent">GAME MỚI NHẤT</span>
+            </h2>
+            <p class="hero-description">
+              Cập nhật tin tức gaming hàng ngày từ các nguồn uy tín. <br />
+              Tin Việt Nam & Quốc tế.
+            </p>
+          </div>
+        </div>
+
+        <!-- News Section -->
+        <section class="news-section">
+          <div class="news-header">
+            <h2 class="news-title">
+              <i data-lucide="rss"></i>
+              TIN MỚI NHẤT
+            </h2>
+            <div class="news-filters">
+              <button class="filter-btn active" data-lang="all">TẤT CẢ</button>
+              <button class="filter-btn" data-lang="vi">🇻🇳 TIẾNG VIỆT</button>
+              <button class="filter-btn" data-lang="en">🇺🇸 QUỐC TẾ</button>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div id="news-loading" class="news-loading">
+            <i data-lucide="loader-2"></i>
+            <p style="margin-top: 1rem">ĐANG TẢI TIN TỨC...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="news-empty" class="news-empty" style="display: none">
+            <i data-lucide="inbox"></i>
+            <p>Không có tin tức nào</p>
+          </div>
+
+          <!-- News Grid -->
+          <div id="news-grid" class="news-grid" style="display: none"></div>
+
+          <!-- Load More Button -->
+          <div
+            id="load-more-container"
+            class="load-more-container"
+            style="display: none"
+          >
+            <button id="load-more-btn" class="load-more-btn">
+              <i data-lucide="chevrons-down"></i>
+              TẢI THÊM TIN TỨC
+            </button>
+          </div>
+          <p id="news-count" class="news-count" style="display: none"></p>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-line"></div>
+        
+        <div class="container">
+          <!-- Top Grid -->
+          <div class="footer-grid">
+            <!-- Column 1: Logo & Info -->
+            <div class="footer-column">
+              <div class="footer-brand">
+                <i data-lucide="zap" class="footer-brand-icon"></i>
+                <span class="footer-brand-text">NEON<span class="footer-brand-accent">NEXUS</span></span>
+              </div>
+              <div class="footer-info">
+                <p>System Status: <span class="text-white">ONLINE</span></p>
+                <p>Version: <span class="text-white">1.0.4</span></p>
+                <p>Server: <span class="text-white">Asia-Pacific (VietNam)</span></p>
+              </div>
+            </div>
+
+            <!-- Column 2: Navigation -->
+            <div class="footer-column">
+              <h4 class="footer-heading footer-heading-cyan">Navigation</h4>
+              <ul class="footer-links">
+                <li><a href="../index.html" class="footer-link" style="text-decoration: none; color: inherit;">:: STORE</a></li>
+                <li><a href="community.html" class="footer-link" style="text-decoration: none; color: inherit;">:: COMMUNITY</a></li>
+                <li class="footer-link">:: SUPPORT</li>
+              </ul>
+            </div>
+
+            <!-- Column 3: Legal -->
+            <div class="footer-column">
+              <h4 class="footer-heading footer-heading-purple">Legal</h4>
+              <ul class="footer-links">
+                <li><a href="privacy_policy.html" class="footer-link" style="text-decoration: none; color: inherit;">PRIVACY_POLICY</a></li>
+                <li>
+                  <a
+                    href="terms_of_service.html"
+                    class="footer-link"
+                    style="text-decoration: none; color: inherit"
+                    >TERMS_OF_SERVICE</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <!-- Column 4: Secure Payment -->
+            <div class="footer-column">
+              <h4 class="footer-heading footer-heading-gray">Secure Payment</h4>
+              <div class="payment-icons">
+                <div class="payment-icon payment-card">
+                  <i data-lucide="credit-card"></i>
+                </div>
+                <div class="payment-icon payment-bank">
+                  <i data-lucide="building-2"></i>
+                </div>
+                <div class="payment-icon payment-momo">
+                  <img src="../Image/MOMO-Logo-App.png" alt="MoMo" class="payment-logo">
+                </div>
+                <div class="payment-icon payment-zalopay">
+                  <img src="../Image/idv2DAbjER_1769330590719.jpeg" alt="ZaloPay" class="payment-logo">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Support Info Grid -->
+          <div class="support-grid">
+            <!-- Contact Support -->
+            <div class="support-card support-card-cyan">
+              <div class="support-glow support-glow-cyan"></div>
+              <div class="support-header">
+                <i data-lucide="phone" class="support-icon"></i>
+                <h4 class="support-title">CONTACT_SUPPORT</h4>
+              </div>
+              <div class="support-content">
+                <p class="support-item">
+                  <i data-lucide="phone" class="support-item-icon"></i>
+                  <span>Hotline: <span class="text-white">1900-9679</span></span>
+                </p>
+                <p class="support-item">
+                  <i data-lucide="globe" class="support-item-icon"></i>
+                  <span>International: <span class="text-white">+84 28 3910 9679</span></span>
+                </p>
+                <p class="support-item">
+                  <i data-lucide="mail" class="support-item-icon"></i>
+                  <span>Email: <span class="text-white">support@neonnexus.com</span></span>
+                </p>
+                <p class="support-item">
+                  <i data-lucide="message-circle" class="support-item-icon"></i>
+                  <span>Live Chat: <span class="text-white">24/7</span></span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Support Hours -->
+            <div class="support-card support-card-purple">
+              <div class="support-glow support-glow-purple"></div>
+              <div class="support-header">
+                <i data-lucide="clock" class="support-icon"></i>
+                <h4 class="support-title">SUPPORT_HOURS</h4>
+              </div>
+              <div class="support-content">
+                <p class="support-item">
+                  <i data-lucide="clock" class="support-item-icon"></i>
+                  <span>Mon - Fri: <span class="text-white">08:00 - 22:00</span></span>
+                </p>
+                <p class="support-item">
+                  <i data-lucide="clock" class="support-item-icon"></i>
+                  <span>Sat - Sun: <span class="text-white">09:00 - 20:00</span></span>
+                </p>
+                <p class="support-item">
+                  <i data-lucide="zap" class="support-item-icon"></i>
+                  <span>Response: <span class="text-white">&lt; 1 hour</span></span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Social Connect -->
+            <div class="support-card support-card-cyan">
+              <div class="support-glow support-glow-cyan"></div>
+              <div class="support-header">
+                <i data-lucide="message-square" class="support-icon"></i>
+                <h4 class="support-title">SOCIAL_CONNECT</h4>
+              </div>
+              <div class="social-icons">
+                <a href="https://www.facebook.com/NeonNexuss" target="_blank" class="social-icon social-facebook">
+                  <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="#" class="social-icon social-x">
+                   <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </a>
+                <a href="#" class="social-icon social-discord">
+                   <svg width="20" height="20" fill="white" viewBox="0 0 71 55"><path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718  48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/></svg>
+                </a>
+                <a href="#" class="social-icon social-youtube">
+                   <svg width="20" height="20" fill="#FF0000" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copyright -->
+          <div class="footer-copyright">
+            <p>
+              © 2026 Neon<span class="footer-brand-accent">Nexus</span> DIGITAL STORE. ALL_RIGHTS_RESERVED.
+              <span class="footer-separator">|</span>
+              POWERED_BY_<span class="text-cyan">CHEAPSHARK</span>
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="module">
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+      import "../API/auth.js";
+
+      // Server URL
+      const SERVER_URL = "http://localhost:5000";
+
+      // State
+      let currentLang = "all";
+      let allNews = [];
+      let currentUserUID = null;
+
+      // DOM Elements
+      const newsGrid = document.getElementById("news-grid");
+      const newsLoading = document.getElementById("news-loading");
+      const newsEmpty = document.getElementById("news-empty");
+      const filterBtns = document.querySelectorAll(".filter-btn");
+      const loadMoreContainer = document.getElementById("load-more-container");
+      const loadMoreBtn = document.getElementById("load-more-btn");
+      const newsCount = document.getElementById("news-count");
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        loadTheme();
+
+        // Listen for Auth State Changes
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("👤 User Logged In:", user.uid);
+                currentUserUID = user.uid;
+                // Initial load: Feb 2nd 2026 to Present
+                loadNews("2026-02-02", null, true);
+            } else {
+                console.log("👤 Guest Mode");
+                currentUserUID = null;
+                // Initial load: Feb 2nd 2026 to Present
+                loadNews("2026-02-02", null, true);
+            }
+        });
+
+        // Filter buttons
+        filterBtns.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            filterBtns.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            currentLang = btn.dataset.lang;
+            renderNews(allNews);
+          });
+        });
+
+        // Load More button (Load news from Feb 1st to Feb 2nd 2026)
+        loadMoreBtn.addEventListener("click", () => {
+          loadNews("2026-02-01", "2026-02-02", false);
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById("theme-toggle");
+        if (themeToggle) {
+            themeToggle.addEventListener("click", toggleTheme);
+        }
+      });
+
+      // Load theme
+      function loadTheme() {
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        const icon = document.getElementById("theme-icon");
+        if (icon) {
+          icon.setAttribute(
+            "data-lucide",
+            savedTheme === "light" ? "moon" : "sun",
+          );
+          lucide.createIcons();
+        }
+      }
+
+      // Toggle theme
+      function toggleTheme() {
+        const current =
+          document.documentElement.getAttribute("data-theme") || "dark";
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+        const icon = document.getElementById("theme-icon");
+        if (icon) {
+          icon.setAttribute("data-lucide", next === "light" ? "moon" : "sun");
+          lucide.createIcons();
+        }
+      }
+
+      /**
+       * Load news from Server + Cache (Local or Firestore)
+       */
+      async function loadNews(startDate, endDate, isInitial = false) {
+        if (isInitial) {
+          newsLoading.style.display = "flex";
+          newsGrid.style.display = "none";
+          newsEmpty.style.display = "none";
+          loadMoreContainer.style.display = "none";
+        } else {
+          loadMoreBtn.disabled = true;
+          loadMoreBtn.innerHTML = '<i data-lucide="loader-2"></i> ĐANG TẢI...';
+          lucide.createIcons();
+        }
+
+        try {
+          // 1. Load from Cache FIRST (Fastest)
+          let cachedNews = [];
+          
+          if (currentUserUID) {
+              // Load from Firestore
+              try {
+                  const db = getFirestore();
+                  const docRef = doc(db, "users", currentUserUID, "news_cache", "latest");
+                  const docSnap = await getDoc(docRef);
+                  if (docSnap.exists()) {
+                      cachedNews = docSnap.data().articles || [];
+                      console.log(`🔥 Loaded ${cachedNews.length} articles from Firestore`);
+                  }
+              } catch (err) {
+                  console.warn("🔥 Firestore load error:", err);
+              }
+          } else {
+              // Load from LocalStorage
+              const localData = localStorage.getItem("news_cache");
+              if (localData) {
+                  cachedNews = JSON.parse(localData);
+                  console.log(`💾 Loaded ${cachedNews.length} articles from LocalStorage`);
+              }
+          }
+
+          if (cachedNews.length > 0) {
+              mergeNews(cachedNews);
+              if (allNews.length > 0 && isInitial) {
+                  renderNews(allNews);
+                  newsGrid.style.display = "grid";
+              }
+          }
+
+          // 2. Fetch from Server
+          let url = `${SERVER_URL}/api/news?lang=all&limit=500`;
+          if (startDate) url += `&startDate=${startDate}`;
+          if (endDate) url += `&endDate=${endDate}`;
+
+          console.log(`📡 Fetching news: ${url}`);
+
+          const response = await fetch(url);
+          const result = await response.json();
+          let newArticles = [];
+
+          if (result.success && result.data.length > 0) {
+            newArticles = result.data;
+            console.log(`✅ Loaded ${newArticles.length} articles from server`);
+          } else {
+            console.log("⚠️ No new articles from server");
+          }
+
+          mergeNews(newArticles);
+          
+          // Save FULL list to Storage (Auth or Local)
+          if (newArticles.length > 0) {
+              saveNews(allNews);
+          }
+
+          if (allNews.length > 0) {
+            renderNews(allNews);
+            newsGrid.style.display = "grid";
+
+            if (isInitial) {
+              loadMoreContainer.style.display = "flex";
+              loadMoreBtn.innerHTML = `
+                    <i data-lucide="chevrons-down"></i>
+                    TẢI THÊM TIN TỨC
+                `;
+            } else {
+              loadMoreContainer.style.display = "none";
+              showNotification("Đã tải thêm tất cả tin tức!", "success");
+            }
+          } else {
+            newsEmpty.style.display = "block";
+          }
+        } catch (error) {
+          console.error("Failed to load news:", error);
+          if (isInitial) {
+             // Fallback to cache if server fails
+             if(allNews.length > 0) {
+                 renderNews(allNews);
+                 newsGrid.style.display = "grid";
+                 showNotification("Đang xem tin tức đã lưu (Offline Mode)", "warning");
+             } else {
+                newsEmpty.innerHTML = `
+                    <i data-lucide="wifi-off"></i>
+                    <p>Không thể kết nối server</p>
+                    <p style="font-size: 0.75rem; margin-top: 0.5rem;">Hãy chắc chắn server đang chạy</p>
+                `;
+                newsEmpty.style.display = "block";
+             }
+          } else {
+            showNotification("Lỗi tải thêm tin tức", "error");
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.innerHTML =
+              '<i data-lucide="chevrons-down"></i> TẢI THÊM TIN TỨC';
+          }
+        } finally {
+          newsLoading.style.display = "none";
+          lucide.createIcons();
+        }
+      }
+
+      // Merge new articles with existing list
+      function mergeNews(newArticles) {
+        const existingLinks = new Set(allNews.map((n) => n.link));
+        let addedCount = 0;
+
+        newArticles.forEach((article) => {
+          if (!existingLinks.has(article.link)) {
+            allNews.push(article);
+            existingLinks.add(article.link);
+            addedCount++;
+          }
+        });
+
+        // Sort by date desc
+        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        console.log(
+          `➕ Merged ${addedCount} new articles. Total: ${allNews.length}`,
+        );
+      }
+
+      // Render news cards
+      function renderNews(newsToRender) {
+        let filtered = newsToRender;
+        if (currentLang !== "all") {
+          filtered = newsToRender.filter((n) => n.language === currentLang);
+        }
+
+        newsGrid.innerHTML = filtered
+          .map((item) => {
+            const date = new Date(item.pubDate);
+            const dateStr = date.toLocaleDateString("vi-VN", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            });
+
+            return `
+          <article class="news-card" onclick="window.open('${item.link}', '_blank')">
+            <div class="news-image-wrapper">
+              <img src="${item.image}" alt="${item.title}" class="news-image" onerror="this.src='https://placehold.co/400x200/1a1a1a/22d3ee?text=Gaming+News'">
+              <span class="news-source-badge">${item.source}</span>
+              <span class="news-lang-badge">${item.language === "vi" ? "🇻🇳" : "🇺🇸"}</span>
+            </div>
+            <div class="news-content">
+              <h3 class="news-card-title">${item.title}</h3>
+              <p class="news-snippet">${item.snippet}</p>
+              <div class="news-meta">
+                <span class="news-date">
+                  <i data-lucide="calendar"></i>
+                  ${dateStr}
+                </span>
+                <span class="read-more-link">
+                  Đọc thêm
+                  <i data-lucide="arrow-right"></i>
+                </span>
+              </div>
+            </div>
+          </article>
+        `;
+          })
+          .join("");
+
+        newsCount.style.display = "block";
+        newsCount.textContent = `Hiển thị ${filtered.length} tin tức`;
+        lucide.createIcons();
+      }
+
+      /**
+       * Save news to Storage (Firestore if logged in, LocalStorage if guest)
+       */
+      /**
+       * Save news to Storage (Firestore if logged in, LocalStorage if guest)
+       */
+      async function saveNews(fullNewsList) {
+        try {
+            // Limit cache size to prevent quota exceeded (e.g., last 500 items)
+            let cache = [...fullNewsList];
+            if (cache.length > 500) {
+                // Keep newest news
+                cache.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+                cache = cache.slice(0, 500);
+            }
+
+            if (currentUserUID) {
+                // Save to Firestore
+                const db = getFirestore();
+                await setDoc(doc(db, "users", currentUserUID, "news_cache", "latest"), {
+                    articles: cache,
+                    updatedAt: new Date().toISOString()
+                });
+                console.log(`🔥 Saved ${cache.length} articles to Firestore`);
+            } else {
+                // Save to LocalStorage
+                localStorage.setItem("news_cache", JSON.stringify(cache));
+                console.log(`💾 Saved ${cache.length} articles to LocalStorage`);
+            }
+        } catch (e) {
+            console.warn("⚠️ Save news failed:", e);
+        }
+      }
+      
+      function showNotification(msg, type = "info") {
+        console.log(`🔔 [${type}] ${msg}`);
+        const countEl = document.getElementById("news-count");
+        if (countEl) {
+          const original = countEl.textContent;
+          countEl.textContent = `${msg} - ${original}`;
+          setTimeout(() => (countEl.textContent = original), 3000);
+        }
+      }
+    </script>
+    <!-- Login Modal -->
+    <div id="login-modal" class="login-modal" style="display: none;">
+      <div class="login-modal-backdrop"></div>
+      <div class="login-modal-content">
+        <button id="close-login-btn" class="modal-close-btn">
+          <i data-lucide="x"></i>
+        </button>
+        
+        <div class="login-header">
+          <div class="login-logo">
+            <i data-lucide="zap" class="text-cyan"></i>
+            <span class="text-white">NEON<span class="text-cyan">NEXUS</span></span>
+          </div>
+          <h3 class="login-title">CHƠI GAME KHÔNG GIỚI HẠN</h3>
+          <p class="login-subtitle">Kết nối trải nghiệm</p>
+        </div>
+
+        <div class="login-options">
+          <!-- Google Login -->
+          <button id="google-login-btn" class="social-login-btn google-btn">
+            <div class="social-icon-wrapper">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png" alt="Google logo">
+            </div>
+            <span>Sign in with Google</span>
+          </button>
+
+          <!-- Steam Login -->
+          <button id="steam-login-btn" class="social-login-btn steam-btn">
+            <div class="social-icon-wrapper">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/512px-Steam_icon_logo.svg.png" alt="Steam logo">
+            </div>
+            <span>Sign in with Steam</span>
+          </button>
+        </div>
+
+        <div class="login-footer">
+          <p>By logging in, you agree to our <a href="#" class="text-cyan hover:underline">Terms</a> & <a href="html/privacy_policy.html" class="text-cyan hover:underline">Privacy Policy</a></p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

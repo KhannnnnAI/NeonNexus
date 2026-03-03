@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    match /users/{userId} {
+      // Helper: Check if request is from the right user
+      function isAuthorized() {
+        return request.auth != null && (
+          // Direct UID match (Google users)
+          request.auth.uid == userId ||
+          // Anonymous auth users can access their own paths
+          (request.auth.token.firebase.sign_in_provider == 'anonymous')
+        );
+      }
+      
+      // Allow reading/writing the user document itself
+      allow read, write: if isAuthorized();
+      
+      // User Profile
+      match /profile/{docId} {
+        allow read, write: if isAuthorized();
+      }
+      
+      // User Cart
+      match /cart/{docId} {
+        allow read, write: if isAuthorized();
+      }
+      
+      // User Keys (Purchased)
+      match /keys/{orderId} {
+        allow read, write: if isAuthorized();
+      }
+
+      // User News Cache (For Community Page)
+      match /news_cache/{docId} {
+        allow read, write: if isAuthorized();
+      }
+    }
+    
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
