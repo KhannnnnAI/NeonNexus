@@ -7,19 +7,18 @@ const CheapSharkAPI = (() => {
   // Try proxy server first (for CORS bypass + Steam prices),
   // but automatically fall back to direct CheapShark if server is down.
   const CHEAPSHARK_DIRECT_URL = 'https://www.cheapshark.com/api/1.0';
-  const SERVER_URL = (window.location.port === '5500' || window.location.protocol === 'file:')
-    ? 'http://localhost:5000'
-    : '';
+  const SERVER_URL = ''; // Disabled local proxy check: (window.location.port === '5500' || window.location.protocol === 'file:') ? 'http://localhost:5000' : '';
   const PROXY_URL = `${SERVER_URL}/api/cheapshark`;
 
   // Dynamic base URL — starts with proxy, switches to direct if server is down
-  let BASE_URL = PROXY_URL;
-  let useProxy = true;
-  let serverChecked = false;
+  let BASE_URL = CHEAPSHARK_DIRECT_URL;
+  let useProxy = false;
+  let serverChecked = true;
 
   // Check if proxy server is available (runs once on startup)
   async function checkServerAvailability() {
-    if (serverChecked) return useProxy;
+    return useProxy; // Disabled proxy auto-check
+
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 3000); // 3s timeout
