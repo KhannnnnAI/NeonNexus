@@ -1,0 +1,226 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/index.html",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/html/account.html",
+        "destination": "/account",
+        "type": 301
+      },
+      {
+        "source": "/account.html",
+        "destination": "/account",
+        "type": 301
+      },
+      {
+        "source": "/html/community.html",
+        "destination": "/community",
+        "type": 301
+      },
+      {
+        "source": "/community.html",
+        "destination": "/community",
+        "type": 301
+      },
+      {
+        "source": "/html/dashboard.html",
+        "destination": "/dashboard",
+        "type": 301
+      },
+      {
+        "source": "/dashboard.html",
+        "destination": "/dashboard",
+        "type": 301
+      },
+      {
+        "source": "/html/debug-steam.html",
+        "destination": "/debug-steam",
+        "type": 301
+      },
+      {
+        "source": "/debug-steam.html",
+        "destination": "/debug-steam",
+        "type": 301
+      },
+      {
+        "source": "/html/featured-banner.html",
+        "destination": "/featured-banner",
+        "type": 301
+      },
+      {
+        "source": "/featured-banner.html",
+        "destination": "/featured-banner",
+        "type": 301
+      },
+      {
+        "source": "/html/game.html",
+        "destination": "/game",
+        "type": 301
+      },
+      {
+        "source": "/game.html",
+        "destination": "/game",
+        "type": 301
+      },
+      {
+        "source": "/html/keygen.html",
+        "destination": "/keygen",
+        "type": 301
+      },
+      {
+        "source": "/keygen.html",
+        "destination": "/keygen",
+        "type": 301
+      },
+      {
+        "source": "/html/logo_export.html",
+        "destination": "/logo-export",
+        "type": 301
+      },
+      {
+        "source": "/logo_export.html",
+        "destination": "/logo-export",
+        "type": 301
+      },
+      {
+        "source": "/html/privacy_policy.html",
+        "destination": "/privacy-policy",
+        "type": 301
+      },
+      {
+        "source": "/privacy_policy.html",
+        "destination": "/privacy-policy",
+        "type": 301
+      },
+      {
+        "source": "/html/support.html",
+        "destination": "/support",
+        "type": 301
+      },
+      {
+        "source": "/support.html",
+        "destination": "/support",
+        "type": 301
+      },
+      {
+        "source": "/html/terms_of_service.html",
+        "destination": "/terms-of-service",
+        "type": 301
+      },
+      {
+        "source": "/terms_of_service.html",
+        "destination": "/terms-of-service",
+        "type": 301
+      },
+      {
+        "source": "/html/trending.html",
+        "destination": "/trending",
+        "type": 301
+      },
+      {
+        "source": "/trending.html",
+        "destination": "/trending",
+        "type": 301
+      },
+      {
+        "source": "/html/event.html",
+        "destination": "/event",
+        "type": 301
+      },
+      {
+        "source": "/event.html",
+        "destination": "/event",
+        "type": 301
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/account",
+        "destination": "/html/account.html"
+      },
+      {
+        "source": "/community",
+        "destination": "/html/community.html"
+      },
+      {
+        "source": "/dashboard",
+        "destination": "/dashboard/dashboard.html"
+      },
+      {
+        "source": "/debug-steam",
+        "destination": "/html/debug-steam.html"
+      },
+      {
+        "source": "/featured-banner",
+        "destination": "/html/featured-banner.html"
+      },
+      {
+        "source": "/game",
+        "destination": "/html/game.html"
+      },
+      {
+        "source": "/keygen",
+        "destination": "/html/keygen.html"
+      },
+      {
+        "source": "/logo-export",
+        "destination": "/html/logo_export.html"
+      },
+      {
+        "source": "/privacy-policy",
+        "destination": "/html/privacy_policy.html"
+      },
+      {
+        "source": "/support",
+        "destination": "/html/support.html"
+      },
+      {
+        "source": "/terms-of-service",
+        "destination": "/html/terms_of_service.html"
+      },
+      {
+        "source": "/trending",
+        "destination": "/html/trending.html"
+      },
+      {
+        "source": "/event",
+        "destination": "/html/event.html"
+      },
+      {
+        "source": "/api/**",
+        "function": "api"
+      },
+      {
+        "source": "/auth/**",
+        "function": "api"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(eot|otf|ttf|ttc|woff|font.css|js)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ]
+  },
+  "functions": {
+    "source": "functions"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}

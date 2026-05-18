@@ -1,0 +1,297 @@
+<!doctype html><html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Thống kê sản phẩm bán chạy, phân tích danh mục và doanh thu theo sản phẩm."><title>Sản Phẩm & Dịch Vụ | NeonNexus Dashboard</title><link rel="stylesheet" href="./dashboard.css"><link rel="stylesheet" href="./products-services.css"><script src="https://unpkg.com/lucide@latest"></script></head><body><div class="dashboard-shell"><aside class="sidebar"><div class="sidebar-brand"><span class="brand-logo" aria-label="NeonNexus"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg></span><h1 class="brand-title">NEONNEXUS</h1></div><nav class="sidebar-nav"><a href="dashboard.html" class="nav-link"><i data-lucide="layout-dashboard"></i> <span>Tổng Quan</span> </a><a href="orders-revenue.html" class="nav-link"><i data-lucide="shopping-cart"></i> <span>Đơn Hàng &amp; Doanh Thu</span> </a><a href="products-services.html" class="nav-link active"><i data-lucide="package"></i> <span>Sản Phẩm &amp; Dịch Vụ</span> </a><a href="customers.html" class="nav-link"><i data-lucide="users"></i> <span>Khách Hàng</span> </a><a href="support-errors.html" class="nav-link"><i data-lucide="headphones"></i> <span>Hỗ Trợ &amp; Xử Lý Lỗi</span> </a><a href="fraud-review.html" class="nav-link"><i data-lucide="shield-alert"></i> <span>Kiểm Duyệt Gian Lận</span> </a><a href="system-settings.html" class="nav-link"><i data-lucide="settings"></i> <span>Cài Đặt Hệ Thống</span></a></nav><div class="sidebar-mascot"></div><div class="sidebar-bottom"><div id="sidebar-auth-guest"><p class="sidebar-label">Đăng nhập</p><button id="google-login-btn" class="btn btn-primary btn-block" type="button"><i data-lucide="log-in"></i> <span>Đăng nhập Google</span></button></div><div id="sidebar-auth-user" class="hidden"><div class="user-chip"><span class="user-avatar"><img id="sidebar-user-avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=User" alt="User"></span><div class="user-meta"><p id="sidebar-user-name" class="user-name">Người dùng</p><p id="sidebar-user-email" class="user-sub">Đã đăng nhập</p></div></div><div style="margin-top:10px"><button id="sidebar-logout-btn" class="btn btn-outline btn-block" type="button"><i data-lucide="log-out"></i> <span>Đăng xuất</span></button></div></div></div></aside><main class="main-content"><header class="topbar"><div class="topbar-left"><button class="topbar-menu-btn" type="button" aria-label="Mở menu điều hướng"><i data-lucide="menu"></i></button><div class="topbar-breadcrumb" aria-label="Đường dẫn điều hướng"><span class="crumb-soft">NeonNexus</span> <i data-lucide="chevron-right" class="topbar-crumb-icon"></i> <span class="crumb-strong">Sản Phẩm & Dịch Vụ</span></div></div><label class="topbar-search" aria-label="Tìm kiếm sản phẩm"><i data-lucide="search"></i> <input id="product-search" type="search" placeholder="Tìm kiếm sản phẩm..."></label><div class="topbar-right"><div class="global-clock"><p id="global-time" class="global-clock-time">--:--:--</p><p class="global-clock-label">GLOBAL TIME</p></div><button class="notify-btn" type="button" aria-label="Thông báo"><i data-lucide="bell"></i> <span class="notify-dot"></span></button></div></header><section class="content-wrap"><section id="login-section" class="panel login-panel"><p class="section-kicker">Đăng nhập Firebase</p><h3 class="section-title">Phân tích sản phẩm & dịch vụ</h3><p class="section-desc">Hệ thống tổng hợp dữ liệu đơn hàng từ Firestore để thống kê sản phẩm bán chạy, phân tích danh mục và doanh thu theo từng sản phẩm. Đăng nhập để xem chi tiết.</p><ul class="info-list"><li><i data-lucide="check-circle-2"></i><span>Top sản phẩm bán chạy nhất theo số lượng và doanh thu.</span></li><li><i data-lucide="check-circle-2"></i><span>Biểu đồ phân bổ doanh thu theo sản phẩm.</span></li><li><i data-lucide="check-circle-2"></i><span>Tìm kiếm và lọc sản phẩm nhanh chóng.</span></li></ul><p id="login-error" class="alert-error hidden"></p></section><section id="dashboard-section" class="dashboard-section hidden"><div class="stats-grid"><article class="stat-card"><p class="stat-label">Tổng sản phẩm</p><p id="stat-total-products" class="stat-value stat-cyan">0</p></article><article class="stat-card"><p class="stat-label">Tổng lượt mua</p><p id="stat-total-purchases" class="stat-value stat-violet">0</p></article><article class="stat-card"><p class="stat-label">Tổng doanh thu SP</p><p id="stat-total-product-revenue" class="stat-value stat-emerald">0 ₫</p></article><article class="stat-card"><p class="stat-label">Trung bình/SP</p><p id="stat-avg-per-product" class="stat-value stat-amber">0 ₫</p></article></div><article class="panel"><div class="panel-head"><div><h3 class="panel-title">🏆 Top Sản Phẩm Bán Chạy</h3><p class="panel-subtitle">Xếp hạng theo số lượt mua từ dữ liệu Firestore</p></div><div class="ps-sort-controls"><button type="button" class="filter-chip active" data-sort="quantity">Theo lượt mua</button> <button type="button" class="filter-chip" data-sort="revenue">Theo doanh thu</button></div></div><div id="top-products-list" class="top-products-list"><p class="empty-row">Đang tải dữ liệu...</p></div></article><article class="panel"><div class="orders-head"><div><h3 class="panel-title">📋 Danh Sách Tất Cả Sản Phẩm</h3><p class="panel-subtitle">Tổng hợp từ tất cả đơn hàng</p></div><p id="product-count" class="filter-count"></p></div><div class="table-wrap"><table class="orders-table ps-products-table"><thead><tr><th>#</th><th>Sản phẩm</th><th>Lượt mua</th><th>Tổng doanh thu</th><th>Giá TB/đơn</th><th>Đơn gần nhất</th></tr></thead><tbody id="products-tbody"></tbody></table></div></article><p id="status-text" class="status-text tone-info"></p></section></section></main></div><script type="module">import { initializeApp, getApp, getApps } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        collection, collectionGroup, doc, getDoc, getFirestore,
+        increment, limit, onSnapshot, query, serverTimestamp, setDoc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBUR5_v33e6ciQrN2YVSRXugHHOO5mnZqw",
+        authDomain: "nenonexus-digital-game-store.firebaseapp.com",
+        projectId: "nenonexus-digital-game-store",
+        storageBucket: "nenonexus-digital-game-store.firebasestorage.app",
+        messagingSenderId: "171441174876",
+        appId: "1:171441174876:web:463dae218cc3b845c1e999",
+        measurementId: "G-VM6GX6WZ69",
+      };
+
+      const state = { user: null, isSupportAgent: false, orders: [], unsubscribe: null, sortBy: "quantity", searchQuery: "" };
+
+      const els = {
+        globalTime: document.getElementById("global-time"),
+        loginSection: document.getElementById("login-section"),
+        dashboardSection: document.getElementById("dashboard-section"),
+        loginBtn: document.getElementById("google-login-btn"),
+        sidebarLogoutBtn: document.getElementById("sidebar-logout-btn"),
+        loginError: document.getElementById("login-error"),
+        sidebarGuest: document.getElementById("sidebar-auth-guest"),
+        sidebarUser: document.getElementById("sidebar-auth-user"),
+        sidebarUserName: document.getElementById("sidebar-user-name"),
+        sidebarUserEmail: document.getElementById("sidebar-user-email"),
+        sidebarUserAvatar: document.getElementById("sidebar-user-avatar"),
+        statusText: document.getElementById("status-text"),
+        statTotalProducts: document.getElementById("stat-total-products"),
+        statTotalPurchases: document.getElementById("stat-total-purchases"),
+        statTotalProductRevenue: document.getElementById("stat-total-product-revenue"),
+        statAvgPerProduct: document.getElementById("stat-avg-per-product"),
+        topProductsList: document.getElementById("top-products-list"),
+        productsTbody: document.getElementById("products-tbody"),
+        productCount: document.getElementById("product-count"),
+        productSearch: document.getElementById("product-search"),
+        sortButtons: Array.from(document.querySelectorAll("[data-sort]")),
+      };
+
+      function refreshIcons() { if (window.lucide?.createIcons) window.lucide.createIcons(); }
+      function setStatus(msg, tone = "info") { els.statusText.textContent = msg || ""; els.statusText.className = `status-text tone-${tone}`; }
+      function setLoginError(msg) { els.loginError.textContent = msg || ""; els.loginError.classList.toggle("hidden", !msg); }
+
+      function escapeHtml(v) {
+        return String(v || "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+      }
+      function formatVnd(a) { return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(Number(a) || 0); }
+      function toDate(v) { if (v?.toDate) return v.toDate(); const p = new Date(v || 0); return isNaN(p.getTime()) ? new Date(0) : p; }
+      function formatDate(d) { return d.toLocaleString("vi-VN", { year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }); }
+      function toTimestamp(v) {
+        if (!v) return 0; if (v instanceof Date) return v.getTime();
+        if (typeof v?.toDate === "function") return v.toDate().getTime();
+        if (typeof v?.seconds === "number") return v.seconds * 1000;
+        if (typeof v === "number") return v > 1e12 ? v : v * 1000;
+        if (typeof v === "string") { const p = Date.parse(v); return Number.isFinite(p) ? p : 0; } return 0;
+      }
+
+      function normalizeGames(data) {
+        if (Array.isArray(data.games) && data.games.length > 0)
+          return data.games.map(g => (typeof g === "string" ? g : g?.title || g?.name || "Không xác định"));
+        if (Array.isArray(data.items) && data.items.length > 0)
+          return data.items.map(i => (typeof i === "string" ? i : i?.title || i?.name || i?.gameName || i?.id || "Không xác định"));
+        return ["Không xác định"];
+      }
+
+      function normalizeOrder(docSnap, fallbackUserId) {
+        const data = docSnap.data() || {};
+        const ownerRef = docSnap.ref?.parent?.parent;
+        const ownerId = ownerRef ? ownerRef.id : fallbackUserId;
+        const purchaseDate = toDate(data.purchaseDate || data.createdAt || data.updatedAt);
+        return {
+          id: docSnap.id, ownerId, games: normalizeGames(data),
+          amount: Number(data.amount) || 0, paymentMethod: String(data.paymentMethod || "không rõ"),
+          status: String(data.status || "completed"), purchaseDate, purchaseDateMs: purchaseDate.getTime(),
+        };
+      }
+
+      /* ── Aggregate products from orders ── */
+      function aggregateProducts() {
+        const map = new Map();
+        for (const order of state.orders) {
+          const perGame = order.games.length > 0 ? order.amount / order.games.length : order.amount;
+          for (const game of order.games) {
+            const key = game.trim().toLowerCase();
+            if (!map.has(key)) map.set(key, { name: game.trim(), quantity: 0, revenue: 0, lastDate: new Date(0) });
+            const entry = map.get(key);
+            entry.quantity += 1;
+            entry.revenue += perGame;
+            if (order.purchaseDate > entry.lastDate) entry.lastDate = order.purchaseDate;
+          }
+        }
+        let products = Array.from(map.values());
+        if (state.searchQuery) {
+          const q = state.searchQuery.toLowerCase();
+          products = products.filter(p => p.name.toLowerCase().includes(q));
+        }
+        products.sort((a, b) => state.sortBy === "revenue" ? b.revenue - a.revenue : b.quantity - a.quantity);
+        return products;
+      }
+
+      function aggregatePaymentMethods() {
+        const map = new Map();
+        for (const order of state.orders) {
+          const method = order.paymentMethod || "không rõ";
+          if (!map.has(method)) map.set(method, { name: method, count: 0, revenue: 0 });
+          const e = map.get(method);
+          e.count += 1;
+          e.revenue += order.amount;
+        }
+        return Array.from(map.values()).sort((a, b) => b.revenue - a.revenue);
+      }
+
+      /* ── Render functions ── */
+      const MEDAL = ["🥇", "🥈", "🥉"];
+      const RANK_COLORS = ["#fbbf24", "#94a3b8", "#cd7f32", "#67e8f9", "#a78bfa", "#34d399", "#fb7185", "#f97316", "#6ee7b7", "#818cf8"];
+
+      function renderStats(products) {
+        const totalProducts = products.length;
+        const totalPurchases = products.reduce((s, p) => s + p.quantity, 0);
+        const totalRevenue = products.reduce((s, p) => s + p.revenue, 0);
+        const avg = totalProducts > 0 ? totalRevenue / totalProducts : 0;
+        els.statTotalProducts.textContent = totalProducts.toLocaleString("vi-VN");
+        els.statTotalPurchases.textContent = totalPurchases.toLocaleString("vi-VN");
+        els.statTotalProductRevenue.textContent = formatVnd(totalRevenue);
+        els.statAvgPerProduct.textContent = formatVnd(avg);
+      }
+
+      function renderTopProducts(products) {
+        const top = products.slice(0, 10);
+        if (top.length === 0) { els.topProductsList.innerHTML = '<p class="empty-row">Chưa có dữ liệu sản phẩm.</p>'; return; }
+        const maxVal = state.sortBy === "revenue" ? Math.max(...top.map(p => p.revenue), 1) : Math.max(...top.map(p => p.quantity), 1);
+        els.topProductsList.innerHTML = top.map((p, i) => {
+          const pct = state.sortBy === "revenue" ? Math.max(5, (p.revenue / maxVal) * 100) : Math.max(5, (p.quantity / maxVal) * 100);
+          const medal = i < 3 ? MEDAL[i] : `<span class="rank-num">${i + 1}</span>`;
+          const color = RANK_COLORS[i % RANK_COLORS.length];
+          return `
+            <div class="top-product-row" style="--delay:${i * 60}ms">
+              <div class="top-product-rank">${medal}</div>
+              <div class="top-product-info">
+                <div class="top-product-name">${escapeHtml(p.name)}</div>
+                <div class="top-product-bar-track">
+                  <div class="top-product-bar-fill" style="width:${pct}%;background:${color}"></div>
+                </div>
+              </div>
+              <div class="top-product-stats">
+                <span class="top-product-qty">${p.quantity} lượt</span>
+                <span class="top-product-rev">${escapeHtml(formatVnd(p.revenue))}</span>
+              </div>
+            </div>`;
+        }).join("");
+      }
+
+
+
+      function renderProductsTable(products) {
+        els.productCount.textContent = `Hiển thị ${products.length} sản phẩm`;
+        if (products.length === 0) {
+          els.productsTbody.innerHTML = '<tr><td colspan="6" class="empty-row">Không tìm thấy sản phẩm nào.</td></tr>';
+          return;
+        }
+        els.productsTbody.innerHTML = products.map((p, i) => `
+          <tr>
+            <td class="td-muted">${i + 1}</td>
+            <td class="td-primary">${escapeHtml(p.name)}</td>
+            <td><span class="ps-qty-badge">${p.quantity}</span></td>
+            <td class="td-cyan">${escapeHtml(formatVnd(p.revenue))}</td>
+            <td class="td-soft">${escapeHtml(formatVnd(p.quantity > 0 ? p.revenue / p.quantity : 0))}</td>
+            <td class="td-muted">${escapeHtml(formatDate(p.lastDate))}</td>
+          </tr>`).join("");
+      }
+
+      function renderDashboard() {
+        const products = aggregateProducts();
+        renderStats(products);
+        renderTopProducts(products);
+        renderProductsTable(products);
+      }
+
+      /* ── Firebase logic (same pattern as orders-revenue) ── */
+      async function detectSupportAgent(db, uid) {
+        try {
+          const [s, a] = await Promise.all([getDoc(doc(db, "support_agents", uid)), getDoc(doc(db, "admins", uid))]);
+          return s.exists() || a.exists();
+        } catch { return false; }
+      }
+
+      async function syncCurrentUserLogin(db, user) {
+        if (!db || !user?.uid) return;
+        const uid = String(user.uid).trim();
+        if (!uid) return;
+        const syncKey = `products-login-sync:${uid}:${user.metadata?.lastSignInTime || "x"}`;
+        if (sessionStorage?.getItem(syncKey) === "1") return;
+        try {
+          await setDoc(doc(db, "users", uid, "profile", "data"), {
+            authUid: uid, userId: uid, displayName: user.displayName || "", email: user.email || "",
+            provider: user.providerData?.[0]?.providerId || "unknown",
+            lastLogin: serverTimestamp(), lastLoginAt: serverTimestamp(), updatedAt: serverTimestamp(), visitCount: increment(1),
+          }, { merge: true });
+          sessionStorage?.setItem(syncKey, "1");
+        } catch (e) { console.warn("Product page login sync:", e); }
+      }
+
+      function teardownListener() { if (typeof state.unsubscribe === "function") state.unsubscribe(); state.unsubscribe = null; }
+
+      function toggleLayout(loggedIn) {
+        els.loginSection.classList.toggle("hidden", loggedIn);
+        els.dashboardSection.classList.toggle("hidden", !loggedIn);
+      }
+
+      function updateSidebarAuth(user) {
+        els.sidebarGuest.classList.toggle("hidden", !!user);
+        els.sidebarUser.classList.toggle("hidden", !user);
+        if (!user) return;
+        const name = user.displayName || user.email || "Người dùng";
+        els.sidebarUserName.textContent = name;
+        els.sidebarUserEmail.textContent = user.email || "Đã đăng nhập";
+        els.sidebarUserAvatar.src = user.photoURL || `https://api.dicebear.com/9.x/initials/svg?seed=${encodeURIComponent(name)}`;
+      }
+
+      function subscribeOrders(db) {
+        teardownListener();
+        const source = state.isSupportAgent ? collectionGroup(db, "keys") : collection(db, "users", state.user.uid, "keys");
+        setStatus("Đang tải dữ liệu sản phẩm...", "info");
+        state.unsubscribe = onSnapshot(query(source, limit(400)), snap => {
+          const orders = [];
+          snap.forEach(d => orders.push(normalizeOrder(d, state.user.uid)));
+          orders.sort((a, b) => b.purchaseDateMs - a.purchaseDateMs);
+          state.orders = orders;
+          renderDashboard();
+          setStatus(orders.length ? `Đã tải ${orders.length} đơn hàng → tổng hợp sản phẩm thành công.` : "Chưa có dữ liệu đơn hàng.", orders.length ? "success" : "warn");
+        }, err => {
+          console.error("Products listener error:", err);
+          state.orders = [];
+          renderDashboard();
+          setStatus(err?.code === "permission-denied" ? "Không đủ quyền đọc dữ liệu." : "Lỗi tải dữ liệu Firestore.", "error");
+        });
+      }
+
+      /* ── Init ── */
+      let app, auth, db;
+      const provider = new GoogleAuthProvider();
+      try {
+        app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+        auth = getAuth(app); db = getFirestore(app);
+      } catch (e) { console.error("Firebase init:", e); setLoginError("Không thể khởi tạo Firebase."); els.loginBtn.disabled = true; }
+
+      // Sort buttons
+      els.sortButtons.forEach(btn => btn.addEventListener("click", () => {
+        state.sortBy = btn.dataset.sort;
+        els.sortButtons.forEach(b => b.classList.toggle("active", b === btn));
+        renderDashboard();
+      }));
+
+      // Search
+      let searchTimer;
+      els.productSearch.addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => { state.searchQuery = els.productSearch.value.trim(); renderDashboard(); }, 250);
+      });
+
+      // Clock
+      updateSidebarAuth(null);
+      const syncTime = () => { if (els.globalTime) els.globalTime.textContent = new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true }); };
+      syncTime(); setInterval(syncTime, 1000);
+
+      // Login
+      els.loginBtn.addEventListener("click", async () => {
+        if (!auth) return;
+        setLoginError(""); els.loginBtn.disabled = true;
+        try { await signInWithPopup(auth, provider); } catch (e) { setLoginError("Đăng nhập thất bại."); }
+        finally { els.loginBtn.disabled = false; }
+      });
+      els.sidebarLogoutBtn?.addEventListener("click", async () => { try { await signOut(auth); } catch {} });
+
+      if (auth && db) {
+        onAuthStateChanged(auth, async user => {
+          setLoginError("");
+          if (!user || user.isAnonymous) {
+            state.user = null; state.isSupportAgent = false; state.orders = [];
+            teardownListener(); toggleLayout(false); updateSidebarAuth(null); return;
+          }
+          state.user = user;
+          await syncCurrentUserLogin(db, user);
+          state.orders = [];
+          toggleLayout(true); updateSidebarAuth(user); renderDashboard();
+          setStatus("Đang kiểm tra quyền truy cập...", "info");
+          state.isSupportAgent = await detectSupportAgent(db, user.uid);
+          subscribeOrders(db);
+        });
+      }
+      refreshIcons();</script><script type="module" src="./sidebar-auth.js"></script></body></html>

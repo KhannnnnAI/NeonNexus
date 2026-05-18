@@ -1,0 +1,302 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function hasSteamProfileForAuthUser() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid)/profile/data);
+    }
+    function isSteamOwner(userId) {
+      // Steam owner check - user is authenticated and the resource data contains their steamId
+      // This allows Steam users to save profiles using their steamId as the document ID
+      return isSignedIn() && request.resource.data.steamId == userId;
+    }
+    function canAccessSteamProfile(userId) {
+      // Allow Steam users to read profiles from both their steamId and authUid paths
+      return isSignedIn() && (
+        // Case 1: Reading from steamId document and data contains matching steamId
+        (request.resource.data.steamId == userId) ||
+        // Case 2: Reading from authUid document and user is authenticated
+        (request.auth.uid == userId)
+      );
+    }
+    function isPathOwner(userId) {
+      return isOwner(userId) || isSteamOwner(userId);
+    }
+    function isSupportAgent() {
+      return isSignedIn()
+        && exists(/databases/$(database)/documents/support_agents/$(request.auth.uid));
+    }
+    function isAdmin() {
+      return isSignedIn()
+        && (
+             request.auth.token.admin == true
+             || exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+           );
+    }
+    function isDashboardStaff() {
+      return isSupportAgent() || isAdmin();
+    }
+    function validTicketStatus(status) {
+      return status == 'open'
+        || status == 'in_progress'
+        || status == 'resolved'
+        || status == 'closed';
+    }
+    function validOrderStatus(status) {
+      return status == 'completed'
+        || status == 'pending'
+        || status == 'refunded'
+        || status == 'failed';
+    }
+    function validSupportOrderUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+               'status',
+               'updatedAt',
+               'handledBy',
+               'adminNote'
+             ])
+        && (
+             !('status' in request.resource.data)
+             || validOrderStatus(request.resource.data.status)
+           )
+        && (
+             !('updatedAt' in request.resource.data)
+             || request.resource.data.updatedAt is timestamp
+           )
+        && (
+             !('handledBy' in request.resource.data)
+             || request.resource.data.handledBy == null
+             || request.resource.data.handledBy is string
+           )
+        && (
+             !('adminNote' in request.resource.data)
+             || request.resource.data.adminNote == null
+             || (
+                  request.resource.data.adminNote is string
+                  && request.resource.data.adminNote.size() <= 300
+                )
+           )
+        && (
+             !('orderId' in resource.data)
+             || request.resource.data.orderId == resource.data.orderId
+           )
+        && (
+             !('keys' in resource.data)
+             || request.resource.data.keys == resource.data.keys
+           )
+        && (
+             !('games' in resource.data)
+             || request.resource.data.games == resource.data.games
+           )
+        && (
+             !('amount' in resource.data)
+             || request.resource.data.amount == resource.data.amount
+           )
+        && (
+             !('paymentMethod' in resource.data)
+             || request.resource.data.paymentMethod == resource.data.paymentMethod
+           )
+        && (
+             !('purchaseDate' in resource.data)
+             || request.resource.data.purchaseDate == resource.data.purchaseDate
+           );
+    }
+    function validCrmSegment(segment) {
+      return segment == 'new'
+        || segment == 'active'
+        || segment == 'vip'
+        || segment == 'at_risk'
+        || segment == 'churned';
+    }
+    function validCrmWrite(customerId) {
+      return request.resource.data.keys().hasAll([
+               'userId',
+               'segment',
+               'note',
+               'updatedAt',
+               'updatedBy'
+             ])
+        && request.resource.data.keys().hasOnly([
+               'userId',
+               'segment',
+               'note',
+               'updatedAt',
+               'updatedBy',
+               'tierSnapshot',
+               'orderCountSnapshot',
+               'totalSpentSnapshot',
+               'lastPurchaseAt'
+             ])
+        && request.resource.data.userId == customerId
+        && request.resource.data.userId is string
+        && request.resource.data.userId.size() <= 128
+        && request.resource.data.segment is string
+        && validCrmSegment(request.resource.data.segment)
+        && request.resource.data.note is string
+        && request.resource.data.note.size() <= 300
+        && request.resource.data.updatedAt is timestamp
+        && request.resource.data.updatedBy is string
+        && request.resource.data.updatedBy == request.auth.uid
+        && (
+             !('tierSnapshot' in request.resource.data)
+             || request.resource.data.tierSnapshot == null
+             || request.resource.data.tierSnapshot is string
+           )
+        && (
+             !('orderCountSnapshot' in request.resource.data)
+             || request.resource.data.orderCountSnapshot == null
+             || request.resource.data.orderCountSnapshot is int
+             || request.resource.data.orderCountSnapshot is float
+           )
+        && (
+             !('totalSpentSnapshot' in request.resource.data)
+             || request.resource.data.totalSpentSnapshot == null
+             || request.resource.data.totalSpentSnapshot is int
+             || request.resource.data.totalSpentSnapshot is float
+           )
+        && (
+             !('lastPurchaseAt' in request.resource.data)
+             || request.resource.data.lastPurchaseAt == null
+             || request.resource.data.lastPurchaseAt is timestamp
+           );
+    }
+    function validSupportTicketCreate() {
+      return request.resource.data.keys().hasAll([
+               'email',
+               'accountIdentifier',
+               'accountType',
+               'provider',
+               'displayName',
+               'subject',
+               'message',
+               'status',
+               'createdAt',
+               'userId'
+             ])
+        && request.resource.data.keys().hasOnly([
+               'email',
+               'accountIdentifier',
+               'accountType',
+               'provider',
+               'displayName',
+               'steamId',
+               'subject',
+               'message',
+               'status',
+               'createdAt',
+               'updatedAt',
+               'handledBy',
+               'userId'
+             ])
+        && (
+             request.resource.data.userId == request.auth.uid
+             || (
+                  request.resource.data.userId is string
+                  && isSteamOwner(request.resource.data.userId)
+                )
+           )
+        && request.resource.data.status == 'open'
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 180
+        && request.resource.data.accountIdentifier is string
+        && request.resource.data.accountIdentifier.size() <= 180
+        && request.resource.data.accountType is string
+        && request.resource.data.accountType.size() <= 32
+        && request.resource.data.provider is string
+        && request.resource.data.provider.size() <= 64
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 120
+        && request.resource.data.subject is string
+        && request.resource.data.subject.size() >= 2
+        && request.resource.data.subject.size() <= 64
+        && request.resource.data.message is string
+        && request.resource.data.message.size() >= 5
+        && request.resource.data.message.size() <= 5000
+        && (
+             !('steamId' in request.resource.data)
+             || request.resource.data.steamId == null
+             || request.resource.data.steamId is string
+           );
+    }
+    function validSupportTicketUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+               'status',
+               'updatedAt',
+               'handledBy'
+             ])
+        && validTicketStatus(request.resource.data.status)
+        && request.resource.data.userId == resource.data.userId
+        && request.resource.data.createdAt == resource.data.createdAt
+        && (
+             !('updatedAt' in request.resource.data)
+             || request.resource.data.updatedAt is timestamp
+           )
+        && (
+             !('handledBy' in request.resource.data)
+             || request.resource.data.handledBy == null
+             || request.resource.data.handledBy is string
+           );
+    }
+
+    // Required for collectionGroup("keys") queries in dashboard/orders-revenue.
+    // Dashboard staff (support/admin) can read all keys subcollections.
+    match /{path=**}/keys/{orderId} {
+      allow read: if isDashboardStaff();
+    }
+
+    // Required for collectionGroup("profile") queries in dashboard/customers.
+    // Without this wildcard match, collectionGroup(profile) can be denied.
+    match /{path=**}/profile/{docId} {
+      allow read: if isDashboardStaff();
+    }
+    
+    match /users/{userId} {
+      allow read: if isPathOwner(userId) || isDashboardStaff();
+      allow write: if isPathOwner(userId);
+      match /profile/{docId} {
+        // Owners can read their own profile; dashboard staff can aggregate all.
+        // Note: docId is always "data" in our implementation, so we check against userId
+        allow read: if isPathOwner(userId) || isDashboardStaff() || canAccessSteamProfile(userId);
+        allow write: if isPathOwner(userId) || canAccessSteamProfile(userId);
+      }
+      match /cart/{docId} {
+        allow read, write: if isPathOwner(userId) || canAccessSteamProfile(userId);
+      }
+      match /keys/{orderId} {
+        allow read: if isPathOwner(userId) || isDashboardStaff() || canAccessSteamProfile(userId);
+        allow create: if isPathOwner(userId) || canAccessSteamProfile(userId);
+        allow update: if isPathOwner(userId) || (isDashboardStaff() && validSupportOrderUpdate()) || canAccessSteamProfile(userId);
+        allow delete: if isPathOwner(userId) || canAccessSteamProfile(userId);
+      }
+      match /news_cache/{docId} {
+        allow read, write: if isPathOwner(userId);
+      }
+    }
+    match /crm_customers/{customerId} {
+      // Dashboard customers page uses CRM snapshots for tier/visit fallback.
+      allow read: if isDashboardStaff();
+      allow create, update: if isDashboardStaff() && validCrmWrite(customerId);
+      allow delete: if false;
+    }
+    match /admins/{adminId} {
+      allow read: if isOwner(adminId) || isAdmin();
+      allow write: if false;
+    }
+    match /support_agents/{agentId} {
+      allow read: if isOwner(agentId) || isAdmin();
+      allow write: if false;
+    }
+    match /support_tickets/{ticketId} {
+      allow create: if isSignedIn() && validSupportTicketCreate();
+      allow read: if isDashboardStaff();
+      allow update: if isDashboardStaff() && validSupportTicketUpdate();
+      allow delete: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Debug Steam Session</title>
+    
+    <!-- Universal Mobile CSS Manager -->
+    <script>
+      class MobileCSSManager {
+        constructor() {
+          this.isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          this.mobileCSS = {};
+          this.resizeTimer = null;
+          this.themeObserver = null;
+          this.pageMobileCSS = {
+            "index.html": "css/index.css?v=5",
+            'community.html': 'css/community-mobile.css?v=1',
+            'account.html': 'css/account-mobile.css?v=1',
+            'event.html': 'css/event-mobile.css?v=2',
+            'trending.html': 'css/trending-mobile.css?v=11'
+          };
+          this.currentPage = this.getCurrentPageName();
+        }
+        init() { this.loadInitialCSS(); this.setupResizeListener(); this.setupThemeListener(); }
+        getCurrentPageName() {
+          const path = window.location.pathname;
+          const fileName = path.split('/').pop();
+          return fileName || 'index.html';
+        }
+        loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
+        loadMobileCSS() {
+          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const prefix = isRoot ? '' : '../';
+          const mobileCSSPath = this.pageMobileCSS[this.currentPage];
+          const cacheBuster = new Date().getTime();
+          if (mobileCSSPath && !this.mobileCSS.page) {
+            document.body.classList.add('mobile-view');
+            this.mobileCSS.page = document.createElement('link');
+            this.mobileCSS.page.rel = 'stylesheet';
+            const sep = mobileCSSPath.includes('?') ? '&' : '?';
+            this.mobileCSS.page.href = `${prefix}${mobileCSSPath}${sep}v=${cacheBuster}`;
+            this.mobileCSS.page.id = 'page-mobile-css';
+            document.head.appendChild(this.mobileCSS.page);
+          }
+          if (!this.mobileCSS.discounts) {
+            this.mobileCSS.discounts = document.createElement('link');
+            this.mobileCSS.discounts.rel = 'stylesheet';
+            this.mobileCSS.discounts.href = `${prefix}css/discounts-mobile.css?v=${cacheBuster}`;
+            this.mobileCSS.discounts.id = 'discounts-mobile-css';
+            document.head.appendChild(this.mobileCSS.discounts);
+          }
+          if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS(cacheBuster);
+        }
+        unloadMobileCSS() {
+          if (this.mobileCSS.page) { document.body.classList.remove('mobile-view'); this.mobileCSS.page.remove(); this.mobileCSS.page = null; }
+          if (this.mobileCSS.discounts) { this.mobileCSS.discounts.remove(); this.mobileCSS.discounts = null; }
+          this.unloadLightCSS();
+        }
+        loadLightCSS(cacheBuster = new Date().getTime()) {
+          if (!this.mobileCSS.light) {
+            const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+            const prefix = isRoot ? '' : '../';
+            this.mobileCSS.light = document.createElement('link');
+            this.mobileCSS.light.rel = 'stylesheet';
+            this.mobileCSS.light.href = `${prefix}css/discounts-light.css?v=${cacheBuster}`;
+            this.mobileCSS.light.id = 'discounts-light-css';
+            document.head.appendChild(this.mobileCSS.light);
+          }
+        }
+        unloadLightCSS() { if (this.mobileCSS.light) { this.mobileCSS.light.remove(); this.mobileCSS.light = null; } }
+        setupResizeListener() {
+          window.addEventListener('resize', () => {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(() => {
+              const currentlyMobile = window.innerWidth <= 768;
+              if (currentlyMobile && !this.isMobile) { this.isMobile = true; this.loadMobileCSS(); }
+              else if (!currentlyMobile && this.isMobile) { this.isMobile = false; this.unloadMobileCSS(); }
+            }, 250);
+          });
+        }
+        setupThemeListener() {
+          this.themeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme' && this.isMobile) {
+                if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS();
+                else this.unloadLightCSS();
+              }
+            });
+          });
+          this.themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+        }
+      }
+      const initMobileCSSManager = () => { if (!window.mobileCSSManager) { window.mobileCSSManager = new MobileCSSManager(); window.mobileCSSManager.init(); } };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMobileCSSManager);
+      else initMobileCSSManager();
+    </script>
+
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- Path Resolver for Local/Server switching -->
+  <script src="../API/path-resolver.js"></script>
+</head>
+  <body>
+    <h1>Steam Session Debug</h1>
+    <button onclick="checkSession()">Check LocalStorage</button>
+    <button onclick="clearSession()">Clear Session</button>
+    <pre id="output"></pre>
+
+    <script>
+      function checkSession() {
+        const output = document.getElementById("output");
+        const steamUser = localStorage.getItem("steam_user");
+
+        output.textContent = `Steam User in localStorage:\n${steamUser ? JSON.stringify(JSON.parse(steamUser), null, 2) : "NOT FOUND"}`;
+      }
+
+      function clearSession() {
+        localStorage.removeItem("steam_user");
+        alert("Session cleared!");
+        checkSession();
+      }
+
+      // Auto-check on load
+      checkSession();
+    </script>
+  </body>
+</html>
+
+

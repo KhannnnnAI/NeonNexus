@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="google" content="notranslate" />
+    <title>NeonNexus - Order Complete</title>
+
+    <link rel="stylesheet" href="../css/index.css?v=4" />
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Universal Mobile CSS Manager -->
+    <script>
+      class MobileCSSManager {
+        constructor() {
+          this.isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          this.mobileCSS = {};
+          this.resizeTimer = null;
+          this.themeObserver = null;
+          this.pageMobileCSS = {
+            "index.html": "css/index.css?v=5",
+            'community.html': 'css/community-mobile.css?v=1',
+            'account.html': 'css/account-mobile.css?v=1',
+            'event.html': 'css/event-mobile.css?v=2',
+            'trending.html': 'css/trending-mobile.css?v=11'
+          };
+          this.currentPage = this.getCurrentPageName();
+        }
+        init() { this.loadInitialCSS(); this.setupResizeListener(); this.setupThemeListener(); }
+        getCurrentPageName() {
+          const path = window.location.pathname;
+          const fileName = path.split('/').pop();
+          return fileName || 'index.html';
+        }
+        loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
+        loadMobileCSS() {
+          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const prefix = isRoot ? '' : '../';
+          const mobileCSSPath = this.pageMobileCSS[this.currentPage];
+          const cacheBuster = new Date().getTime();
+          if (mobileCSSPath && !this.mobileCSS.page) {
+            document.body.classList.add('mobile-view');
+            this.mobileCSS.page = document.createElement('link');
+            this.mobileCSS.page.rel = 'stylesheet';
+            const sep = mobileCSSPath.includes('?') ? '&' : '?';
+            this.mobileCSS.page.href = `${prefix}${mobileCSSPath}${sep}v=${cacheBuster}`;
+            this.mobileCSS.page.id = 'page-mobile-css';
+            document.head.appendChild(this.mobileCSS.page);
+          }
+          if (!this.mobileCSS.discounts) {
+            this.mobileCSS.discounts = document.createElement('link');
+            this.mobileCSS.discounts.rel = 'stylesheet';
+            this.mobileCSS.discounts.href = `${prefix}css/discounts-mobile.css?v=${cacheBuster}`;
+            this.mobileCSS.discounts.id = 'discounts-mobile-css';
+            document.head.appendChild(this.mobileCSS.discounts);
+          }
+          if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS(cacheBuster);
+        }
+        unloadMobileCSS() {
+          if (this.mobileCSS.page) { document.body.classList.remove('mobile-view'); this.mobileCSS.page.remove(); this.mobileCSS.page = null; }
+          if (this.mobileCSS.discounts) { this.mobileCSS.discounts.remove(); this.mobileCSS.discounts = null; }
+          this.unloadLightCSS();
+        }
+        loadLightCSS(cacheBuster = new Date().getTime()) {
+          if (!this.mobileCSS.light) {
+            const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+            const prefix = isRoot ? '' : '../';
+            this.mobileCSS.light = document.createElement('link');
+            this.mobileCSS.light.rel = 'stylesheet';
+            this.mobileCSS.light.href = `${prefix}css/discounts-light.css?v=${cacheBuster}`;
+            this.mobileCSS.light.id = 'discounts-light-css';
+            document.head.appendChild(this.mobileCSS.light);
+          }
+        }
+        unloadLightCSS() { if (this.mobileCSS.light) { this.mobileCSS.light.remove(); this.mobileCSS.light = null; } }
+        setupResizeListener() {
+          window.addEventListener('resize', () => {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(() => {
+              const currentlyMobile = window.innerWidth <= 768;
+              if (currentlyMobile && !this.isMobile) { this.isMobile = true; this.loadMobileCSS(); }
+              else if (!currentlyMobile && this.isMobile) { this.isMobile = false; this.unloadMobileCSS(); }
+            }, 250);
+          });
+        }
+        setupThemeListener() {
+          this.themeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme' && this.isMobile) {
+                if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS();
+                else this.unloadLightCSS();
+              }
+            });
+          });
+          this.themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+        }
+      }
+      const initMobileCSSManager = () => { if (!window.mobileCSSManager) { window.mobileCSSManager = new MobileCSSManager(); window.mobileCSSManager.init(); } };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMobileCSSManager);
+      else initMobileCSSManager();
+    </script>
+
+    <script>
+      // Apply theme immediately
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+
+      // CHECK PAYMENT STATUS IMMEDIATELY (Before Render)
+      (function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // ZaloPay: ?status=1 (Success)
+        const zaloStatus = urlParams.get("status");
+
+        // MoMo: ?resultCode=0 (Success)
+        const momoResultCode = urlParams.get("resultCode");
+        const momoErrorCode = urlParams.get("errorCode");
+
+        // Check ZaloPay Fail/Cancel
+        if (zaloStatus !== null && zaloStatus !== "1") {
+          localStorage.removeItem("purchasedItems");
+          window.location.replace("../index.html");
+          return;
+        }
+
+        // Check MoMo Fail/Cancel
+        if (momoResultCode !== null && momoResultCode !== "0") {
+          localStorage.removeItem("purchasedItems");
+          window.location.replace("../index.html");
+          return;
+        }
+
+        if (momoErrorCode !== null && momoErrorCode !== "0") {
+          localStorage.removeItem("purchasedItems");
+          window.location.replace("../index.html");
+          return;
+        }
+      })();
+    </script>
+
+    <style>
+      .keygen-container {
+        max-width: 800px;
+        margin: 6rem auto 2rem;
+        padding: 2rem;
+        background: rgba(23, 26, 33, 0.95);
+        border: 1px solid rgba(34, 211, 238, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 0 40px rgba(34, 211, 238, 0.1);
+        backdrop-filter: blur(10px);
+        min-height: 60vh;
+      }
+
+      .success-header {
+        text-align: center;
+        margin-bottom: 3rem;
+        animation: fadeInDown 0.8s ease-out;
+      }
+
+      .success-icon {
+        width: 80px;
+        height: 80px;
+        color: #22d3ee;
+        margin-bottom: 1.5rem;
+        filter: drop-shadow(0 0 15px rgba(34, 211, 238, 0.5));
+      }
+
+      .success-title {
+        font-family: "Orbitron", sans-serif;
+        font-size: 2.5rem;
+        background: linear-gradient(to right, #fff, #22d3ee);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 1rem;
+      }
+
+      .success-message {
+        color: #9ca3af;
+        font-size: 1.1rem;
+        font-family: "ROG Viet", sans-serif;
+      }
+
+      .key-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .key-item {
+        background: rgba(13, 16, 23, 0.8);
+        border: 1px solid rgba(75, 85, 99, 0.4);
+        border-radius: 8px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        animation: slideInUp 0.5s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: border-color 0.3s ease;
+      }
+
+      .key-item:hover {
+        border-color: #22d3ee;
+      }
+
+      .game-thumb {
+        width: 120px;
+        height: 67px;
+        object-fit: cover;
+        border-radius: 6px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        flex-shrink: 0;
+      }
+
+      .key-details {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .game-name {
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .key-meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.6rem;
+        flex-wrap: wrap;
+      }
+
+      .key-badge {
+        font-size: 0.68rem;
+        font-family: 'Courier New', monospace;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+      }
+      .key-badge.category-dlc    { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.3); }
+      .key-badge.category-steam  { background: rgba(34,211,238,0.12); color: #22d3ee; border: 1px solid rgba(34,211,238,0.25); }
+      .key-badge.category-gift   { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+      .key-badge.franchise-badge { background: rgba(255,255,255,0.06); color: #9ca3af; border: 1px solid rgba(255,255,255,0.1); }
+
+      .key-box {
+        background: #000;
+        padding: 0.75rem 1rem;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        color: #22d3ee;
+        font-size: 1.05rem;
+        letter-spacing: 2px;
+        border: 1px solid #1f2937;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        word-break: break-all;
+      }
+
+      .copy-btn {
+        background: none;
+        border: none;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+
+      .copy-btn:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .back-home-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #22d3ee;
+        color: #000;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: bold;
+        text-decoration: none;
+        margin-top: 3rem;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-family: "ROG Viet", sans-serif;
+      }
+
+      .back-home-btn:hover {
+        background: #06b6d4;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(34, 211, 238, 0.4);
+      }
+
+      /* Toast notification */
+      .copy-toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #1e3a3f;
+        border: 1px solid #22d3ee;
+        color: #22d3ee;
+        padding: 0.65rem 1.4rem;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 20px rgba(34, 211, 238, 0.25);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        z-index: 9999;
+      }
+      .copy-toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes slideInUp {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* Light Mode Overrides */
+      html[data-theme="light"] .keygen-container {
+        background: rgba(255, 255, 255, 0.85);
+        border-color: rgba(8, 145, 178, 0.2);
+        box-shadow: 0 0 40px rgba(8, 145, 178, 0.1);
+      }
+      html[data-theme="light"] .success-title {
+        background: linear-gradient(to right, #0284c7, #06b6d4);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      html[data-theme="light"] .success-message { color: #4b5563; }
+      html[data-theme="light"] .key-item {
+        background: rgba(240, 249, 255, 0.8);
+        border-color: rgba(186, 230, 253, 0.5);
+      }
+      html[data-theme="light"] .key-item:hover { border-color: #06b6d4; }
+      html[data-theme="light"] .game-name { color: #0f172a; }
+      html[data-theme="light"] .key-box {
+        background: #f0f9ff;
+        border-color: #bae6fd;
+        color: #0284c7;
+      }
+      html[data-theme="light"] .copy-btn { color: #64748b; }
+      html[data-theme="light"] .copy-btn:hover {
+        color: #0284c7;
+        background: rgba(14, 165, 233, 0.1);
+      }
+    </style>
+
+    <!-- Firebase Compat SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Path Resolver for Local/Server switching -->
+    <script src="../API/path-resolver.js"></script>
+  </head>
+
+  <body class="bg-dark text-gray-100">
+    <div class="tech-bg"></div>
+    <div class="tech-gradient"></div>
+
+    <div class="keygen-container">
+      <div class="success-header">
+        <i data-lucide="check-circle" class="success-icon"></i>
+        <h1 class="success-title">PAYMENT SUCCESSFUL!</h1>
+        <p class="success-message">
+          Thank you for your purchase. Here are your product activation codes.
+        </p>
+      </div>
+
+      <div id="key-list-container" class="key-list">
+        <!-- Keys will be injected here -->
+      </div>
+
+      <div style="text-align: center">
+        <a href="../index.html" class="back-home-btn">
+          <i data-lucide="home"></i>
+          BACK TO HOME
+        </a>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="copy-toast" id="copy-toast">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      CODE COPIED!
+    </div>
+
+    <!-- Scripts -->
+    <script src="../API/auth.js?v=fixed_v2"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        lucide.createIcons();
+
+        // Wait for Firebase to initialize (max 10s)
+        let attempts = 0;
+        while ((!window.firebaseCart || !window.__firestoreDB) && attempts < 20) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          attempts++;
+        }
+
+        if (window.__firebaseAuthReady && typeof window.__firebaseAuthReady.then === "function") {
+          await Promise.race([
+            window.__firebaseAuthReady,
+            new Promise((resolve) => setTimeout(resolve, 6000)),
+          ]);
+        }
+
+        // ─── Read purchased items ────────────────────────────────────────────
+        const purchasedItemsJson = localStorage.getItem("purchasedItems");
+        const keyListContainer = document.getElementById("key-list-container");
+
+        if (!purchasedItemsJson) {
+          keyListContainer.innerHTML =
+            '<p style="text-align:center; color:#ef4444; font-family: Courier New, monospace;">Order information not found. Please contact support.</p>';
+          return;
+        }
+
+        let items;
+        try {
+          items = JSON.parse(purchasedItemsJson);
+        } catch (e) {
+          keyListContainer.innerHTML =
+            '<p style="text-align:center; color:#ef4444;">Failed to read order data.</p>';
+          return;
+        }
+
+        const EXCHANGE_RATE = 26000;
+        const allKeys = [];
+        const allGames = [];
+        let totalAmount = 0;
+        let globalIndex = 0;
+
+        // ─── Render key cards ────────────────────────────────────────────────
+        items.forEach((item) => {
+          const quantity = item.quantity || 1;
+          const itemPrice = item.price || item.originalPrice || 0;
+          totalAmount += itemPrice * quantity;
+
+          for (let q = 0; q < quantity; q++) {
+            const cat = (item.category || '').toLowerCase();
+            const priceInUSD = itemPrice / EXCHANGE_RATE;
+
+            // Key length logic
+            let numGroups;
+            if (cat === 'walletcode' || item.title.toLowerCase().includes('gift card')) {
+              numGroups = 3; // XXXXX-XXXXX-XXXXX
+            } else if (cat === 'dlc') {
+              numGroups = 4; // XXXXX-XXXXX-XXXXX-XXXXX
+            } else if (priceInUSD >= 25) {
+              numGroups = 5; // Premium game
+            } else {
+              numGroups = 4; // Standard game
+            }
+
+            // Generate code
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+            let code = "";
+            for (let g = 0; g < numGroups; g++) {
+              if (g > 0) code += "-";
+              for (let c = 0; c < 5; c++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+              }
+            }
+
+            allKeys.push(code);
+            allGames.push(item.title);
+
+            // Category badge class
+            const catRaw = item.category || 'STEAM';
+            const catClass = cat === 'dlc' ? 'category-dlc'
+              : cat === 'walletcode' ? 'category-gift'
+              : 'category-steam';
+
+            const franchiseBadge = item.franchise
+              ? `<span class="key-badge franchise-badge">${item.franchise}</span>`
+              : '';
+
+            // Image src — handle relative paths
+            const imgSrc = (item.image && item.image.startsWith('http'))
+              ? item.image
+              : (item.image ? '../' + item.image : 'https://placehold.co/120x67/171a21/22d3ee?text=DLC');
+
+            const keyEl = document.createElement("div");
+            keyEl.className = "key-item";
+            keyEl.style.animationDelay = `${globalIndex * 0.12}s`;
+
+            keyEl.innerHTML = `
+              <img src="${imgSrc}"
+                class="game-thumb"
+                alt="${item.title}"
+                referrerpolicy="no-referrer"
+                onerror="this.src='https://placehold.co/120x67/171a21/22d3ee?text=Game'"
+              >
+              <div class="key-details">
+                <span class="game-name" title="${item.title}">
+                  ${item.title}${quantity > 1 ? ` (${q + 1}/${quantity})` : ''}
+                </span>
+                <div class="key-meta">
+                  <span class="key-badge ${catClass}">${catRaw}</span>
+                  ${franchiseBadge}
+                </div>
+                <div class="key-box">
+                  <span id="key-${globalIndex}">${code}</span>
+                  <button class="copy-btn" onclick="copyToClipboard('key-${globalIndex}')" title="Copy code">
+                    <i data-lucide="copy" style="width:16px;height:16px;"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+
+            keyListContainer.appendChild(keyEl);
+            globalIndex++;
+          }
+        });
+
+        lucide.createIcons();
+
+        // ─── Resolve current user ────────────────────────────────────────────
+        const authUid =
+          window.__firebaseAuth?.currentUser?.uid || "";
+
+        let currentUserId = "";
+        let fallbackUserId = "";
+
+        try {
+          const steamData = JSON.parse(localStorage.getItem("steam_user") || "null");
+          if (steamData) {
+            if (steamData.steamId) currentUserId = steamData.steamId;
+            if (steamData.uid && steamData.uid !== currentUserId) fallbackUserId = steamData.uid;
+          }
+        } catch (e) {}
+
+        if (!currentUserId) currentUserId = authUid;
+
+        if (!currentUserId) {
+          try {
+            const dash = JSON.parse(localStorage.getItem('dashboard_auth_session_v1') || 'null');
+            if (dash?.isGuest && dash?.uid) currentUserId = dash.uid;
+          } catch (e) {}
+        }
+
+        if (!currentUserId) currentUserId = localStorage.getItem('guest_id') || '';
+
+        // ─── Detect payment method ───────────────────────────────────────────
+        const urlParams = new URLSearchParams(window.location.search);
+        let paymentMethod = localStorage.getItem('payment_method') || "card";
+        
+        // Fallback to URL parameters if localStorage not available
+        if (!localStorage.getItem('payment_method')) {
+          if (urlParams.has("status"))      paymentMethod = "zalopay";
+          else if (urlParams.has("resultCode")) paymentMethod = "momo";
+          else if (urlParams.has("orderCode"))  paymentMethod = "vietqr";
+        }
+        
+        // Clear payment method from localStorage after using it
+        localStorage.removeItem('payment_method');
+
+        const isGuest = !currentUserId || currentUserId === 'guest' || currentUserId.startsWith('guest_');
+
+        // ─── Save keys ───────────────────────────────────────────────────────
+        totalAmount = Math.round(Number(totalAmount)) || 0;
+
+        const orderData = {
+          orderId: "ORDER_" + Date.now(),
+          keys: allKeys,
+          games: allGames,
+          amount: totalAmount,
+          paymentMethod,
+          purchaseDate: new Date().toISOString(),
+          status: "completed",
+        };
+
+        if (isGuest) {
+          try {
+            const existing = JSON.parse(localStorage.getItem('guest_purchased_keys') || '[]');
+            existing.push(orderData);
+            localStorage.setItem('guest_purchased_keys', JSON.stringify(existing));
+            console.log("Keys saved to LocalStorage (guest).");
+          } catch (e) {
+            console.warn("Failed to save guest keys:", e);
+          }
+        } else if (currentUserId && window.firebaseCart?.isAvailable()) {
+          // Apply membership discount
+          if (window.firebaseCart.getUserMembership) {
+            try {
+              const membership = await window.firebaseCart.getUserMembership(currentUserId);
+              if (membership?.discount > 0) {
+                orderData.amount = Math.round(totalAmount * (1 - membership.discount));
+              }
+            } catch (e) {}
+          }
+          try {
+            let saved = await window.firebaseCart.savePurchasedKeys(currentUserId, orderData);
+            if (!saved && fallbackUserId) {
+              saved = await window.firebaseCart.savePurchasedKeys(fallbackUserId, orderData);
+            }
+            console.log(saved ? "Keys saved to Firebase." : "Firebase save failed.");
+          } catch (e) {
+            console.error("Error saving keys:", e);
+          }
+        }
+
+        // ─── Clear cart ──────────────────────────────────────────────────────
+        try {
+          const toRemove = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k?.startsWith('cart_')) toRemove.push(k);
+          }
+          toRemove.forEach(k => localStorage.removeItem(k));
+          localStorage.removeItem('purchasedItems');
+        } catch (e) {}
+      });
+
+      // ─── Copy to clipboard ───────────────────────────────────────────────
+      const _toast = document.getElementById('copy-toast');
+      let _toastTimer = null;
+
+      function showCopyToast() {
+        _toast.classList.add('show');
+        clearTimeout(_toastTimer);
+        _toastTimer = setTimeout(() => _toast.classList.remove('show'), 2000);
+      }
+
+      function copyToClipboard(elementId) {
+        const text = document.getElementById(elementId)?.innerText?.trim();
+        if (!text) return;
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(text).then(showCopyToast).catch(() => fallbackCopy(text));
+        } else {
+          fallbackCopy(text);
+        }
+      }
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try { document.execCommand('copy'); showCopyToast(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+
+      window.copyToClipboard = copyToClipboard;
+    </script>
+  </body>
+</html>

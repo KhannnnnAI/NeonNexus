@@ -1,0 +1,2073 @@
+<!DOCTYPE html>
+<html lang="vi" translate="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <meta name="description" content="NeonNexus - Events & Promotions - Game Events and Steam Sales">
+  <title>NeonNexus - Events & Promotions</title>
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="preconnect" href="https://nenonexus-digital-game-store.web.app" crossorigin>
+  <link rel="stylesheet" href="../css/index.css?v=9">
+<link rel="stylesheet" href="../css/event-mobile.css?v=4" media="(max-width: 900px)">
+  <link rel="stylesheet" href="../css/discounts-mobile.css" media="(max-width: 900px)">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+
+   <script>
+    class MobileCSSManager {
+      constructor() {
+        this.isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        this.mobileCSS = {};
+        this.resizeTimer = null;
+        this.themeObserver = null;
+        this.pageMobileCSS = {
+          "index.html": "css/index.css?v=5",
+          'community.html': 'css/community-mobile.css?v=1',
+          'account.html': 'css/account-mobile.css?v=1',
+          'event.html': 'css/event-mobile.css?v=2',
+          'trending.html': 'css/trending-mobile.css?v=11'
+        };
+        this.currentPage = this.getCurrentPageName();
+      }
+      init() { this.loadInitialCSS(); this.setupResizeListener(); this.setupThemeListener(); }
+      getCurrentPageName() {
+        const path = window.location.pathname;
+        const fileName = path.split('/').pop();
+        return fileName || 'index.html';
+      }
+      loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
+      loadMobileCSS() {
+        const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+        const prefix = isRoot ? '' : '../';
+        const mobileCSSPath = this.pageMobileCSS[this.currentPage];
+        const cacheBuster = new Date().getTime();
+        if (mobileCSSPath && !this.mobileCSS.page) {
+          document.body.classList.add('mobile-view');
+          this.mobileCSS.page = document.createElement('link');
+          this.mobileCSS.page.rel = 'stylesheet';
+          const sep = mobileCSSPath.includes('?') ? '&' : '?';
+          this.mobileCSS.page.href = `${prefix}${mobileCSSPath}${sep}v=${cacheBuster}`;
+          this.mobileCSS.page.id = 'page-mobile-css';
+          document.head.appendChild(this.mobileCSS.page);
+        }
+        if (!this.mobileCSS.discounts) {
+          this.mobileCSS.discounts = document.createElement('link');
+          this.mobileCSS.discounts.rel = 'stylesheet';
+          this.mobileCSS.discounts.href = `${prefix}css/discounts-mobile.css?v=${cacheBuster}`;
+          this.mobileCSS.discounts.id = 'discounts-mobile-css';
+          document.head.appendChild(this.mobileCSS.discounts);
+        }
+        if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS(cacheBuster);
+      }
+      unloadMobileCSS() {
+        if (this.mobileCSS.page) { document.body.classList.remove('mobile-view'); this.mobileCSS.page.remove(); this.mobileCSS.page = null; }
+        if (this.mobileCSS.discounts) { this.mobileCSS.discounts.remove(); this.mobileCSS.discounts = null; }
+        this.unloadLightCSS();
+      }
+      loadLightCSS(cacheBuster = new Date().getTime()) {
+        if (!this.mobileCSS.light) {
+          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const prefix = isRoot ? '' : '../';
+          this.mobileCSS.light = document.createElement('link');
+          this.mobileCSS.light.rel = 'stylesheet';
+          this.mobileCSS.light.href = `${prefix}css/discounts-light.css?v=${cacheBuster}`;
+          this.mobileCSS.light.id = 'discounts-light-css';
+          document.head.appendChild(this.mobileCSS.light);
+        }
+      }
+      unloadLightCSS() { if (this.mobileCSS.light) { this.mobileCSS.light.remove(); this.mobileCSS.light = null; } }
+      setupResizeListener() {
+        window.addEventListener('resize', () => {
+          clearTimeout(this.resizeTimer);
+          this.resizeTimer = setTimeout(() => {
+            const currentlyMobile = window.innerWidth <= 768;
+            if (currentlyMobile && !this.isMobile) { this.isMobile = true; this.loadMobileCSS(); }
+            else if (!currentlyMobile && this.isMobile) { this.isMobile = false; this.unloadMobileCSS(); }
+          }, 250);
+        });
+      }
+      setupThemeListener() {
+        this.themeObserver = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme' && this.isMobile) {
+              if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS();
+              else this.unloadLightCSS();
+            }
+          });
+        });
+        this.themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+      }
+    }
+    const initMobileCSSManager = () => { if (!window.mobileCSSManager) { window.mobileCSSManager = new MobileCSSManager(); window.mobileCSSManager.init(); } };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMobileCSSManager);
+    else initMobileCSSManager();
+  </script>
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <style>
+    /* Event Page Specific Styles */
+    .event-hero {
+      padding: 4rem 0 6rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(176, 38, 255, 0.2);
+      position: relative;
+    }
+    
+    .event-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(0, 243, 255, 0.5);
+      background: rgba(0, 243, 255, 0.1);
+      color: #00f3ff;
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #00f3ff;
+      animation: pulse 2s infinite;
+    }
+
+    .event-hero-title {
+      font-family: 'ROG Lyons', monospace;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 900;
+      color: #fff;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    [data-theme="light"] .event-hero-title {
+      background: linear-gradient(90deg, #00ffd5, #006eff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .event-hero-subtitle {
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+
+    /* Countdown Banner */
+    .countdown-banner {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 0, 255, 0.5);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .countdown-banner {
+        flex-direction: row;
+      }
+    }
+
+    .countdown-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255, 0, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .countdown-banner:hover::before {
+      opacity: 1;
+    }
+    [data-theme="light"] .countdown-banner::before {
+      background: linear-gradient(90deg, rgba(0, 225, 255, 0.541), transparent);
+    }
+
+    .countdown-info {
+      text-align: left;
+      z-index: 1;
+    }
+    .countdown-title {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 1.25rem;
+      color: #fff;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+    .countdown-desc {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .countdown-timer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      z-index: 1;
+    }
+    
+    .time-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .time-value {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 2rem;
+      font-weight: bold;
+      color: #0051ff;
+    }
+    .time-value.magenta { color: #ff00ff; }
+    .time-value.cyan { color: #00f3ff; }
+
+    .time-label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      font-weight: bold;
+    }
+
+    .time-sep {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 2rem;
+      color: #4b5563;
+    }
+
+    /* Section Headers */
+    .event-section {
+      padding: 4rem 0;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .section-heading-icon {
+      color: #ff00ff;
+      width: 2rem;
+      height: 2rem;
+    }
+    .section-heading-title {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 1.875rem;
+      font-weight: bold;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+    }
+    .section-heading-line {
+      flex-grow: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255, 0, 255, 0.5), transparent);
+    }
+
+    .steam-heading-icon {
+      color: #fff;
+    }
+    .steam-heading-title {
+      text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
+      color: #fff;
+    }
+    .steam-heading-line {
+      background: linear-gradient(90deg, rgba(0, 243, 255, 0.5), transparent);
+    }
+
+    /* =========================================
+       SLIDER CONTAINER & BUTTONS
+       ========================================= */
+    .slider-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 243, 255, 0.2);
+      border: 1px solid rgba(0, 243, 255, 0.5);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+      opacity: 0.5;
+    }
+
+    .slider-btn:hover {
+      background: rgba(0, 243, 255, 0.8);
+      color: #000;
+      opacity: 1;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+    }
+
+    .slider-btn-prev { left: -15px; }
+    .slider-btn-next { right: -15px; }
+
+    .slider-container:hover .slider-btn { opacity: 0.8; }
+    .slider-container:hover .slider-btn:hover { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .slider-btn { display: none; }
+    }
+
+    /* Events Horizontal Scroll */
+    .events-grid {
+      display: flex;
+      gap: 2rem;
+      overflow-x: auto;
+      padding-bottom: 1.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 243, 255, 0.3) transparent;
+      scroll-behavior: smooth;
+    }
+    
+    .events-grid::-webkit-scrollbar { height: 6px; }
+    .events-grid::-webkit-scrollbar-track { background: transparent; }
+    .events-grid::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 243, 255, 0.3);
+      border-radius: 10px;
+    }
+
+    /* Featured Event Card */
+    .featured-event-card {
+      background: transparent;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      min-width: 320px;
+      max-width: 380px; 
+      flex-shrink: 0;
+      scroll-snap-align: start; 
+    }
+    
+    .featured-event-card:hover {
+      border-color: #00f3ff;
+      box-shadow: 0 8px 25px rgba(0, 243, 255, 0.3);
+    }
+
+    .featured-live-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: #ff0000;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 0.3rem 0.75rem;
+      border-radius: 2rem;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'ROG Lyons', monospace;
+      text-transform: uppercase;
+      box-shadow: 0 2px 8px rgba(255, 0, 0, 0.5);
+    }
+
+    .featured-live-badge .pulse-dot { background-color: #fff; }
+
+    .featured-event-img-wrap {
+      width: 100%;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .featured-event-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      object-position: center;
+    }
+    
+    .featured-event-card:hover .featured-event-img { transform: scale(1.08); }
+
+    .featured-event-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      background: linear-gradient(180deg, #00f3ff 0%, #00b3cc 100%);
+      color: #fff;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .featured-event-category {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.75rem;
+      font-weight: bold;
+      font-family: 'ROG Lyons', monospace;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .featured-event-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      font-family: 'ROG Lyons', monospace;
+      text-transform: uppercase;
+      line-height: 1.3;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .featured-event-desc {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      font-weight: 500;
+      transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .featured-event-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+      padding-top: 1rem;
+      transition: border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .featured-event-date {
+      font-size: 0.9rem;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'ROG Lyons', monospace;
+      font-weight: bold;
+      transition: color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .featured-event-btn {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 0.4rem;
+      font-size: 0.8rem;
+      font-family: 'ROG Lyons', monospace;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .featured-event-btn:hover {
+      background: #fff;
+      color: #00b3cc;
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    /* Steam Sales Section */
+    .steam-sales-bg {
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      z-index: -1;
+    }
+
+    /* =========================================
+       STEAM SALES SLIDER WRAPPER
+       ========================================= */
+    .steam-slider-wrapper {
+      max-width: 850px;
+      margin: 0 auto;
+      border: 2px solid rgba(0, 243, 255, 0.4);
+      border-radius: 0.85rem;
+      padding: 10px;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.2), inset 0 0 15px rgba(0, 243, 255, 0.1);
+      background: rgba(0, 0, 0, 0.3);
+      position: relative;
+      width: 100%;
+    }
+
+    /* === FEATURED SALE CAROUSEL SETTINGS === */
+    .featured-sales-carousel {
+      display: flex;
+      gap: 1.5rem; 
+      overflow-x: auto;
+      padding-bottom: 2rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 243, 255, 0.3) transparent;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+    }
+
+    .featured-sales-carousel::-webkit-scrollbar { height: 8px; }
+    .featured-sales-carousel::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+    .featured-sales-carousel::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 243, 255, 0.5);
+      border-radius: 4px;
+    }
+    .featured-sales-carousel::-webkit-scrollbar-thumb:hover { background-color: #00f3ff; }
+
+    /* THIẾT KẾ MỚI CHO THẺ FEATURED SALE: CROP LẠI VỪA VẶN ẢNH 586x192 */
+    .featured-sale {
+      background: #1b2838;
+      border-radius: 0.5rem;
+      padding: 0; /* Bỏ padding tổng để ảnh và viền tràn sát lề */
+      margin-bottom: 0; 
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 0; /* Bỏ khoảng cách giữa ảnh và chữ */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      overflow: hidden; /* Cắt sạch góc vuông của ảnh cho bo sát mép card */
+      
+      min-width: 100%;
+      flex-shrink: 0;
+      scroll-snap-align: start; 
+      transition: all 0.3s ease; /* Thêm transition cho hiệu ứng chuyển đổi */
+      transform-style: preserve-3d; /* Cho hiệu ứng shadow nổi lên */
+    }
+    
+    .featured-sale:hover {
+       transform: translateY(-2px); /* Đẩy thẻ lên một xíu khi hover */
+       box-shadow: 0 15px 30px rgba(0, 243, 255, 0.2);
+       border-color: rgba(0, 243, 255, 0.6);
+    }
+    
+    @media (min-width: 768px) {
+      .featured-sale {
+        flex-direction: row;
+        height: 192px; /* Fix cứng chiều cao khớp 100% tỷ lệ Steam (586x192) */
+      }
+    }
+
+    .featured-sale-img-wrap {
+      width: 100%;
+      height: 192px; /* Đảm bảo cả mobile cũng đẹp */
+      position: relative;
+      overflow: hidden;
+    }
+    
+    @media (min-width: 768px) {
+      .featured-sale-img-wrap {
+        width: 586px; /* Đúng kích thước ngang của ảnh Steam Header */
+        flex: 0 0 586px;
+      }
+    }
+    
+    .featured-sale-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease-out; /* Hiệu ứng mượt cho ảnh */
+    }
+
+    .featured-sale:hover .featured-sale-img {
+      transform: scale(1.05); /* Phóng to ảnh nhẹ khi hover */
+    }
+    
+    .featured-sale-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent 40%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .featured-sale:hover .featured-sale-img-overlay {
+       background: linear-gradient(to top, rgba(0,243,255,0.2), transparent 50%); /* Thay đổi ánh sáng khi hover */
+    }
+    
+    .featured-sale-badge {
+      background: #A1CD44;
+      color: #000;
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.75rem; 
+      font-weight: bold;
+      padding: 0.2rem 0.6rem;
+      border-radius: 0.25rem;
+      display: inline-block;
+      margin-bottom: 0;
+      box-shadow: 0 0 10px rgba(161, 205, 68, 0.5);
+    }
+
+    .featured-sale-info {
+      flex: 1; /* Tự động fit phần không gian dư còn lại */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: rgba(0,0,0,0.2);
+      padding: 1.25rem 1.5rem; /* Căn lề vừa vặn gọn gàng */
+      border-left: 1px solid rgba(255,255,255,0.05); /* Tách nhẹ hình và chữ */
+      transition: background-color 0.3s ease; /* Thêm hiệu ứng đổi nền */
+    }
+    
+    .featured-sale:hover .featured-sale-info {
+        background: rgba(0, 243, 255, 0.05); /* Sáng nhẹ nền khi hover */
+    }
+
+    .featured-sale-title {
+      font-size: 1.15rem; /* Thu nhỏ cỡ chữ phù hợp với khoảng hẹp */
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 0.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Hiển thị gọn 3 dòng */
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      line-height: 1.3;
+      transition: color 0.3s ease;
+    }
+
+    .featured-sale:hover .featured-sale-title {
+        color: #00f3ff; /* Text sáng lên khi hover */
+    }
+
+    .featured-sale-price-box {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: auto; /* Đẩy giá và nút sát đáy thẻ */
+      margin-bottom: 0.75rem;
+    }
+    
+    .featured-sale-prices {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .featured-sale-curr {
+      color: #00f3ff;
+      font-size: 1.35rem; /* Kích thước giá hợp lý */
+      font-weight: bold;
+      font-family: 'ROG Lyons', monospace;
+      line-height: 1;
+    }
+
+    .featured-sale-btn {
+      width: 100%;
+      background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+      background-size: 300% 100%;
+      color: #fff;
+      border: none;
+      padding: 0.6rem; /* Thu gọn nút */
+      border-radius: 0.25rem;
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .featured-sale-btn:hover {
+      background-position: 100% 0;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.5);
+      transform: scale(1.02); /* Phóng to nhẹ nút khi hover */
+    }
+
+    .view-all-sales {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .view-all-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .view-all-btn:hover {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    
+    /* Light Theme Adjustments */
+    [data-theme="light"] .countdown-banner {
+      background: #fff;
+      border-color: rgba(0, 183, 255, 0.4);
+      box-shadow: 0 0 20px rgba(0, 183, 255, 0.15);
+    }
+    [data-theme="light"] .countdown-title,
+    [data-theme="light"] .time-unit,
+    [data-theme="light"] .section-heading-title {
+      color: #0f172a;
+    }
+    [data-theme="light"] .section-heading-title.steam-heading-title {
+      text-shadow: 0 0 5px rgb(34, 193, 221);
+    }
+    [data-theme="light"] .time-sep { color: #00d9ff; }
+    
+    [data-theme="light"] .featured-event-card {
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="light"] .featured-event-card:hover {
+      border-color: #0ea5e9;
+      box-shadow: 0 8px 25px rgba(14, 165, 233, 0.2);
+    }
+    [data-theme="light"] .featured-event-content {
+      background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);
+    }
+    [data-theme="light"] .featured-event-category { color: rgba(255, 255, 255, 0.8); }
+    [data-theme="light"] .featured-event-title { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    [data-theme="light"] .featured-event-desc { color: rgba(255, 255, 255, 0.95); }
+    [data-theme="light"] .featured-event-footer { border-top-color: rgba(255, 255, 255, 0.4); }
+    [data-theme="light"] .featured-event-date { color: #fff; }
+    [data-theme="light"] .featured-event-btn { color: #fff; border-color: rgba(255, 255, 255, 0.6); }
+    [data-theme="light"] .featured-event-btn:hover {
+      background: #fff; color: #0284c7; border-color: #fff; box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+    
+    [data-theme="light"] .steam-sales-bg {
+      background: transparent;
+    }
+    [data-theme="light"] .steam-heading-title { color: #0f172a; text-shadow: none; }
+    [data-theme="light"] .steam-heading-icon { color: #0f172a; }
+
+    /* Light Theme - Featured Sale Settings */
+    /* Container Wrapper trong suốt mờ mờ ở light mode */
+    [data-theme="light"] .steam-slider-wrapper {
+      background: transparent;
+      border-color: rgba(14, 165, 233, 0.4);
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.15), inset 0 0 15px rgba(14, 165, 233, 0.05);
+    }
+
+    [data-theme="light"] .featured-sale {
+      background: transparent;
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    [data-theme="light"] .featured-sale-title {
+      color: #0f172a; 
+    }
+    [data-theme="light"] .featured-sale-info {
+      background: #ffffff;
+      border-left-color: rgba(14, 165, 233, 0.2);
+    }
+    [data-theme="light"] .featured-sale-curr {
+      color: #0284c7;
+    }
+    [data-theme="light"] .slider-btn {
+      background: rgba(240, 249, 255, 0.9);
+      border-color: rgba(14, 165, 233, 0.5);
+      color: #0ea5e9;
+    }
+    [data-theme="light"] .slider-btn:hover {
+      background: #0ea5e9;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+    }
+    [data-theme="light"] .featured-sale:hover .featured-sale-title {
+        color: #0ea5e9; /* Sửa màu hover text cho theme sáng */
+    }
+
+    /* === PAGE LAYOUT: 2-COLUMN === */
+    .page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .page-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: sticky;
+      top: 6rem;
+      max-height: calc(100vh - 7rem);
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .page-sidebar::-webkit-scrollbar { display: none; }
+
+    .page-main {
+      min-width: 0;
+    }
+
+    /* === SIDEBAR NAV === */
+    .sidebar-nav {
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .sidebar-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      border-radius: 0.5rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .sidebar-nav-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .sidebar-nav-item.active {
+      background: rgba(6, 182, 212, 0.12);
+      color: #22d3ee;
+      border-left: 3px solid #22d3ee;
+      padding-left: calc(1rem - 3px);
+    }
+
+    .sidebar-nav-icon {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+
+    /* === SIDEBAR SECTION === */
+    .sidebar-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .sidebar-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-section-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sidebar-section-dot {
+      width: 4px;
+      height: 1.1rem;
+      border-radius: 2px;
+      background: linear-gradient(to bottom, #22d3ee, #9333ea);
+      flex-shrink: 0;
+    }
+
+    .sidebar-section-title h3 {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      cursor: text;
+    }
+
+    /* === LEADERBOARD === */
+    .sidebar-lb-title {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      cursor: text;
+    }
+
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .lb-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 0.4rem;
+      transition: background 0.2s;
+    }
+
+    .lb-item:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .lb-rank {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      min-width: 1.5rem;
+      text-align: center;
+    }
+
+    .lb-rank-1 { color: #fbbf24; }
+    .lb-rank-2 { color: #9ca3af; }
+    .lb-rank-3 { color: #f97316; }
+
+    .lb-avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22d3ee, #9333ea);
+      flex-shrink: 0;
+    }
+
+    .lb-name {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .lb-amount {
+      font-family: 'ROG Lyons', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #22d3ee;
+    }
+
+    /* === DISCOUNT GAMES LIST === */
+    .discount-games-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    /* === RESPONSIVE: collapse sidebar on small screens === */
+    @media (max-width: 900px) {
+      .page-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      .page-sidebar {
+        position: static;
+        max-height: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+      }
+    }
+  </style>
+
+  <!-- Path Resolver for Local/Server switching -->
+  <script src="../API/path-resolver.js"></script>
+</head>
+<body>
+  <div id="app" class="min-h-screen bg-dark text-gray-100 overflow-x-hidden relative">
+    
+    <!-- Tech Background -->
+    <div class="tech-bg"></div>
+    <div class="tech-gradient"></div>
+
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-content">
+        <!-- Logo -->
+        <a href="../index.html" id="logo-btn" class="logo" style="text-decoration: none;">
+          <div class="logo-icon-wrapper">
+            <div class="logo-glow"></div>
+            <i data-lucide="zap" class="logo-icon"></i>
+          </div>
+          <div class="logo-text-wrapper">
+            <span class="logo-text">NEON<span class="logo-accent">NEXUS</span></span>
+            <span class="logo-subtitle">EVENTS & PROMOTIONS</span>
+          </div>
+        </a>
+        
+        <!-- Header Social Links -->
+        <a href="https://www.youtube.com/@VCTPacific" target="_blank" class="header-logo-link" title="NeonNexus YouTube">
+          <i data-lucide="youtube" class="header-logo-image" style="width: 2.5rem; height: 2.5rem; color: #ff0000; display: flex; align-items: center; justify-content: center;"></i>
+        </a>
+
+
+
+        <!-- Currency Selector -->
+        <div class="header-actions">
+          <!-- Mobile Search Toggle -->
+          <button id="mobile-search-btn" class="theme-toggle mobile-search-btn" aria-label="Toggle search">
+            <i data-lucide="search" class="theme-icon"></i>
+          </button>
+
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <i data-lucide="moon" class="theme-icon" id="theme-icon"></i>
+          </button>
+          
+          <!-- Login Button / User Profile -->
+          <div class="user-section">
+            <button id="login-btn" class="login-btn">
+              <i data-lucide="user" class="login-icon"></i>
+              <span class="login-text">LOGIN</span>
+            </button>
+            
+            <!-- User Dropdown (Hidden by default) -->
+            <div id="user-dropdown" class="user-dropdown" style="display: none;">
+              <div class="user-dropdown-header">
+                <img id="user-dropdown-avatar" src="" alt="Avatar" class="user-dropdown-avatar">
+                <div class="user-dropdown-info">
+                  <span id="user-dropdown-name" class="user-dropdown-name">User</span>
+                  <span class="user-dropdown-status">ONLINE</span>
+                </div>
+              </div>
+              <div class="user-dropdown-divider"></div>
+              <a href="account.html" class="user-dropdown-item" style="text-decoration: none; color: inherit;">
+                <i data-lucide="key" class="user-dropdown-icon"></i>
+                <span>My Keys</span>
+              </a>
+              <button id="logout-btn" class="user-dropdown-item">
+                <i data-lucide="log-out" class="user-dropdown-icon"></i>
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Layout: Sidebar + Content -->
+    <div class="container">
+      <div class="page-layout">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="page-sidebar">
+
+        <!-- Sidebar Nav -->
+        <nav class="sidebar-nav">
+          <a href="../index.html" class="sidebar-nav-item" id="nav-home">
+            <i data-lucide="home" class="sidebar-nav-icon"></i>
+            <span>Home</span>
+          </a>
+          <a href="trending.html" class="sidebar-nav-item" id="nav-trending">
+            <i data-lucide="flame" class="sidebar-nav-icon"></i>
+            <span>Trending</span>
+          </a>
+          <a href="event.html" class="sidebar-nav-item active" id="nav-event">
+            <i data-lucide="tag" class="sidebar-nav-icon"></i>
+            <span>Event</span>
+          </a>
+          <a href="community.html" class="sidebar-nav-item" id="nav-community">
+            <i data-lucide="users" class="sidebar-nav-icon"></i>
+            <span>Community</span>
+          </a>
+          <a href="support.html" class="sidebar-nav-item" id="nav-support">
+            <i data-lucide="help-circle" class="sidebar-nav-icon"></i>
+            <span>Support</span>
+          </a>
+          <a href="privacy_policy.html" class="sidebar-nav-item" id="nav-privacy">
+            <i data-lucide="shield" class="sidebar-nav-icon"></i>
+            <span>Privacy Policy</span>
+          </a>
+          <a href="terms_of_service.html" class="sidebar-nav-item" id="nav-terms">
+            <i data-lucide="file-text" class="sidebar-nav-icon"></i>
+            <span>Terms of Service</span>
+          </a>
+        </nav>
+
+        <!-- Discounts Section -->
+        <div class="sidebar-section">
+          <div class="sidebar-section-header">
+            <div class="sidebar-section-title">
+              <span class="sidebar-section-dot"></span>
+              <h3>DISCOUNTS</h3>
+            </div>
+          </div>
+
+          <!-- 5 AAA Deals Container -->
+          <div id="discount-games-list" class="discount-games-list">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        
+      </aside>
+
+      <!-- RIGHT MAIN CONTENT -->
+      <div class="page-main">
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        
+        <!-- Hero Section -->
+        <section class="event-hero">
+          <div class="event-status-badge">
+            <span class="pulse-dot"></span>
+            <span>DATA SYSTEM IS ONLINE</span>
+          </div>
+          <h1 class="event-hero-title">
+            EVENT &<br>
+            <span class="text-cyan" style="background: linear-gradient(90deg, #00f3ff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PROMOTION CENTER</span>
+          </h1>
+          <p class="event-hero-subtitle">
+            Access the NeonNexus network now to get the hottest Esports tournaments and unmissable Steam sales.
+          </p>
+          
+          <!-- Countdown Banner for Mega Sale -->
+          <div class="countdown-banner group">
+            <div class="countdown-info">
+              <h3 class="countdown-title">🔥 Summer Sale 2026</h3>
+              <p class="countdown-desc">Up to 90% off on AAA games</p>
+            </div>
+            <div class="countdown-timer" id="countdown">
+              <div class="time-unit">
+                <span class="time-value magenta" id="days">00</span>
+                <span class="time-label">DAYS</span>
+              </div>
+              <span class="time-sep">:</span>
+              <div class="time-unit">
+                <span class="time-value" id="hours">00</span>
+                <span class="time-label">HOURS</span>
+              </div>
+              <span class="time-sep">:</span>
+              <div class="time-unit">
+                <span class="time-value" id="minutes">00</span>
+                <span class="time-label">MINS</span>
+              </div>
+              <span class="time-sep">:</span>
+              <div class="time-unit">
+                <span class="time-value cyan" id="seconds">00</span>
+                <span class="time-label">SECS</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Game Events Section -->
+        <section id="game-events" class="event-section">
+          <div class="section-heading">
+            <i data-lucide="gamepad-2" class="section-heading-icon"></i>
+            <h2 class="section-heading-title">Featured Game Events</h2>
+            <div class="section-heading-line"></div>
+          </div>
+
+          <!-- Lớp bọc Slider để chứa nút bấm -->
+          <div class="slider-container" style="max-width: 100%;">
+            <button class="slider-btn slider-btn-prev" onclick="scrollCarousel('events-scroll-container', 'left')">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            
+            <div class="events-grid" id="events-scroll-container">
+              <!-- Event Card 1 -->
+              <div class="featured-event-card">
+                <div class="featured-live-badge">
+                  <span class="pulse-dot"></span> LIVE
+                </div>
+                <div class="featured-event-img-wrap">
+                  <img src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/news_live/e68fe09664e39cd91223bd0d47b8c332d466b8c1-1920x1080.jpg?accountingTag=val_esports&auto=format&fit=max&w=3840" alt="Esports Tournament" class="featured-event-img">
+                </div>
+                <div class="featured-event-content">
+                  <div class="featured-event-category">
+                    <span>ESPORTS</span>
+                    <span>Final in HCM City</span>
+                  </div>
+                  <h3 class="featured-event-title">VALORANT Champions Tour Pacific 2026 </h3>
+                  <p class="featured-event-desc">Watch the top teams from the Pacific region battle it out for the championship title.</p>
+                  <div class="featured-event-footer">
+                    <span class="featured-event-date">
+                      <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                      03/04 - 17/05
+                    </span>
+                    <a href="https://www.youtube.com/@VCTPacific" target="_blank" rel="noopener noreferrer">
+                      <button class="featured-event-btn">
+                        <i data-lucide="youtube" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px; color: #ff0000;"></i>
+                        WATCH LIVE
+                      </button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Event Card 2 -->
+              <div class="featured-event-card">
+                <div class="featured-event-img-wrap">
+                  <img src="https://s1cdn.vnecdn.net/vnexpress/restruct/i/v9808/ldpr/1006735/graphics/thumb-share.png?w=1200&h=0&q=100&dpr=1&fit=crop&s=rlAaRuXifED_U0Kx9CNUtw" alt="Event" class="featured-event-img">
+                </div>
+                <div class="featured-event-content">
+                  <div class="featured-event-category">
+                    <span>EVENTS</span>
+                    <span>(SECC), HCM City</span>
+                  </div>
+                  <h3 class="featured-event-title">Vietnam Gameverse 2026</h3>
+                  <p class="featured-event-desc">Step into the action at Vietnam GameVerse 2026! Join us for an action-packed festival featuring the latest blockbuster titles.</p>
+                  <div class="featured-event-footer">
+                    <span class="featured-event-date">
+                      <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                      08-09/05/2026
+                    </span>
+                    <a href="https://vnexpress.net/the-thao/gameverse" target="_blank" rel="noopener noreferrer">
+                      <button class="featured-event-btn">DETAILS</button>
+                    </a> 
+                  </div>
+                </div>
+              </div>
+
+              <!-- Event Card 3 -->
+              <div class="featured-event-card">
+                <div class="featured-event-img-wrap">
+                  <img src="https://videos.rockstargames.com/v4/rkoCtr1r/art/global.jpg" alt="Release" class="featured-event-img">
+                </div>
+                <div class="featured-event-content">
+                  <div class="featured-event-category">
+                    <span>RELEASE</span>
+                    <span>PS5 and Xbox</span>
+                  </div>
+                  <h3 class="featured-event-title">Grand Theft Auto VI (GTA VI)</h3>
+                  <p class="featured-event-desc">Grand Theft Auto VI is an upcoming action-adventure video game developed by Rockstar Games.</p>
+                  <div class="featured-event-footer">
+                    <span class="featured-event-date">
+                      <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                      Coming: 19/11/2026
+                    </span>
+                    <a href="https://www.rockstargames.com/VI" target="_blank" rel="noopener noreferrer">
+                      <button class="featured-event-btn">REGISTER</button>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Event Card 4 -->
+              <div class="featured-event-card">
+                <div class="featured-event-img-wrap">
+                  <img src="https://i.redd.it/steam-summer-sale-art-without-any-text-couldnt-find-it-v0-o9ohzqab9o9d1.png?width=1920&format=png&auto=webp&s=be2594521e4b833a4d76295bc19e68424bddbef8" alt="Sale" class="featured-event-img">
+                </div>
+                <div class="featured-event-content">
+                  <div class="featured-event-category">
+                    <span>SALE EVENTS</span>
+                    <span>Steam</span>
+                  </div>
+                  <h3 class="featured-event-title">Steam Summer Sale 2026</h3>
+                  <p class="featured-event-desc">Gear up for the Steam Summer Sale 2026 and dive into massive discounts on thousands of epic games!</p>
+                  <div class="featured-event-footer">
+                    <span class="featured-event-date">
+                      <i data-lucide="calendar" style="width: 18px; height: 18px;"></i>
+                      Starts: 25/07/2026
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+            <button class="slider-btn slider-btn-next" onclick="scrollCarousel('events-scroll-container', 'right')">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </section>
+
+        <!-- Steam Sales Section -->
+        <section id="steam-sales" class="event-section" style="position: relative;">
+          <div class="steam-sales-bg"></div>
+          <div class="section-heading">
+            <i data-lucide="package" class="section-heading-icon" style="color: #00ffff;"></i>
+            <h2 class="section-heading-title steam-heading-title">Featured Steam Bundle</h2>
+            <div class="section-heading-line steam-heading-line"></div>
+          </div>
+
+          <!-- Lớp bọc Slider giới hạn độ rộng và Thêm Viền Ngoài Phát Sáng -->
+          <div class="slider-container steam-slider-wrapper">
+            <!-- Nút Prev: Dùng JS lấy khoảng gap để scroll cho mượt, lệch 1 chút cho giống thiết kế -->
+            <button class="slider-btn slider-btn-prev" style="left: -20px;" onclick="scrollCarousel('featured-sales-scroll-container', 'left')">
+              <i data-lucide="chevron-left"></i>
+            </button>
+
+            <!-- Featured Sale Carousel Container -->
+            <div class="featured-sales-carousel" id="featured-sales-scroll-container">
+              
+              <!-- Card 1 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/subs/1142889/3cc12863a0756f5d9e6ea565c2d3241848f27dfb/header_586x192.jpg?t=1731458368" alt="RE" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Resident Evil <br>Remake Trilogy</br></h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">1.890.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/sub/1142889/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 2 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/bundles/70045/qw4qqz3ifac8o6i7/f3ac3e3b4359b6d5279c841836f0d48822f06363/header.jpg?t=1774897949" alt="Pack" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">SILENT HILL f x <br>FATAL FRAME II <br>REMAKE</br></h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">2.100.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/bundle/70045/SILENT_HILL_f_x_FATAL_FRAME_II_REMAKE/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 3 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/bundles/70424/p5bwkopbfiibuxdi/10bfbc2909bf518147d9ebd665d4594efe09ab71/header.jpg?t=1775577628" alt="Sports Bundle" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">FC™ 25 & FC™ 26  <br>ICONS Edition</br>Bundle</br></h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">522.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/bundle/70424/EA_SPORTS_FC_25__EA_SPORTS_FC_26_ICONS_Edition_Bundle/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 4 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/bundles/3785/11dovicv7sx2s7ki/b296547afc6f7bbf9424b31b24e8eb9e7b023a5c/header.jpg?t=1774369103" alt="game" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Watch_Dogs <br>Bundle</h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">2.087.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/bundle/3785/Watch_Dogs_Bundle/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 5 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/bundles/15366/bpy5kcwk5k69vio6/678026797b48ea2d2a2df8238fc394d69a06e662/header.jpg?t=1737568798" alt="Wizard Game" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">DOOM <br>Anthology</h3>
+                  <div class="featured-sale-price-box"> 
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">1.677.500₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/bundle/15366/DOOM_Anthology/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 6 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/bundles/52798/dxknsg5l75xv6w4y/26ae2f28132d036601475acb1c90113480ada393/header.jpg?t=1745352568" alt="race" class="featured-sale-img"">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Forza Premium <br>Bundle</h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">2.975.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/bundle/52798/Forza_Motorsport_and_Forza_Horizon_5_Premium_Editions_Bundle/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 7 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/subs/376282/header_586x192.jpg?t=1684339836" alt="Fantasy" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Halo <br>The Masterr <br>Chief Collection</h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">949.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/sub/376282/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 8 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/bundles/65243/qcj25fckv7hhgoum/77c0647fe0c1fe75223a9c75776dd7a6754ea497/header.jpg?t=1765402049" alt="Racing" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Tomb Raider <br>Adventure</h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">1.690.500₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/bundle/65243/Tomb_Raider_Adventure/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 9 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/subs/1252652/599118c635862458e95054478d876d0e0b6a5f01/header_586x192.jpg?t=1741978493" alt="Shooter" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Resident Evil <br>7 & Village <br>Gold Edition</h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">1.690.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/sub/1252652/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card 10 -->
+              <div class="featured-sale">
+                <div class="featured-sale-img-wrap">
+                  <img src="https://shared.akamai.steamstatic.com/store_item_assets/steam/subs/817628/header_586x192.jpg?t=1752520763" alt="Strategy" class="featured-sale-img">
+                  <div class="featured-sale-img-overlay">
+                    <div class="featured-sale-badge">DEAL BUNDLE</div>
+                  </div>
+                </div>
+                <div class="featured-sale-info">
+                  <h3 class="featured-sale-title">Grand Theft Auto <br>Trilogy Definitive <br>Edition</h3>
+                  <div class="featured-sale-price-box">
+                    <div class="featured-sale-prices">
+                      <span class="featured-sale-curr">1.000.000₫</span>
+                    </div>
+                  </div>
+                  <a href="https://store.steampowered.com/sub/817628/" target="_blank" style="text-decoration: none;">
+                    <button class="featured-sale-btn">
+                      <i data-lucide="external-link" style="width: 20px; height: 20px;"></i>
+                      Steam
+                    </button>
+                  </a>
+                </div>
+              </div>
+              
+            </div>
+
+            <!-- Nút Next -->
+            <button class="slider-btn slider-btn-next" style="right: -20px;" onclick="scrollCarousel('featured-sales-scroll-container', 'right')">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+
+                  </section>
+
+      </div>
+    </main>
+      </div>
+    </div>
+  </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-line"></div>
+      <div class="container">
+        <!-- Top Grid -->
+        <div class="footer-grid">
+          <!-- Column 1: Logo & Info -->
+          <div class="footer-column">
+            <div class="footer-brand">
+              <i data-lucide="zap" class="footer-brand-icon"></i>
+              <span class="footer-brand-text">NEON<span class="footer-brand-accent">NEXUS</span></span>
+            </div>
+            <div class="footer-info">
+              <p>System Status: <span class="text-white">ONLINE</span></p>
+              <p>Version: <span class="text-white">1.0.4</span></p>
+              <p>Server: <span class="text-white">Asia-Pacific (VietNam)</span></p>
+            </div>
+          </div>
+          <!-- Column 2: Navigation -->
+          <div class="footer-column">
+            <h4 class="footer-heading footer-heading-cyan">Navigation</h4>
+            <ul class="footer-links">
+              <li><a href="../index.html" class="footer-link" style="text-decoration: none; color: inherit;">:: STORE</a></li>
+              <li><a href="community.html" class="footer-link" style="text-decoration: none; color: inherit;">:: COMMUNITY</a></li>
+              <li><a href="support.html" class="footer-link" style="text-decoration:none;color:inherit">:: SUPPORT</a></li>
+            </ul>
+          </div>
+          <!-- Column 3: Legal -->
+          <div class="footer-column">
+            <h4 class="footer-heading footer-heading-purple">Legal</h4>
+            <ul class="footer-links">
+              <li><a href="privacy_policy.html" class="footer-link" style="text-decoration: none; color: inherit;">PRIVACY_POLICY</a></li>
+              <li><a href="terms_of_service.html" class="footer-link" style="text-decoration: none; color: inherit">TERMS_OF_SERVICE</a></li>
+            </ul>
+          </div>
+          <!-- Column 4: Secure Payment -->
+          <div class="footer-column">
+            <h4 class="footer-heading footer-heading-gray">Secure Payment</h4>
+            <div class="payment-icons">
+              <div class="payment-icon payment-card">
+                <i data-lucide="credit-card"></i>
+              </div>
+              <div class="payment-icon payment-bank">
+                <i data-lucide="building-2"></i>
+              </div>
+              <div class="payment-icon payment-momo">
+                <img src="../Image/MOMO-Logo-App.png" alt="MoMo" class="payment-logo" loading="lazy" decoding="async">
+              </div>
+              <div class="payment-icon payment-zalopay">
+                <img src="../Image/idv2DAbjER_1769330590719.jpeg" alt="ZaloPay" class="payment-logo" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Support Info Grid -->
+        <div class="support-grid">
+          <!-- Contact Support -->
+          <div class="support-card support-card-cyan">
+            <div class="support-glow support-glow-cyan"></div>
+            <div class="support-header">
+              <i data-lucide="phone" class="support-icon"></i>
+              <h4 class="support-title">CONTACT_SUPPORT</h4>
+            </div>
+            <div class="support-content">
+              <p class="support-item">
+                <i data-lucide="phone" class="support-item-icon"></i>
+                <span>Hotline: <span class="text-white">1900-9679</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="globe" class="support-item-icon"></i>
+                <span>International: <span class="text-white">+84 28 3910 9679</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="mail" class="support-item-icon"></i>
+                <span>Email: <span class="text-white">support@neonnexus.com</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="message-circle" class="support-item-icon"></i>
+                <span>Live Chat: <span class="text-white">24/7</span></span>
+              </p>
+            </div>
+          </div>
+          <!-- Support Hours -->
+          <div class="support-card support-card-purple">
+            <div class="support-glow support-glow-purple"></div>
+            <div class="support-header">
+              <i data-lucide="clock" class="support-icon"></i>
+              <h4 class="support-title">SUPPORT_HOURS</h4>
+            </div>
+            <div class="support-content">
+              <p class="support-item">
+                <i data-lucide="clock" class="support-item-icon"></i>
+                <span>Mon - Fri: <span class="text-white">08:00 - 22:00</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="clock" class="support-item-icon"></i>
+                <span>Sat - Sun: <span class="text-white">09:00 - 20:00</span></span>
+              </p>
+              <p class="support-item">
+                <i data-lucide="zap" class="support-item-icon"></i>
+                <span>Response: <span class="text-white">&lt; 1 hour</span></span>
+              </p>
+            </div>
+          </div>
+          <!-- Social Connect -->
+          <div class="support-card support-card-cyan">
+            <div class="support-glow support-glow-cyan"></div>
+            <div class="support-header">
+              <i data-lucide="message-square" class="support-icon"></i>
+              <h4 class="support-title">SOCIAL_CONNECT</h4>
+            </div>
+            <div class="social-icons">
+              <a href="https://www.facebook.com/NeonNexuss" target="_blank" class="social-icon social-facebook">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon social-x">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon social-discord">
+                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.03-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.176 2.42 0 1.333-.966 2.418-2.176 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.176 2.42 0 1.333-.966 2.418-2.176 2.418z"/>
+                </svg>
+              </a>
+              <a href="#" class="social-icon social-youtube">
+                <svg width="20" height="20" fill="#FF0000" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Copyright -->
+        <div class="footer-copyright">
+          <p>
+            © 2026 Neon<span class="footer-brand-accent">Nexus</span> DIGITAL STORE. ALL_RIGHTS_RESERVED.
+            <span class="footer-separator">|</span>
+            POWERED_BY_<span class="text-cyan">CHEAPSHARK</span>
+          </p>
+        </div>
+      </div>
+    </footer>
+
+  <!-- Login Modal -->
+  <div id="login-modal" class="login-modal" style="display: none;">
+    <div class="login-modal-backdrop"></div>
+    <div class="login-modal-content">
+      <button id="close-login-btn" class="modal-close-btn">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="login-header">
+        <div class="login-logo">
+          <i data-lucide="zap" class="text-cyan"></i>
+          <span class="text-white">NEON<span class="text-cyan">NEXUS</span></span>
+        </div>
+        <h3 class="login-title">UNLIMITED GAMING</h3>
+        <p class="login-subtitle">Connect your experience</p>
+      </div>
+      <div class="login-options">
+        <button id="google-login-btn" class="social-login-btn google-btn">
+          <div class="social-icon-wrapper">
+            <img src="../Image/google-logo.svg" alt="Google logo" loading="lazy" decoding="async">
+          </div>
+          <span>Sign in with Google</span>
+        </button>
+        <button id="steam-login-btn" class="social-login-btn steam-btn">
+          <div class="social-icon-wrapper">
+            <img src="../Image/steam-svgrepo-com.svg" alt="Steam logo" loading="lazy" decoding="async">
+          </div>
+          <span>Sign in with Steam</span>
+        </button>
+        <button id="guest-login-btn" class="social-login-btn guest-btn">
+          <div class="social-icon-wrapper">
+            <i data-lucide="user"></i>
+          </div>
+          <span>Continue as Guest</span>
+        </button>
+      </div>
+      <div class="login-footer">
+        <p>By logging in, you agree to our <a href="terms_of_service.html" class="text-cyan hover:underline">Terms</a> & <a href="privacy_policy.html" class="text-cyan hover:underline">Privacy Policy</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Required Notification Modal -->
+  <div id="login-required-modal" class="login-modal" style="display: none;">
+    <div class="login-modal-backdrop"></div>
+    <div class="login-modal-content">
+      <button id="close-login-required-btn" class="modal-close-btn">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="login-header">
+        <div class="login-logo" style="color: #fbbf24;">
+          <i data-lucide="zap" class="text-yellow-500" style="color: #fbbf24;"></i>
+        </div>
+        <h3 class="login-title" style="color: #fbbf24;">LOGIN REQUIRED</h3>
+        <p class="login-subtitle">Please sign in to add items to your cart</p>
+      </div>
+      <div class="login-options">
+        <button id="login-required-google-btn" class="social-login-btn google-btn">
+          <div class="social-icon-wrapper">
+            <img src="../Image/google-logo.svg" alt="Google logo" loading="lazy" decoding="async">
+          </div>
+            <span>Sign in with Google</span>
+        </button>
+        <button id="login-required-steam-btn" class="social-login-btn steam-btn">
+          <div class="social-icon-wrapper">
+            <img src="../Image/steam-svgrepo-com.svg" alt="Steam logo" loading="lazy" decoding="async">
+          </div>
+          <span>Sign in with Steam</span>
+        </button>
+        <button id="login-required-guest-btn" class="social-login-btn guest-btn">
+          <div class="social-icon-wrapper">
+            <i data-lucide="user"></i>
+          </div>
+          <span>Continue as Guest</span>
+        </button>
+      </div>
+      <div class="login-footer">
+        <p style="color: #9ca3af;">Cart functionality requires authentication</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="../API/cheapshark-api.js?v=fixed_v2"></script>
+  <script src="../API/auth.js?v=local"></script>
+  <script src="../API/support.js?v=local"></script>
+  <script src="../API/trending-discounts.js?v=spa_v8"></script>
+  <script src="../API/theme-toggle.js?v=fixed_v2"></script>
+<script>
+    // Drag to scroll functionality
+    const eventsScrollContainer = document.getElementById('events-scroll-container');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    if (eventsScrollContainer) {
+      eventsScrollContainer.addEventListener('mousedown', (e) => {
+        isDown = true;
+        eventsScrollContainer.style.cursor = 'grabbing';
+        startX = e.pageX - eventsScrollContainer.offsetLeft;
+        scrollLeft = eventsScrollContainer.scrollLeft;
+      });
+
+      eventsScrollContainer.addEventListener('mouseleave', () => {
+        isDown = false;
+        eventsScrollContainer.style.cursor = 'default';
+      });
+
+      eventsScrollContainer.addEventListener('mouseup', () => {
+        isDown = false;
+        eventsScrollContainer.style.cursor = 'default';
+      });
+
+      eventsScrollContainer.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - eventsScrollContainer.offsetLeft;
+        const walk = (x - startX) * 2; // Tốc độ scroll
+        eventsScrollContainer.scrollLeft = scrollLeft - walk;
+      });
+    }
+    
+    // Drag to scroll functionality cho phần Featured Sales Carousel
+    const salesScrollContainer = document.getElementById('featured-sales-scroll-container');
+    let isSalesDown = false;
+    let salesStartX;
+    let salesScrollLeft;
+
+    if (salesScrollContainer) {
+      salesScrollContainer.addEventListener('mousedown', (e) => {
+        isSalesDown = true;
+        salesScrollContainer.style.cursor = 'grabbing';
+        salesStartX = e.pageX - salesScrollContainer.offsetLeft;
+        salesScrollLeft = salesScrollContainer.scrollLeft;
+      });
+
+      salesScrollContainer.addEventListener('mouseleave', () => {
+        isSalesDown = false;
+        salesScrollContainer.style.cursor = 'default';
+      });
+
+      salesScrollContainer.addEventListener('mouseup', () => {
+        isSalesDown = false;
+        salesScrollContainer.style.cursor = 'default';
+      });
+
+      salesScrollContainer.addEventListener('mousemove', (e) => {
+        if (!isSalesDown) return;
+        e.preventDefault();
+        const x = e.pageX - salesScrollContainer.offsetLeft;
+        const walk = (x - salesStartX) * 2;
+        salesScrollContainer.scrollLeft = salesScrollLeft - walk;
+      });
+    }
+
+    // TÍNH TOÁN CUỘN JS HOÀN HẢO CHO CẢ 2 SLIDER
+    function scrollCarousel(containerId, direction) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      const firstCard = container.firstElementChild;
+      if (!firstCard) return;
+      
+      const gap = parseInt(window.getComputedStyle(container).gap) || 0;
+      const itemWidth = firstCard.offsetWidth + gap;
+      
+      // Tính toán index hiện tại dựa vào scrollLeft để biết đang đứng ở card số mấy
+      const currentIndex = Math.round(container.scrollLeft / itemWidth);
+      let nextIndex = direction === 'left' ? currentIndex - 1 : currentIndex + 1;
+      
+      // Không cho trượt lố qua card đầu hoặc card cuối
+      const maxIndex = container.children.length - 1;
+      if (nextIndex < 0) nextIndex = 0;
+      if (nextIndex > maxIndex) nextIndex = maxIndex;
+      
+      // Cuộn chính xác đến vị trí mới
+      container.scrollTo({
+        left: nextIndex * itemWidth,
+        behavior: 'smooth'
+      });
+    }
+
+    // Steam Sale Countdown timer
+    const startCountdownImmediately = () => {
+      console.log('Starting countdown immediately...');
+      fallbackCountdown();
+      
+      setTimeout(() => {
+        loadSteamSaleAPI();
+      }, 1000);
+    };
+
+    // Hàm load API đã được điều chỉnh logic
+    const loadSteamSaleAPI = async () => {
+      // Đã vô hiệu hóa để hiển thị dữ liệu tĩnh demo
+      console.log('API loading disabled for demo.');
+    };
+
+    const fallbackCountdown = () => {
+      const countdownDate = new Date('2026-06-25T17:00:00Z').getTime();
+      
+      const countdownEl = document.getElementById("countdown");
+      const elDays = document.getElementById("days");
+      const elHours = document.getElementById("hours");
+      const elMinutes = document.getElementById("minutes");
+      const elSeconds = document.getElementById("seconds");
+      
+      if (!countdownEl || !elDays || !elHours || !elMinutes || !elSeconds) {
+        console.log('Countdown elements not found, retrying...');
+        setTimeout(fallbackCountdown, 500);
+        return;
+      }
+      
+      if (window.countdownInterval) {
+        clearInterval(window.countdownInterval);
+      }
+      
+      console.log('Starting countdown timer...');
+      window.countdownInterval = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countdownDate - now;
+
+        if (distance < 0) {
+          clearInterval(window.countdownInterval);
+          if (countdownEl) {
+            countdownEl.innerHTML = "<span style='color: #ff00ff; font-family: \"ROG Lyons\", monospace; font-weight: bold; text-transform: uppercase;'>EVENT HAS ENDED</span>";
+          }
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        const formatTime = (t) => t < 10 ? '0' + t : t;
+
+        if (elDays) elDays.innerHTML = formatTime(days);
+        if (elHours) elHours.innerHTML = formatTime(hours);
+        if (elMinutes) elMinutes.innerHTML = formatTime(minutes);
+        if (elSeconds) elSeconds.innerHTML = formatTime(seconds);
+      }, 1000);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startCountdownImmediately);
+    } else {
+      startCountdownImmediately();
+    }
+
+    setTimeout(() => {
+      if (!window.countdownInterval) {
+        console.log('Starting fallback countdown as backup...');
+        fallbackCountdown();
+      }
+    }, 500);
+
+    // Initialize trending discounts
+    setTimeout(() => {
+      console.log('Loading trending discounts...');
+      if (typeof loadTrendingDiscounts === 'function') {
+        loadTrendingDiscounts();
+      } else {
+        console.warn('loadTrendingDiscounts function not available');
+      }
+    }, 1000);
+
+    const mobileSearchBtn = document.getElementById('mobile-search-btn');
+    if (mobileSearchBtn) {
+      const searchWrapper = document.querySelector('.search-wrapper');
+      if (searchWrapper) {
+        mobileSearchBtn.addEventListener('click', () => {
+          searchWrapper.classList.toggle('mobile-active');
+        });
+      }
+    }
+
+    const navItems = document.querySelectorAll('.sidebar-nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        navItems.forEach(navItem => navItem.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
+          return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/lucide@latest';
+      
+      script.onload = () => {
+          lucide.createIcons(); 
+      };
+      
+      script.onerror = () => {
+          console.error("Lỗi: Không thể tải Lucide.");
+      };
+      
+      document.body.appendChild(script);
+  });
+  </script>
+</body>
+</html>

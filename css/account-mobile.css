@@ -1,0 +1,191 @@
+/* Mobile CSS for Account Page */
+@media screen and (max-width: 768px) {
+  /* Main Container */
+  main.container {
+    margin-top: 72px !important;
+    margin-bottom: 2rem !important;
+    min-height: calc(100vh - 150px) !important;
+  }
+
+  /* Header adjustments */
+  .header {
+    height: 60.8px !important;
+  }
+  .header-content {
+    gap: 0.5rem;
+    padding: 0 0.75rem;
+    width: 100%;
+    height: 100% !important;
+    box-sizing: border-box;
+    justify-content: space-between;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+  }
+  .header-actions {
+    gap: 0.35rem !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    height: 40px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Logo size reduction */
+  .logo {
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .logo-text {
+    font-size: 1.2rem !important;
+    letter-spacing: 0.1em;
+  }
+  .logo-subtitle {
+    display: none !important;
+  }
+  .logo-icon {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+  .logo-icon-wrapper {
+    padding: 4px !important;
+  }
+
+  /* User section adjustments */
+  .header-actions {
+    gap: 0.35rem !important;
+  }
+  .user-section {
+    margin-left: 0;
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+  }
+  #user-name {
+    display: none !important;
+  }
+  #user-info-display {
+    gap: 0.35rem !important;
+    display: none; /* Let JS toggle between none and flex */
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  #user-info-display span:last-child {
+    display: none !important; /* Hide "ONLINE" text on mobile to save space */
+  }
+  .membership-next-tier-msg {
+    font-size: 0.8rem !important;
+  }
+  #logout-btn span {
+    display: none !important;
+  }
+  #user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    margin-right: 0 !important;
+  }
+  .theme-toggle, .login-btn, #logout-btn {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+  }
+  .theme-icon, .login-icon, #logout-btn i {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .login-btn {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Page Header */
+  .hero-title {
+    font-size: 2rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .hero-description {
+    font-size: 0.9rem !important;
+  }
+
+  /* Membership Section */
+  .membership-section {
+    padding: 1.5rem 1rem !important;
+    border-radius: 12px !important;
+  }
+  .membership-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .membership-icon-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+  .membership-tier-title {
+    font-size: 1.5rem !important;
+  }
+  .membership-badges {
+    justify-content: center;
+  }
+  .membership-spend-container {
+    text-align: center;
+    align-items: center;
+    padding-left: 0 !important;
+    border-left: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+    width: 100%;
+  }
+  .membership-total-spent {
+    font-size: 1.5rem !important;
+  }
+  
+  /* Guest Overlay */
+  .guest-overlay-content {
+    padding: 1.5rem 1rem;
+    width: 90%;
+  }
+  .guest-overlay-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.5rem;
+  }
+  .guest-overlay-title {
+    font-size: 1.2rem;
+  }
+
+  /* Keys List Container */
+  #keys-list {
+    gap: 1rem !important;
+    justify-content: center;
+  }
+  
+  /* Empty & Loading States */
+  #empty-state,
+  #loading-state,
+  #login-required-msg {
+    padding: 2rem 1rem !important;
+  }
+  #empty-state i,
+  #login-required-msg i {
+    width: 60px !important;
+    height: 60px !important;
+    margin-bottom: 1rem !important;
+  }
+  #empty-state h3,
+  #login-required-msg h2 {
+    font-size: 1.5rem !important;
+  }
+  .back-home-btn {
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.9rem !important;
+  }
+}

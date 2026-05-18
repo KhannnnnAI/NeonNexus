@@ -1,0 +1,374 @@
+<!doctype html><html lang="en" translate="no"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="google" content="notranslate"><title>NeonNexus - Order Complete</title><base href="/"><link rel="stylesheet" href="../css/index.css?v=4"><script src="https://unpkg.com/lucide@latest"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script><script src="../API/cors-client.js?v=1.0"></script><script>// Apply theme immediately
+      const savedTheme = localStorage.getItem("theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+
+      // CHECK PAYMENT STATUS IMMEDIATELY (Before Render)
+      (function () {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // DEBUG: Uncomment this line to diagnose MoMo return URL
+        // alert("DEBUG PARAMS: " + window.location.search);
+
+        // ZaloPay: ?status=1 (Success)
+        const zaloStatus = urlParams.get("status");
+
+        // MoMo: ?resultCode=0 (Success)
+        const momoResultCode = urlParams.get("resultCode");
+        const momoErrorCode = urlParams.get("errorCode"); // Sometimes used
+
+        // Check ZaloPay Fail/Cancel
+        if (zaloStatus !== null && zaloStatus !== "1") {
+          localStorage.removeItem("purchasedItems");
+          window.location.replace("/");
+          return;
+        }
+
+        // Check MoMo Fail/Cancel
+        // If resultCode exists and is not 0 -> Redirect
+        if (momoResultCode !== null && momoResultCode !== "0") {
+          localStorage.removeItem("purchasedItems");
+          window.location.replace("/");
+          return;
+        }
+
+        // If errorCode exists and is not 0 -> Redirect
+        if (momoErrorCode !== null && momoErrorCode !== "0") {
+          localStorage.removeItem("purchasedItems");
+          window.location.replace("/");
+          return;
+        }
+      })();</script><style>.keygen-container{max-width:800px;margin:6rem auto 2rem;padding:2rem;background:rgba(23,26,33,.95);border:1px solid rgba(34,211,238,.2);border-radius:12px;box-shadow:0 0 40px rgba(34,211,238,.1);backdrop-filter:blur(10px);min-height:60vh}.success-header{text-align:center;margin-bottom:3rem;animation:fadeInDown .8s ease-out}.success-icon{width:80px;height:80px;color:#22d3ee;margin-bottom:1.5rem;filter:drop-shadow(0 0 15px rgba(34, 211, 238, .5))}.success-title{font-family:Orbitron,sans-serif;font-size:2.5rem;background:linear-gradient(to right,#fff,#22d3ee);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:1rem}.success-message{color:#9ca3af;font-size:1.1rem;font-family:"ROG Viet",sans-serif}.key-list{display:flex;flex-direction:column;gap:1.5rem}.key-item{background:rgba(13,16,23,.8);border:1px solid rgba(75,85,99,.4);border-radius:8px;padding:1.5rem;display:flex;align-items:center;gap:1.5rem;animation:slideInUp .5s ease-out forwards;opacity:0;transform:translateY(20px);transition:border-color .3s ease}.key-item:hover{border-color:#22d3ee}.game-thumb{width:120px;height:67px;object-fit:cover;border-radius:6px;box-shadow:0 4px 10px rgba(0,0,0,.5)}.key-details{flex:1}.game-name{color:#fff;font-weight:700;font-size:1.1rem;margin-bottom:.5rem;display:block}.key-box{background:#000;padding:.75rem 1rem;border-radius:4px;font-family:"Courier New",monospace;color:#22d3ee;font-size:1.1rem;letter-spacing:2px;border:1px solid #1f2937;position:relative;display:flex;justify-content:space-between;align-items:center}.copy-btn{background:0 0;border:none;color:#6b7280;cursor:pointer;padding:4px;border-radius:4px;transition:all .2s}.copy-btn:hover{color:#fff;background:rgba(255,255,255,.1)}.back-home-btn{display:inline-flex;align-items:center;gap:.5rem;background:#22d3ee;color:#000;padding:1rem 2rem;border-radius:8px;font-weight:700;text-decoration:none;margin-top:3rem;transition:all .3s ease;border:none;cursor:pointer;font-family:"ROG Viet",sans-serif}.back-home-btn:hover{background:#06b6d4;transform:translateY(-2px);box-shadow:0 4px 15px rgba(34,211,238,.4)}@keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}@keyframes slideInUp{to{opacity:1;transform:translateY(0)}}html[data-theme=light] .keygen-container{background:rgba(255,255,255,.85);border-color:rgba(8,145,178,.2);box-shadow:0 0 40px rgba(8,145,178,.1)}html[data-theme=light] .success-title{background:linear-gradient(to right,#0284c7,#06b6d4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}html[data-theme=light] .success-message{color:#4b5563}html[data-theme=light] .key-item{background:rgba(240,249,255,.8);border-color:rgba(186,230,253,.5)}html[data-theme=light] .key-item:hover{border-color:#06b6d4}html[data-theme=light] .game-name{color:#0f172a}html[data-theme=light] .key-box{background:#f0f9ff;border-color:#bae6fd;color:#0284c7}html[data-theme=light] .copy-btn{color:#64748b}html[data-theme=light] .copy-btn:hover{color:#0284c7;background:rgba(14,165,233,.1)}</style></head><body class="bg-dark text-gray-100"><div class="tech-bg"></div><div class="tech-gradient"></div><div class="keygen-container"><div class="success-header"><i data-lucide="check-circle" class="success-icon"></i><h1 class="success-title">PAYMENT SUCCESSFUL!</h1><p class="success-message">Thank you for your purchase. Here is your product activation code.</p></div><div id="key-list-container" class="key-list"></div><div style="text-align:center"><a href="/" class="back-home-btn"><i data-lucide="home"></i> BACK TO HOME</a></div></div><script type="module">// Import Firebase auth for getting current user
+      import "/API/auth.js";
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        lucide.createIcons();
+
+        // Wait for Firebase to initialize with improved error handling
+        let attempts = 0;
+        const maxAttempts = 30; // Increased from 20 to 30 (15 seconds instead of 10)
+        let firebaseLoaded = false;
+        
+        while (attempts < maxAttempts && !firebaseLoaded) {
+          // Check if Firebase is properly initialized
+          if (window.firebaseCart && window.__firestoreDB && window.__firebaseAuth) {
+            // Test if Firebase is actually working by checking if methods exist
+            try {
+              if (typeof window.firebaseCart.isAvailable === 'function' && 
+                  typeof window.__firestoreDB.collection === 'function') {
+                firebaseLoaded = true;
+                console.log("✅ Firebase successfully loaded and verified");
+                break;
+              }
+            } catch (err) {
+              console.warn("Firebase objects found but not fully functional:", err);
+            }
+          }
+          
+          if (!firebaseLoaded) {
+            attempts++;
+            if (attempts < maxAttempts) {
+              console.log(`⏳ Waiting for Firebase... (${attempts}/${maxAttempts})`);
+              await new Promise((resolve) => setTimeout(resolve, 500));
+            }
+          }
+        }
+
+        if (!firebaseLoaded) {
+          console.error("❌ Firebase failed to load after timeout");
+          
+          // Show user-friendly error message
+          const keyListContainer = document.getElementById("key-list-container");
+          if (keyListContainer) {
+            const errorMessage = document.createElement("div");
+            errorMessage.innerHTML = `
+              <div style="text-align: center; padding: 2rem; color: #ef4444;">
+                <i data-lucide="alert-circle" style="width: 48px; height: 48px; margin-bottom: 1rem; display: inline-block;"></i>
+                <h3>Connection Error</h3>
+                <p>Unable to connect to our services. Your keys have been generated but may not be saved to your account.</p>
+                <p>Please save your keys manually and contact support if needed.</p>
+                <button onclick="location.reload()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: #22d3ee; border: none; border-radius: 4px; cursor: pointer;">
+                  Retry
+                </button>
+              </div>
+            `;
+            keyListContainer.appendChild(errorMessage);
+            if (window.lucide) lucide.createIcons();
+          }
+        } else {
+          console.log("✅ Firebase loaded and ready!");
+        }
+
+        if (
+          window.__firebaseAuthReady &&
+          typeof window.__firebaseAuthReady.then === "function"
+        ) {
+          await Promise.race([
+            window.__firebaseAuthReady,
+            new Promise((resolve) => setTimeout(resolve, 6000)),
+          ]);
+        }
+
+        // Logic to retrieve purchased items
+        const purchasedItemsJson = localStorage.getItem("purchasedItems");
+        const keyListContainer = document.getElementById("key-list-container");
+
+        if (!purchasedItemsJson) {
+          keyListContainer.innerHTML =
+            '<p style="text-align:center; color:#ef4444;">Order information not found. Please contact support.</p>';
+          return;
+        }
+
+        const items = JSON.parse(purchasedItemsJson);
+        const EXCHANGE_RATE = 26000;
+
+        // Helper to generate key (same logic as before)
+        function generateKey(length) {
+          const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+          let key = "";
+          for (let i = 0; i < length; i++) {
+            if (i > 0 && i % 5 === 0) {
+              key += "-";
+            }
+            key += chars.charAt(Math.floor(Math.random() * chars.length));
+          }
+          return key;
+        }
+
+        // Collect all generated keys and games for Firebase
+        const allKeys = [];
+        const allGames = [];
+        let totalAmount = 0;
+
+        // Render items
+        let globalIndex = 0;
+        items.forEach((item) => {
+          const quantity = item.quantity || 1;
+          // Use sale price (price) first, then fallback to originalPrice
+          const itemPrice = item.price || item.originalPrice || 0;
+          totalAmount += itemPrice * quantity;
+
+          for (let q = 0; q < quantity; q++) {
+            // Determine key length
+            let numGroups = 0;
+            let priceInUSD = itemPrice / EXCHANGE_RATE;
+
+            if (
+              item.category === "GiftCard" ||
+              item.title.toLowerCase().includes("gift card")
+            ) {
+              numGroups = 3;
+            } else if (priceInUSD >= 25) {
+              numGroups = 5;
+            } else {
+              numGroups = 3;
+            }
+
+            let code = "";
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+
+            for (let g = 0; g < numGroups; g++) {
+              if (g > 0) code += "-";
+              for (let c = 0; c < 5; c++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+              }
+            }
+
+            // Store for Firebase
+            allKeys.push(code);
+            allGames.push(item.title);
+
+            const keyEl = document.createElement("div");
+            keyEl.className = "key-item";
+            keyEl.style.animationDelay = `${globalIndex * 0.15}s`;
+
+            keyEl.innerHTML = `
+              <div class="product-image-wrapper" style="width: 120px; height: 67px; flex-shrink: 0;">
+                <img src="${(item.image && !item.image.startsWith("http") ? "../" + item.image : item.image) || "https://placehold.co/120x67"}" class="game-thumb" alt="${item.title}">
+              </div>
+              <div class="key-details">
+                <span class="game-name">${item.title} ${quantity > 1 ? `(${q + 1}/${quantity})` : ""}</span>
+                <div class="key-box">
+                  <span id="key-${globalIndex}">${code}</span>
+                  <button class="copy-btn" onclick="copyToClipboard('key-${globalIndex}')" title="Copy">
+                    <i data-lucide="copy" size="16"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+
+            keyListContainer.appendChild(keyEl);
+            globalIndex++;
+          }
+        });
+
+        lucide.createIcons();
+
+                // ==== SAVE TO FIREBASE ====
+        // Use SteamID as primary path for Steam users.
+        const authUid =
+          window.__firebaseAuth &&
+          window.__firebaseAuth.currentUser &&
+          window.__firebaseAuth.currentUser.uid
+            ? window.__firebaseAuth.currentUser.uid
+            : "";
+        let currentUserId = "";
+        let fallbackUserId = "";
+
+        const savedSteamUser = localStorage.getItem("steam_user");
+        if (savedSteamUser) {
+          try {
+            const userData = JSON.parse(savedSteamUser);
+            const steamId = userData.steamId || "";
+            const steamUid = userData.uid || "";
+
+            if (!currentUserId && steamId) {
+              currentUserId = steamId;
+            }
+            if (!fallbackUserId && steamUid && steamUid !== currentUserId) {
+              fallbackUserId = steamUid;
+            }
+            if (!fallbackUserId && authUid && authUid !== currentUserId) {
+              fallbackUserId = authUid;
+            }
+ console.log("Resolved user for key save:", currentUserId);
+          } catch (e) {
+ console.warn("Failed to parse saved Steam user");
+          }
+        }
+
+        if (!currentUserId) {
+          currentUserId = authUid;
+        }
+
+        // Check payment method from URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        let paymentMethod = "unknown";
+
+        if (urlParams.has("status")) {
+          paymentMethod = "zalopay";
+        } else if (urlParams.has("resultCode")) {
+          paymentMethod = "momo";
+        } else if (urlParams.has("orderCode")) {
+          paymentMethod = "vietqr";
+        } else {
+          // Could be card payment
+          paymentMethod = "card";
+        }
+
+        // Save to Firebase if user is logged in and Firebase is available
+        let cloudSaveStatus = "not_attempted";
+        let cloudSaveMessage = "";
+        
+        if (firebaseLoaded && currentUserId && window.firebaseCart && window.firebaseCart.isAvailable()) {
+          console.log("💾 Saving keys to Firebase...");
+
+          // Ensure totalAmount is a valid number
+          totalAmount = Math.round(Number(totalAmount)) || 0;
+          console.log(`💰 Subtotal: ${totalAmount} VND`);
+
+          // Apply membership discount if available
+          let discountPercent = 0;
+          let tierName = "Member";
+          if (window.firebaseCart && window.firebaseCart.getUserMembership) {
+            try {
+              const membership = await window.firebaseCart.getUserMembership(currentUserId);
+              if (membership && membership.discount > 0) {
+                discountPercent = membership.discount;
+                tierName = membership.tier;
+                const discountAmount = totalAmount * discountPercent;
+                console.log(
+                  `🎉 Applying ${tierName} discount: ${discountPercent * 100}% (-${discountAmount} VND)`,
+                );
+                totalAmount = Math.round(totalAmount - discountAmount);
+              }
+            } catch (err) {
+              console.warn("⚠️ Failed to get membership discount:", err);
+            }
+          }
+
+          console.log(`💰 Final Amount (after discount): ${totalAmount} VND`);
+
+          const orderData = {
+            orderId: "ORDER_" + Date.now(),
+            keys: allKeys,
+            games: allGames,
+            amount: totalAmount,
+            paymentMethod: paymentMethod,
+            purchaseDate: new Date(),
+            status: "completed",
+          };
+
+          try {
+            let saved = await window.firebaseCart.savePurchasedKeys(
+              currentUserId,
+              orderData,
+            );
+
+            if (!saved && fallbackUserId) {
+              console.warn(
+                `⚠️ Primary save failed for ${currentUserId}, retrying with fallback ${fallbackUserId}`,
+              );
+              saved = await window.firebaseCart.savePurchasedKeys(
+                fallbackUserId,
+                orderData,
+              );
+            }
+
+            if (saved) {
+              console.log("✅ Keys saved to Firebase successfully");
+              cloudSaveStatus = "success";
+              cloudSaveMessage = "Your keys have been saved to your account.";
+            } else {
+              console.warn("❌ Failed to save keys to Firebase");
+              cloudSaveStatus = "failed";
+              cloudSaveMessage = "Failed to save keys to cloud. Please save them manually.";
+            }
+          } catch (error) {
+            console.error("💥 Error saving keys:", error);
+            cloudSaveStatus = "error";
+            cloudSaveMessage = "Error saving to cloud. Please save your keys manually.";
+          }
+        } else if (!firebaseLoaded) {
+          cloudSaveStatus = "unavailable";
+          cloudSaveMessage = "Cloud services are currently unavailable. Please save your keys manually.";
+        } else {
+          cloudSaveStatus = "no_user";
+          cloudSaveMessage = "Keys generated locally. Consider logging in to save them to your account.";
+        }
+
+        // Show cloud save status to user
+        if (cloudSaveStatus !== "success") {
+          const statusDiv = document.createElement("div");
+          const statusType = cloudSaveStatus === "failed" || cloudSaveStatus === "error" ? "error" : "warning";
+          const statusIcon = cloudSaveStatus === "failed" || cloudSaveStatus === "error" ? "alert-triangle" : "info";
+          
+          statusDiv.innerHTML = `
+            <div style="margin-top: 2rem; padding: 1rem; border-radius: 8px; background: ${statusType === 'error' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(251, 191, 36, 0.1)'}; border: 1px solid ${statusType === 'error' ? 'rgba(239, 68, 68, 0.3)' : 'rgba(251, 191, 36, 0.3)'}; color: ${statusType === 'error' ? '#ef4444' : '#fbbf24'};">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                <i data-lucide="${statusIcon}" style="width: 16px; height: 16px;"></i>
+                <strong>${statusType === 'error' ? 'Cloud Save Failed' : 'Cloud Save Unavailable'}</strong>
+              </div>
+              <p style="margin: 0; font-size: 0.9rem;">${cloudSaveMessage}</p>
+            </div>
+          `;
+          
+          const keyListContainer = document.getElementById("key-list-container");
+          if (keyListContainer) {
+            keyListContainer.appendChild(statusDiv);
+            if (window.lucide) lucide.createIcons();
+          }
+        }
+
+        // Clear purchased items after showing (keep for page refresh)
+        // localStorage.removeItem("purchasedItems");
+      });
+
+      function copyToClipboard(elementId) {
+        const text = document.getElementById(elementId).innerText;
+        navigator.clipboard.writeText(text).then(() => {
+          alert("Code copied!");
+        });
+      }
+
+      // Make copyToClipboard global
+      window.copyToClipboard = copyToClipboard;</script></body></html>

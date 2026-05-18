@@ -1,0 +1,144 @@
+/* =================================== */
+/* MOBILE STYLES - DISCOUNT CARDS */
+/* =================================== */
+
+/* Enhanced Mobile Flash Sale Styles */
+@media (max-width: 768px) {
+    body .event-card {
+        height: 145px !important; /* Tăng nhẹ 5px để có không gian thở cho viền */
+        margin-bottom: 20px !important;
+        border-radius: 12px !important;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        position: relative !important; /* Đảm bảo các thành phần absolute không chạy ra ngoài */
+        overflow: hidden !important; /* Giấu mọi thứ tràn viền */
+    }
+    
+    body .event-card-bg {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+        z-index: 0 !important;
+    }
+    
+    body .event-card-overlay {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 100%) !important;
+        z-index: 1 !important;
+    }
+    
+    body .event-card-content {
+        position: absolute !important; /* Khóa chặt khối content vào kích thước card */
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 2 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        padding: 12px 14px !important;
+        box-sizing: border-box !important;
+        gap: 0 !important; /* Tránh gap ẩn từ desktop rớt xuống */
+    }
+    
+    body .event-sale-meta {
+        display: flex !important; 
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin: 0 0 6px 0 !important; /* Xóa margin thừa */
+        padding: 0 !important;
+        width: 100% !important;
+        flex-shrink: 0 !important; /* Khóa chống móp thẻ */
+    }
+    
+    body .event-sale-badge {
+        font-size: 0.7rem !important;
+        padding: 4px 8px !important;
+        border-radius: 6px !important;
+        background: linear-gradient(135deg, #16a34a, #15803d) !important;
+        box-shadow: 0 2px 8px rgba(22, 163, 74, 0.3) !important;
+        white-space: nowrap !important; /* Ép không bao giờ rớt dòng */
+        color: #ffffff !important;
+    }
+    
+    body .event-sale-price {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
+        white-space: nowrap !important;
+    }
+    
+    body .event-card-title {
+        font-size: 0.95rem !important;
+        line-height: 1.2 !important;
+        margin: 0 0 6px 0 !important; /* Xóa margin thừa */
+        padding: 0 !important;
+        font-weight: 700 !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8) !important;
+        font-family: 'ROG Lyons', monospace !important;
+        
+        /* Thay vì -webkit-box, đổi thành 1 dòng + ellipsis để tránh lỗi sập chiều cao trên Mobile */
+        display: block !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        width: 100% !important;
+        flex-shrink: 0 !important; /* Khóa chống biến mất chữ */
+    }
+    
+    body .event-countdown {
+        display: flex !important;
+        align-items: center !important;
+        margin: 0 0 2px 0 !important; /* Xóa margin thừa */
+        padding: 0 !important;
+        gap: 6px !important;
+        flex-shrink: 0 !important; /* Khóa chống móp */
+    }
+    
+    body .event-clock-icon {
+        width: 14px !important;
+        height: 14px !important;
+        color: #22d3ee !important;
+    }
+    
+    body .dynamic-countdown-timer {
+        font-size: 0.75rem !important;
+        color: #22d3ee !important;
+        font-weight: 600 !important;
+        font-family: 'ROG Lyons', monospace !important;
+    }
+    
+    /* Add tap hint for mobile only */
+    body .event-card-content::after {
+        content: "Tap to view on Steam →" !important;
+        font-size: 0.65rem !important;
+        color: rgba(255,255,255,0.5) !important;
+        text-align: center !important;
+        font-style: italic !important;
+        margin: 4px 0 0 0 !important;
+        display: block !important;
+        flex-shrink: 0 !important;
+    }
+}
+
+/* Touch Optimizations */
+@media (max-width: 768px) {
+    body .event-card {
+        transform: none !important;
+        transition: transform 0.2s ease !important;
+    }
+    
+    body .event-card:active {
+        transform: scale(0.98) !important;
+    }
+}

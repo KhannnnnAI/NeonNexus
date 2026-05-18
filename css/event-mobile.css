@@ -1,0 +1,397 @@
+
+@media (max-width: 768px) {
+
+    /* =================================== */
+    /* 1. COUNTDOWN BANNER (KÈM THEME)     */
+    /* =================================== */
+    .countdown-banner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1.5rem 1rem;
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+        border-radius: 24px;
+        font-family: 'Orbitron', sans-serif;
+        border: none !important;
+        
+        /* MẶC ĐỊNH LÀ DARK MODE (Nền xám đen) */
+        background: #1a1a1a !important; 
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important; 
+    }
+    
+    /* Ghi đè nền trắng khi hệ thống bật Light Mode */
+    [data-theme="light"] .countdown-banner {
+        background: #ffffff !important; 
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important; 
+    }
+
+    .countdown-info {
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .countdown-title {
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        text-transform: uppercase;
+        color: #f8fafc !important; /* Chữ sáng cho Dark mode */
+    }
+    [data-theme="light"] .countdown-banner .countdown-title { color: #1e293b !important; /* Chữ tối cho Light mode */ }
+
+    .countdown-desc {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #94a3b8 !important; 
+    }
+    [data-theme="light"] .countdown-banner .countdown-desc { color: #64748b !important; }
+
+    .countdown-timer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+    
+    .time-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 3.8rem; 
+        height: 5.2rem; 
+        padding: 0;
+        background: transparent; 
+        border-radius: 10px;
+        border: none !important;
+        box-shadow: none; 
+        transition: all 0.3s ease;
+    }
+    .time-unit:hover { background: transparent; transform: translateY(-2px); }
+    
+    .time-value { font-size: 2.8rem; font-weight: 900; line-height: 1; margin-bottom: 0.2rem; }
+    
+    /* Màu số */
+    .time-value.magenta { color: #ff00ff; text-shadow: 0 0 12px rgba(255, 0, 255, 0.6); }
+    .time-value.blue { color: #0044ff; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); }
+    .time-value.cyan { color: #00f3ff; text-shadow: 0 0 12px rgba(0, 243, 255, 0.6); }
+    
+    .time-label {
+        font-size: 0.75rem; 
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #94a3b8 !important;
+    }
+    [data-theme="light"] .countdown-banner .time-label { color: #4b5563 !important; }
+    
+    .time-sep {
+        font-size: 2.2rem; font-weight: 900; color: #00f3ff; margin: 0 0.1rem; align-self: center; margin-top: -1.5rem; 
+    }
+
+    /* =================================== */
+    /* 2. FEATURED EVENT CARDS             */
+    /* =================================== */
+    .events-grid {
+        display: flex;
+        gap: 1rem;
+        padding: 0 1rem 1.5rem 1rem; 
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch; 
+    }
+
+    .featured-event-card {
+        flex: 0 0 85vw; 
+        max-width: 340px; 
+        scroll-snap-align: center;
+        margin: 0; 
+        box-sizing: border-box; 
+    }
+
+    .featured-event-img-wrap { padding-bottom: 55%; }
+    .featured-event-content { padding: 1.25rem; width: 100%; box-sizing: border-box; }
+    
+    .featured-event-category { font-size: 0.7rem; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .featured-event-title { font-size: 1.2rem; margin-bottom: 0.5rem; line-height: 1.3; word-wrap: break-word; }
+    .featured-event-desc { font-size: 0.85rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1.2rem; }
+    .featured-event-footer { flex-wrap: wrap; gap: 0.75rem; padding-top: 0.8rem; }
+    .featured-event-date { font-size: 0.85rem; }
+    .featured-event-btn { font-size: 0.75rem; padding: 0.5rem 0.8rem; white-space: nowrap; }
+
+    /* =================================== */
+    /* 3. FEATURED STEAM SALE CARDS        */
+    /* =================================== */
+    .featured-sales-carousel {
+        display: flex;
+        gap: 1rem;
+        padding: 0 1rem 1.5rem 1rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .featured-sale {
+        flex: 0 0 85vw !important; 
+        max-width: 320px !important;
+        flex-direction: column !important; 
+        height: auto !important; 
+        scroll-snap-align: center !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        border-radius: 16px !important; 
+        overflow: hidden !important; 
+        
+        /* Đặc trị chống lỗi đè layer góc bo tròn Safari */
+        isolation: isolate; 
+        transform: translateZ(0); 
+        -webkit-mask-image: -webkit-radial-gradient(white, black);
+    }
+
+    /* Bo tròn góc trên và fit chuẩn tỷ lệ Steam Header */
+    .featured-sale-img-wrap {
+        width: 100% !important;
+        height: auto !important; 
+        aspect-ratio: 586 / 192 !important; 
+        flex: none !important; 
+        position: relative !important;
+        overflow: hidden !important;
+        border-top-left-radius: 16px !important;
+        border-top-right-radius: 16px !important;
+    }
+
+    .featured-sale-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; 
+        object-position: center !important; 
+    }
+
+    .featured-sale-img-overlay { padding: 0.8rem !important; }
+
+    /* Bo tròn góc dưới của thẻ nội dung trắng */
+    .featured-sale-info {
+        padding: 1rem 1.25rem 1.25rem 1.25rem !important; 
+        border-left: none !important; 
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important; 
+        flex: 1 !important;
+        border-bottom-left-radius: 16px !important;
+        border-bottom-right-radius: 16px !important;
+    }
+
+    .featured-sale-title {
+        font-size: 1.25rem !important;
+        font-family: 'ROG Lyons', 'Orbitron', monospace !important;
+        text-align: left !important;
+        margin-bottom: 0.2rem !important;
+        line-height: 1.3 !important;
+    }
+
+    .featured-sale-price-box { margin: 0.5rem 0 1rem 0 !important; justify-content: flex-start !important; }
+    .featured-sale-curr { font-size: 1.5rem !important; color: #009dff !important; }
+
+    .featured-sale-info a { width: 100% !important; margin-top: auto !important; display: block !important; }
+    .featured-sale-btn { width: 100% !important; padding: 0.75rem !important; border-radius: 6px !important; font-size: 0.95rem !important; justify-content: center !important; }
+
+}
+
+/* =================================== */
+/* TINH CHỈNH RIÊNG MÀN HÌNH SIÊU NHỎ  */
+/* =================================== */
+@media (max-width: 480px) {
+    .countdown-banner { padding: 1.5rem 1rem; margin: 1rem 0.5rem; }
+    .countdown-title { font-size: 1.2rem; }
+    .time-unit { width: 3.2rem; height: 4.5rem; }
+    .time-value { font-size: 2.2rem; }
+    .time-label { font-size: 0.6rem; }
+    .time-sep { font-size: 1.8rem; margin-top: -1.2rem; }
+}
+/* =================================== */
+/* FEATURED EVENT CARDS (MOBILE FIX)   */
+/* =================================== */
+
+@media (max-width: 768px) {
+    /* 1. Container bao bọc thanh cuộn ngang */
+    .events-grid {
+        display: flex;
+        gap: 1rem;
+        padding: 0 1rem 1.5rem 1rem; /* Thêm padding 2 bên để thẻ không dính sát viền đt */
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch; /* Cuộn mượt trên iOS */
+    }
+
+    /* 2. Fix cứng kích thước thẻ Card (Sửa lỗi bị cắt chữ bên phải) */
+    .featured-event-card {
+        flex: 0 0 85vw; /* QUAN TRỌNG NHẤT: Khóa cứng chiều rộng thẻ bằng 85% màn hình */
+        max-width: 340px; /* Không cho thẻ phình to quá lố */
+        scroll-snap-align: center;
+        margin: 0; /* Xóa margin thừa để lưới flex hoạt động đúng */
+        box-sizing: border-box; /* Ép padding vào trong width */
+    }
+
+    /* 3. Khung ảnh */
+    .featured-event-img-wrap {
+        padding-bottom: 55%; /* Tạo tỷ lệ ảnh chữ nhật nằm ngang vừa vặn */
+    }
+
+    /* 4. Phần Nội dung bên trong */
+    .featured-event-content {
+        padding: 1.25rem;
+        width: 100%; /* Giữ nội dung không tràn giới hạn thẻ */
+        box-sizing: border-box;
+    }
+
+    /* 5. Căn chỉnh lại các text để không bị ép dính vào nhau */
+    .featured-event-category {
+        font-size: 0.7rem;
+        flex-wrap: wrap; /* Cho phép rớt dòng nếu nhãn quá dài */
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .featured-event-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+        word-wrap: break-word; /* Ép rớt dòng nếu 1 chữ quá dài */
+    }
+
+    .featured-event-desc {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 1.2rem;
+    }
+
+    .featured-event-footer {
+        flex-wrap: wrap; /* Phím tắt: rớt dòng ngày/nút bấm nếu màn hình quá hẹp */
+        gap: 0.75rem;
+        padding-top: 0.8rem;
+    }
+
+    .featured-event-date {
+        font-size: 0.85rem;
+    }
+
+    .featured-event-btn {
+        font-size: 0.75rem;
+        padding: 0.5rem 0.8rem;
+        white-space: nowrap; /* Không cho chữ trong nút bị rớt dòng */
+    }
+}
+/* =================================== */
+/* FEATURED STEAM SALE CARDS (MOBILE)  */
+/* =================================== */
+
+@media (max-width: 768px) {
+    /* Container cuộn ngang */
+    .featured-sales-carousel {
+        display: flex;
+        gap: 1rem;
+        padding: 0 1rem 1.5rem 1rem;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Thẻ Sale: Tăng bo góc lên 16px cho tròn đẹp */
+    .featured-sale {
+        flex: 0 0 85vw !important; 
+        max-width: 320px !important;
+        flex-direction: column !important; 
+        height: auto !important; 
+        scroll-snap-align: center !important;
+        margin: 0 !important;
+        box-sizing: border-box !important;
+        border-radius: 16px !important; 
+        overflow: hidden !important; 
+        isolation: isolate; /* Ngăn chặn lỗi layer đè nhau */
+    }
+
+    /* KHUNG ẢNH: Ép bo tròn trực tiếp 2 góc TRÊN */
+    .featured-sale-img-wrap {
+        width: 100% !important;
+        height: auto !important; /* Xóa bỏ height cố định */
+        aspect-ratio: 586 / 192 !important; /* Tự động nội suy chiều cao hoàn hảo */
+        flex: none !important; 
+        position: relative !important;
+        overflow: hidden !important;
+        /* Bo góc trên: */
+        border-top-left-radius: 16px !important;
+        border-top-right-radius: 16px !important;
+    }
+
+    .featured-sale-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important; 
+        object-position: center !important; 
+    }
+
+    /* Vị trí Badge DEAL BUNDLE */
+    .featured-sale-img-overlay {
+        padding: 0.8rem !important; 
+    }
+
+    /* KHỐI NỘI DUNG TRẮNG: Ép bo tròn trực tiếp 2 góc DƯỚI */
+    .featured-sale-info {
+        padding: 1rem 1.25rem 1.25rem 1.25rem !important; 
+        border-left: none !important; 
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0.5rem !important; 
+        flex: 1 !important;
+        /* Cứu tinh bo góc dưới: */
+        border-bottom-left-radius: 16px !important;
+        border-bottom-right-radius: 16px !important;
+    }
+
+    /* Tiêu đề Game */
+    .featured-sale-title {
+        font-size: 1.25rem !important;
+        font-family: 'ROG Lyons', 'Orbitron', monospace !important;
+        text-align: left !important;
+        margin-bottom: 0.2rem !important;
+        line-height: 1.3 !important;
+    }
+
+    /* Khung giá tiền */
+    .featured-sale-price-box {
+        margin: 0.5rem 0 1rem 0 !important; 
+        justify-content: flex-start !important; 
+    }
+
+    .featured-sale-curr {
+        font-size: 1.5rem !important;
+        color: #009dff !important; 
+    }
+
+    /* Nút bấm Steam */
+    .featured-sale-info a {
+        width: 100% !important;
+        margin-top: auto !important; 
+        display: block !important;
+    }
+
+    .featured-sale-btn {
+        width: 100% !important;
+        padding: 0.75rem !important;
+        border-radius: 6px !important;
+        font-size: 0.95rem !important;
+        justify-content: center !important; 
+    }
+}

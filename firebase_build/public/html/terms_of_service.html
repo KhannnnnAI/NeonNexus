@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Terms of Service - NeonNexus" />
+    <title>Terms of Service - NeonNexus</title>
+    
+    <link rel="stylesheet" href="../css/index.css?v=8" />
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Universal Mobile CSS Manager -->
+    <script>
+      class MobileCSSManager {
+        constructor() {
+          this.isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+          this.mobileCSS = {};
+          this.resizeTimer = null;
+          this.themeObserver = null;
+          this.pageMobileCSS = {
+            "index.html": "css/index.css?v=5",
+            'community.html': 'css/community-mobile.css?v=1',
+            'account.html': 'css/account-mobile.css?v=1',
+            'event.html': 'css/event-mobile.css?v=2',
+            'trending.html': 'css/trending-mobile.css?v=11'
+          };
+          this.currentPage = this.getCurrentPageName();
+        }
+        init() { this.loadInitialCSS(); this.setupResizeListener(); this.setupThemeListener(); }
+        getCurrentPageName() {
+          const path = window.location.pathname;
+          const fileName = path.split('/').pop();
+          return fileName || 'index.html';
+        }
+        loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
+        loadMobileCSS() {
+          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const prefix = isRoot ? '' : '../';
+          const mobileCSSPath = this.pageMobileCSS[this.currentPage];
+          const cacheBuster = new Date().getTime();
+          if (mobileCSSPath && !this.mobileCSS.page) {
+            document.body.classList.add('mobile-view');
+            this.mobileCSS.page = document.createElement('link');
+            this.mobileCSS.page.rel = 'stylesheet';
+            const sep = mobileCSSPath.includes('?') ? '&' : '?';
+            this.mobileCSS.page.href = `${prefix}${mobileCSSPath}${sep}v=${cacheBuster}`;
+            this.mobileCSS.page.id = 'page-mobile-css';
+            document.head.appendChild(this.mobileCSS.page);
+          }
+          if (!this.mobileCSS.discounts) {
+            this.mobileCSS.discounts = document.createElement('link');
+            this.mobileCSS.discounts.rel = 'stylesheet';
+            this.mobileCSS.discounts.href = `${prefix}css/discounts-mobile.css?v=${cacheBuster}`;
+            this.mobileCSS.discounts.id = 'discounts-mobile-css';
+            document.head.appendChild(this.mobileCSS.discounts);
+          }
+          if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS(cacheBuster);
+        }
+        unloadMobileCSS() {
+          if (this.mobileCSS.page) { document.body.classList.remove('mobile-view'); this.mobileCSS.page.remove(); this.mobileCSS.page = null; }
+          if (this.mobileCSS.discounts) { this.mobileCSS.discounts.remove(); this.mobileCSS.discounts = null; }
+          this.unloadLightCSS();
+        }
+        loadLightCSS(cacheBuster = new Date().getTime()) {
+          if (!this.mobileCSS.light) {
+            const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+            const prefix = isRoot ? '' : '../';
+            this.mobileCSS.light = document.createElement('link');
+            this.mobileCSS.light.rel = 'stylesheet';
+            this.mobileCSS.light.href = `${prefix}css/discounts-light.css?v=${cacheBuster}`;
+            this.mobileCSS.light.id = 'discounts-light-css';
+            document.head.appendChild(this.mobileCSS.light);
+          }
+        }
+        unloadLightCSS() { if (this.mobileCSS.light) { this.mobileCSS.light.remove(); this.mobileCSS.light = null; } }
+        setupResizeListener() {
+          window.addEventListener('resize', () => {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(() => {
+              const currentlyMobile = window.innerWidth <= 768;
+              if (currentlyMobile && !this.isMobile) { this.isMobile = true; this.loadMobileCSS(); }
+              else if (!currentlyMobile && this.isMobile) { this.isMobile = false; this.unloadMobileCSS(); }
+            }, 250);
+          });
+        }
+        setupThemeListener() {
+          this.themeObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme' && this.isMobile) {
+                if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS();
+                else this.unloadLightCSS();
+              }
+            });
+          });
+          this.themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
+        }
+      }
+      const initMobileCSSManager = () => { if (!window.mobileCSSManager) { window.mobileCSSManager = new MobileCSSManager(); window.mobileCSSManager.init(); } };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMobileCSSManager);
+      else initMobileCSSManager();
+    </script>
+    <style>
+      /* Sidebar Drawer Styles */
+      .sidebar-drawer {
+        justify-content: flex-start !important;
+        visibility: hidden;
+        transition: visibility 0.3s;
+      }
+      
+      .sidebar-drawer.active {
+        visibility: visible;
+      }
+      
+      .sidebar-panel {
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        border-right: 1px solid rgba(34, 211, 238, 0.2);
+        border-left: none !important;
+        display: flex;
+        flex-direction: column;
+        background: #0d0d0d !important;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+      }
+      
+      .sidebar-drawer.active .sidebar-panel {
+        transform: translateX(0);
+      }
+      
+      .sidebar-drawer.active .cart-backdrop {
+        opacity: 1;
+      }
+      
+      .cart-backdrop {
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      
+      .sidebar-drawer-content {
+        padding: 2rem 1.5rem;
+        flex: 1;
+        overflow-y: auto;
+      }
+      
+      /* Staggered Entrance Animation for items */
+      .sidebar-nav-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        transition: opacity 0.4s ease, transform 0.4s ease, background 0.2s ease, color 0.2s ease;
+      }
+      
+      .sidebar-drawer.active .sidebar-nav-item {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      
+      /* Delay each item */
+      .sidebar-drawer.active .sidebar-nav-item:nth-child(1) { transition-delay: 0.1s; }
+      .sidebar-drawer.active .sidebar-nav-item:nth-child(2) { transition-delay: 0.15s; }
+      .sidebar-drawer.active .sidebar-nav-item:nth-child(3) { transition-delay: 0.2s; }
+      .sidebar-drawer.active .sidebar-nav-item:nth-child(4) { transition-delay: 0.25s; }
+      .sidebar-drawer.active .sidebar-nav-item:nth-child(5) { transition-delay: 0.3s; }
+      
+      .sidebar-divider {
+        height: 1px;
+        background: linear-gradient(to right, rgba(34, 211, 238, 0.3), transparent);
+        margin: 2rem 0;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        transition-delay: 0.35s;
+      }
+      
+      .sidebar-drawer.active .sidebar-divider {
+        opacity: 1;
+      }
+      
+      .sidebar-section-title {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        margin-bottom: 1.2rem;
+        padding-left: 1rem;
+        text-transform: uppercase;
+        opacity: 0;
+        transform: translateX(-10px);
+        transition: all 0.4s ease;
+        transition-delay: 0.4s;
+      }
+      
+      .sidebar-drawer.active .sidebar-section-title {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* Adjust header button for mobile */
+      @media (max-width: 768px) {
+        #sidebar-toggle-btn {
+          padding: 0.5rem 0.75rem;
+        }
+        #sidebar-toggle-btn .login-text {
+          display: none;
+        }
+      }
+    </style>
+
+  <!-- Firebase Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <!-- Path Resolver for Local/Server switching -->
+  <script src="../API/path-resolver.js"></script>
+</head>
+  <body>
+    <div
+      id="app"
+      class="min-h-screen bg-dark text-gray-100 overflow-x-hidden relative"
+    >
+      <!-- Tech Background -->
+      <div class="tech-bg"></div>
+      <div class="tech-gradient"></div>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="container header-content">
+          <!-- Logo -->
+          <a href="../index.html" class="logo" style="text-decoration: none">
+            <div class="logo-icon-wrapper">
+              <div class="logo-glow"></div>
+              <i data-lucide="zap" class="logo-icon"></i>
+            </div>
+            <div class="logo-text-wrapper">
+              <span class="logo-text"
+                >NEON<span class="logo-accent">NEXUS</span></span
+              >
+              <span class="logo-subtitle">LEGAL :: TERMS OF SERVICE</span>
+            </div>
+          </a>
+
+          <!-- Right Actions -->
+          <div class="header-actions">
+            <!-- Theme Toggle -->
+            <button
+              id="theme-toggle"
+              class="theme-toggle"
+              aria-label="Toggle theme"
+            >
+              <i data-lucide="moon" class="theme-icon" id="theme-icon"></i>
+            </button>
+
+            <!-- Sidebar Toggle Button (Replaces STORE) -->
+            <button id="sidebar-toggle-btn" class="login-btn" aria-label="Open menu">
+              <i data-lucide="menu" class="login-icon"></i>
+              <span class="login-text">MENU</span>
+            </button>
+
+
+            <!-- Login Button / User Profile -->
+            <div class="user-section">
+              <button id="login-btn" class="login-btn">
+                <i data-lucide="user" class="login-icon"></i>
+                <span class="login-text">LOGIN</span>
+              </button>
+
+              <!-- User Dropdown (Hidden by default) -->
+              <div
+                id="user-dropdown"
+                class="user-dropdown"
+                style="display: none"
+              >
+                <div class="user-dropdown-header">
+                  <img
+                    id="user-dropdown-avatar"
+                    src=""
+                    alt="Avatar"
+                    class="user-dropdown-avatar"
+                  />
+                  <div class="user-dropdown-info">
+                    <span id="user-dropdown-name" class="user-dropdown-name"
+                      >User</span
+                    >
+                    <span class="user-dropdown-status">ONLINE</span>
+                  </div>
+                </div>
+                <div class="user-dropdown-divider"></div>
+                <a
+                  href="account.html"
+                  class="user-dropdown-item"
+                  style="text-decoration: none; color: inherit"
+                >
+                  <i data-lucide="key" class="user-dropdown-icon"></i>
+                  <span>My Keys</span>
+                </a>
+                <button id="logout-btn" class="user-dropdown-item">
+                  <i data-lucide="log-out" class="user-dropdown-icon"></i>
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="container main-content legal-page-main">
+        <div class="privacy-page-container">
+          <div class="privacy-header">
+            <h1 class="privacy-title">TERMS<br>OF SERVICE</h1>
+          </div>
+
+          <div class="privacy-body">
+            <!-- English Content -->
+            <div
+              id="terms-content-en"
+              class="privacy-text"
+            >
+              <h4>1. TERMS ACCEPTANCE</h4>
+              <p>
+                By accessing and using this website, you agree to comply with
+                and be bound by these Terms of Service. If you do not agree to
+                any part of these terms, please do not use our services.
+              </p>
+
+              <h4>2. INTELLECTUAL PROPERTY</h4>
+              <p>
+                All content on this website, including text, graphics, logos,
+                images, and software, is the property of NeonNexus or its
+                content suppliers and is protected by international intellectual
+                property laws.
+              </p>
+
+              <h4>3. USER ACCOUNT</h4>
+              <p>
+                You are responsible for maintaining the confidentiality of your
+                account and password. You agree to accept responsibility for all
+                activities that occur under your account. We reserve the right
+                to refuse service, terminate accounts, or remove content at our
+                discretion.
+              </p>
+
+              <h4>4. PAYMENTS AND REFUNDS</h4>
+              <p>
+                All purchases on the website are final. We accept various forms
+                of payment. Please refer to our Refund Policy for specific
+                details regarding refund conditions and procedures (if
+                applicable).
+              </p>
+
+              <h4>5. LIMITATION OF LIABILITY</h4>
+              <p>
+                NeonNexus shall not be liable for any damages arising out of the
+                use or inability to use the materials on our website, even if we
+                have been advised of the possibility of such damages.
+              </p>
+
+              <h4>6. CHANGES TO TERMS</h4>
+              <p>
+                We reserve the right to modify these terms at any time. Your
+                continued use of the website following any changes signifies
+                your acceptance of those new terms.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-line"></div>
+
+        <div class="container">
+          <!-- Top Grid -->
+          <div class="footer-grid">
+            <!-- Column 1: Logo & Info -->
+            <div class="footer-column">
+              <div class="footer-brand">
+                <i data-lucide="zap" class="footer-brand-icon"></i>
+                <span class="footer-brand-text"
+                  >NEON<span class="footer-brand-accent">NEXUS</span></span
+                >
+              </div>
+              <div class="footer-info">
+                <p>System Status: <span class="text-white">ONLINE</span></p>
+                <p>Version: <span class="text-white">1.0.4</span></p>
+                <p>
+                  Server: <span class="text-white">Asia-Pacific (VietNam)</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Column 2: Navigation -->
+            <div class="footer-column">
+              <h4 class="footer-heading footer-heading-cyan">Navigation</h4>
+              <ul class="footer-links">
+                <li>
+                  <a
+                    href="../index.html"
+                    class="footer-link"
+                    style="text-decoration: none; color: inherit"
+                    >:: STORE</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="community.html"
+                    class="footer-link"
+                    style="text-decoration: none; color: inherit"
+                    >:: COMMUNITY</a
+                  >
+                </li>
+                <li><a href="support.html" class="footer-link" style="text-decoration:none;color:inherit">:: SUPPORT</a></li>
+              </ul>
+            </div>
+
+            <!-- Column 3: Legal -->
+            <div class="footer-column">
+              <h4 class="footer-heading footer-heading-purple">Legal</h4>
+              <ul class="footer-links">
+                <li>
+                  <a
+                    href="privacy_policy.html"
+                    class="footer-link"
+                    style="text-decoration: none; color: inherit"
+                    >PRIVACY_POLICY</a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="terms_of_service.html"
+                    class="footer-link"
+                    style="text-decoration: none; color: inherit"
+                    >TERMS_OF_SERVICE</a
+                  >
+                </li>
+              </ul>
+            </div>
+
+            <!-- Column 4: Secure Payment -->
+            <div class="footer-column">
+              <h4 class="footer-heading footer-heading-gray">Secure Payment</h4>
+              <div class="payment-icons">
+                <div class="payment-icon payment-card">
+                  <i data-lucide="credit-card"></i>
+                </div>
+                <div class="payment-icon payment-bank">
+                  <i data-lucide="building-2"></i>
+                </div>
+                <div class="payment-icon payment-momo">
+                  <img
+                    src="../Image/MOMO-Logo-App.png"
+                    alt="MoMo"
+                    class="payment-logo"
+                  />
+                </div>
+                <div class="payment-icon payment-zalopay">
+                  <img
+                    src="../Image/idv2DAbjER_1769330590719.jpeg"
+                    alt="ZaloPay"
+                    class="payment-logo"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Support Info Grid -->
+          <div class="support-grid">
+            <!-- Contact Support -->
+            <div class="support-card support-card-cyan">
+              <div class="support-glow support-glow-cyan"></div>
+              <div class="support-header">
+                <i data-lucide="phone" class="support-icon"></i>
+                <h4 class="support-title">CONTACT_SUPPORT</h4>
+              </div>
+              <div class="support-content">
+                <p class="support-item">
+                  <i data-lucide="phone" class="support-item-icon"></i>
+                  <span
+                    >Hotline: <span class="text-white">1900-9679</span></span
+                  >
+                </p>
+                <p class="support-item">
+                  <i data-lucide="globe" class="support-item-icon"></i>
+                  <span
+                    >International:
+                    <span class="text-white">+84 28 3910 9679</span></span
+                  >
+                </p>
+                <p class="support-item">
+                  <i data-lucide="mail" class="support-item-icon"></i>
+                  <span
+                    >Email:
+                    <span class="text-white">support@neonnexus.com</span></span
+                  >
+                </p>
+                <p class="support-item">
+                  <i data-lucide="message-circle" class="support-item-icon"></i>
+                  <span>Live Chat: <span class="text-white">24/7</span></span>
+                </p>
+              </div>
+            </div>
+
+            <!-- Support Hours -->
+            <div class="support-card support-card-purple">
+              <div class="support-glow support-glow-purple"></div>
+              <div class="support-header">
+                <i data-lucide="clock" class="support-icon"></i>
+                <h4 class="support-title">SUPPORT_HOURS</h4>
+              </div>
+              <div class="support-content">
+                <p class="support-item">
+                  <i data-lucide="clock" class="support-item-icon"></i>
+                  <span
+                    >Mon - Fri:
+                    <span class="text-white">08:00 - 22:00</span></span
+                  >
+                </p>
+                <p class="support-item">
+                  <i data-lucide="clock" class="support-item-icon"></i>
+                  <span
+                    >Sat - Sun:
+                    <span class="text-white">09:00 - 20:00</span></span
+                  >
+                </p>
+                <p class="support-item">
+                  <i data-lucide="zap" class="support-item-icon"></i>
+                  <span
+                    >Response: <span class="text-white">&lt; 1 hour</span></span
+                  >
+                </p>
+              </div>
+            </div>
+
+            <!-- Social Connect -->
+            <div class="support-card support-card-cyan">
+              <div class="support-glow support-glow-cyan"></div>
+              <div class="support-header">
+                <i data-lucide="message-square" class="support-icon"></i>
+                <h4 class="support-title">SOCIAL_CONNECT</h4>
+              </div>
+              <div class="social-icons">
+                <a
+                  href="https://www.facebook.com/NeonNexuss"
+                  target="_blank"
+                  class="social-icon social-facebook"
+                >
+                  <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path
+                      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
+                    />
+                  </svg>
+                </a>
+                <a href="#" class="social-icon social-x">
+                  <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                    <path
+                      d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+                    />
+                  </svg>
+                </a>
+                <a href="#" class="social-icon social-discord">
+                  <svg width="20" height="20" fill="white" viewBox="0 0 71 55">
+                    <path
+                      d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718  48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"
+                    />
+                  </svg>
+                </a>
+                <a href="#" class="social-icon social-youtube">
+                  <svg
+                    width="20"
+                    height="20"
+                    fill="#FF0000"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Copyright -->
+          <div class="footer-copyright">
+            <p>
+              © 2026 Neon<span class="footer-brand-accent">Nexus</span> DIGITAL
+              STORE. ALL_RIGHTS_RESERVED.
+              <span class="footer-separator">|</span>
+              POWERED_BY_<span class="text-cyan">CHEAPSHARK</span>
+            </p>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Cart Drawer -->
+      <div id="cart-drawer" class="cart-drawer" style="display: none">
+        <div class="cart-backdrop"></div>
+
+        <div class="cart-panel">
+          <div class="cart-header">
+            <h2 class="cart-title">
+              <i data-lucide="tag" class="cart-title-icon"></i>
+              <span>CART_CONTENTS [<span id="cart-header-count">0</span>]</span>
+            </h2>
+            <button id="close-cart-btn" class="cart-close-btn">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+
+          <div id="cart-items" class="cart-items"></div>
+
+          <div class="cart-footer">
+            <div class="cart-total">
+              <span class="cart-total-label">TOTAL_ESTIMATE</span>
+              <span id="cart-total-amount" class="cart-total-amount">0«</span>
+            </div>
+            <button class="cart-checkout-btn">
+              Checkout
+              <i data-lucide="chevron-right" class="cart-checkout-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Drawer -->
+      <div id="sidebar-drawer" class="cart-drawer sidebar-drawer" style="display: none">
+        <div class="cart-backdrop" id="sidebar-backdrop"></div>
+        <div class="cart-panel sidebar-panel">
+          <div class="cart-header">
+            <h2 class="cart-title">
+              <i data-lucide="menu" class="cart-title-icon"></i>
+              <span>NAVIGATION</span>
+            </h2>
+            <button id="close-sidebar-btn" class="cart-close-btn">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          
+          <div class="sidebar-drawer-content">
+            <nav class="sidebar-nav">
+              <a href="../index.html" class="sidebar-nav-item">
+                <i data-lucide="home" class="sidebar-nav-icon"></i>
+                <span>Store Home</span>
+              </a>
+              <a href="trending.html" class="sidebar-nav-item">
+                <i data-lucide="flame" class="sidebar-nav-icon"></i>
+                <span>Trending</span>
+              </a>
+              <a href="event.html" class="sidebar-nav-item">
+                <i data-lucide="tag" class="sidebar-nav-icon"></i>
+                <span>Events</span>
+              </a>
+              <a href="community.html" class="sidebar-nav-item">
+                <i data-lucide="users" class="sidebar-nav-icon"></i>
+                <span>Community</span>
+              </a>
+              <a href="support.html" class="sidebar-nav-item">
+                <i data-lucide="help-circle" class="sidebar-nav-icon"></i>
+                <span>Support Center</span>
+              </a>
+            </nav>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-section">
+              <h4 class="sidebar-section-title">LEGAL</h4>
+              <nav class="sidebar-nav">
+                <a href="privacy_policy.html" class="sidebar-nav-item">
+                  <i data-lucide="shield" class="sidebar-nav-icon"></i>
+                  <span>Privacy Policy</span>
+                </a>
+                <a href="terms_of_service.html" class="sidebar-nav-item active">
+                  <i data-lucide="file-text" class="sidebar-nav-icon"></i>
+                  <span>Terms of Service</span>
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Modal -->
+      <div id="login-modal" class="login-modal" style="display: none">
+        <div class="login-modal-backdrop"></div>
+        <div class="login-modal-content">
+          <button id="close-login-btn" class="modal-close-btn">
+            <i data-lucide="x"></i>
+          </button>
+
+          <div class="login-header">
+            <div class="login-logo">
+              <i data-lucide="zap" class="text-cyan"></i>
+              <span class="text-white"
+                >NEON<span class="text-cyan">NEXUS</span></span
+              >
+            </div>
+            <h3 class="login-title">UNLIMITED GAMING</h3>
+            <p class="login-subtitle">Connect your experience</p>
+          </div>
+
+          <div class="login-options">
+            <!-- Google Login -->
+            <button id="google-login-btn" class="social-login-btn google-btn">
+              <div class="social-icon-wrapper">
+                <img
+                  src="../Image/google-logo.svg"
+                  alt="Google logo"
+                />
+              </div>
+              <span>Sign in with Google</span>
+            </button>
+
+            <!-- Steam Login -->
+            <button id="steam-login-btn" class="social-login-btn steam-btn">
+              <div class="social-icon-wrapper">
+                <img
+                  src="../Image/steam-svgrepo-com.svg"
+                  alt="Steam logo"
+                />
+              </div>
+              <span>Sign in with Steam</span>
+            </button>
+
+            <!-- Guest Login -->
+            <button id="guest-login-btn" class="social-login-btn guest-btn">
+              <div class="social-icon-wrapper">
+                  <i data-lucide="user"></i>
+              </div>
+              <span>Continue as Guest</span>
+            </button>
+          </div>
+
+          <div class="login-footer">
+            <p>
+              By logging in, you agree to our
+              <a href="terms_of_service.html" class="text-cyan hover:underline">Terms</a> &
+              <a href="privacy_policy.html" class="text-cyan hover:underline"
+                >Privacy Policy</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Required Notification -->
+      <div id="login-required-modal" class="login-modal" style="display: none">
+        <div class="login-modal-backdrop"></div>
+        <div class="login-modal-content">
+          <button id="close-login-required-btn" class="modal-close-btn">
+            <i data-lucide="x"></i>
+          </button>
+
+          <div class="login-header">
+            <div class="login-logo" style="color: #fbbf24">
+              <i
+                data-lucide="alert-circle"
+                class="text-yellow-500"
+                style="color: #fbbf24"
+              ></i>
+            </div>
+            <h3 class="login-title" style="color: #fbbf24">LOGIN REQUIRED</h3>
+            <p class="login-subtitle">
+              Please sign in to add items to your cart
+            </p>
+          </div>
+
+          <div class="login-options">
+            <!-- Google Login -->
+            <button
+              id="login-required-google-btn"
+              class="social-login-btn google-btn"
+            >
+              <div class="social-icon-wrapper">
+                <img
+                  src="../Image/google-logo.svg"
+                  alt="Google logo"
+                />
+              </div>
+              <span>Sign in with Google</span>
+            </button>
+
+            <!-- Steam Login -->
+            <button
+              id="login-required-steam-btn"
+              class="social-login-btn steam-btn"
+            >
+              <div class="social-icon-wrapper">
+                <img
+                  src="../Image/steam-svgrepo-com.svg"
+                  alt="Steam logo"
+                />
+              </div>
+              <span>Sign in with Steam</span>
+            </button>
+          </div>
+
+          <div class="login-footer">
+            <p style="color: #9ca3af">
+              🛒 Cart functionality requires authentication
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../API/cheapshark-api.js"></script>
+    <script src="../API/auth.js"></script>
+    <script src="../API/theme-toggle.js?v=fixed_v2"></script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Sidebar Toggle Functionality
+        const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+        const sidebarDrawer = document.getElementById('sidebar-drawer');
+        const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+        const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+        if (sidebarToggleBtn && sidebarDrawer) {
+          sidebarToggleBtn.addEventListener('click', () => {
+            sidebarDrawer.style.display = 'flex';
+            setTimeout(() => sidebarDrawer.classList.add('active'), 10);
+            document.body.style.overflow = 'hidden';
+          });
+
+          const closeSidebar = () => {
+            sidebarDrawer.classList.remove('active');
+            setTimeout(() => {
+              sidebarDrawer.style.display = 'none';
+              document.body.style.overflow = '';
+            }, 400);
+          };
+
+          if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+          if (sidebarBackdrop) sidebarBackdrop.addEventListener('click', closeSidebar);
+        }
+      });
+
+      // Flag to prevent game loading on non-index pages
+      window.IS_TERMS_PAGE = true;
+
+      // Prevent errors from index.js trying to load games
+      if (typeof loadGames !== "undefined") {
+        const originalLoadGames = loadGames;
+        window.loadGames = function () {
+ console.log(" loadGames prevented on terms page");
+          // Do nothing - we don't have a products grid here
+        };
+      }</script>
+  </body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+/* =================================== */
+/* LIGHT MODE STYLES - DISCOUNT CARDS */
+/* =================================== */
+
+/* Light mode mobile adjustments */
+@media (max-width: 768px) {
+    body[data-theme="light"] .event-card-content::after {
+        color: rgba(255,255,255,0.7) !important;
+    }
+    
+    body[data-theme="light"] .event-card {
+        background: rgba(255, 255, 255, 0.95) !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    }
+    
+    body[data-theme="light"] .event-card-overlay {
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 100%) !important;
+    }
+    
+    body[data-theme="light"] .event-card-title {
+        color: #ffffff !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8) !important;
+    }
+    
+    body[data-theme="light"] .event-countdown {
+        color: #ffffff !important;
+    }
+    
+    body[data-theme="light"] .event-sale-badge {
+        background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4) !important;
+    }
+    
+    body[data-theme="light"] .event-sale-price {
+        color: rgba(255,255,255,0.9) !important;
+    }
+    
+    body[data-theme="light"] .dynamic-countdown-timer {
+        color: #22d3ee !important;
+    }
+    
+    body[data-theme="light"] .event-clock-icon {
+        color: #22d3ee !important;
+    }
+}

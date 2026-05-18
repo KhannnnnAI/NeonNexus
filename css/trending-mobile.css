@@ -1,0 +1,236 @@
+/* =================================== */
+/* MOBILE STYLES - TRENDING PAGE */
+/* =================================== */
+/* Mobile Hero Section */
+@media (max-width: 768px) {
+    .trending-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        padding: 2rem 1.5rem; 
+        text-align: center;
+        background: var(--bg-card);
+        border: 1px solid var(--border-primary);
+        border-radius: 1rem;
+        margin-bottom: 2rem;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        overflow: hidden; 
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .trending-title {
+        display: flex;
+        flex-direction: column; 
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        font-size: clamp(1.5rem, 8vw, 2.2rem); 
+        margin-top: 1rem; 
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+        font-weight: 800;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        gap: 0.25rem; 
+    }
+    
+    .trending-title .text-outline-light,
+    .trending-title .text-gradient-cyan {
+        display: block; 
+        width: 100%;
+        text-align: center; 
+        white-space: normal; 
+        word-break: break-word; 
+        margin: 0;
+        padding: 0;
+    }
+
+    .trending-subtitle {
+        font-size: 0.95rem; 
+        opacity: 0.9;
+        padding: 0; 
+        line-height: 1.5;
+        margin-bottom: 1rem;
+        text-align: center;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        white-space: normal; 
+        word-wrap: break-word; 
+    }
+    
+    .trending-stats {
+        justify-content: center;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        min-width: 120px;
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 1.25rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .live-trending-btn {
+        width: auto;
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Mobile Page Layout (ĐÃ SỬA KHOẢNG CÁCH SIDEBAR) */
+@media (max-width: 900px) {
+    .page-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .page-sidebar {
+        display: flex !important; /* Dùng flexbox để ép khoảng cách cho các con */
+        flex-direction: column !important; /* Xếp dọc các khối bên trong */
+        gap: 2rem !important; /* Tự động tạo khoảng cách 2rem giữa Menu và Discounts */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 3rem !important;
+        order: 1 !important;
+    }
+    
+    .page-main {
+        max-width: 100%;
+        order: 2 !important;
+        margin-top: 2rem !important;
+    }
+    
+    /* Reorganize layout for mobile */
+    .content-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+    
+    /* Ensure DISCOUNTS section stays visible */
+    .sidebar-section {
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border-primary) !important;
+        border-radius: 12px !important;
+        padding: 1.5rem !important;
+        margin-bottom: 0 !important; /* Bỏ margin do đã có gap của .page-sidebar lo liệu */
+    }
+    
+    .sidebar-section-header {
+        margin-bottom: 1rem !important;
+    }
+    
+    .sidebar-section-title {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: var(--text-primary) !important;
+    }
+    
+    .sidebar-section-dot {
+        width: 8px !important;
+        height: 8px !important;
+        background: var(--accent-primary) !important;
+        border-radius: 50% !important;
+    }
+}
+
+/* Mobile Product Cards (ĐÃ CÂN BẰNG KÍCH THƯỚC DARK/LIGHT MODE) */
+@media (max-width: 640px) {
+    .products-grid-enhanced {
+        grid-template-columns: 1fr;
+        gap: 1.25rem; /* Tăng khoảng cách giữa các card cho thoáng */
+        padding: 0 1rem;
+    }
+    
+    .product-card {
+        margin-bottom: 0; /* Bỏ margin do đã xài gap của grid */
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important; /* Ép card bung hết chiều cao tương đối */
+        min-height: 330px; /* Chiều cao tối thiểu an toàn để card trông to rõ */
+    }
+    
+    .product-image-wrapper {
+        aspect-ratio: 16/9;
+        position: relative; /* Cần thiết để chứa thẻ Absolute */
+        overflow: hidden !important; /* QUAN TRỌNG: Cắt phần viền ruy-băng thò ra ngoài */
+        border-radius: 12px 12px 0 0; /* Đảm bảo ảnh vẫn bo góc đẹp */
+        flex-shrink: 0; /* Không cho ảnh bị bóp méo */
+    }
+    
+    .product-content {
+        padding: 1.25rem 1.25rem !important; /* Tăng padding để nội dung rộng rãi như Light Mode */
+        display: flex !important;
+        flex-direction: column !important;
+        flex-grow: 1 !important; /* Chiếm toàn bộ không gian dọc còn lại của thẻ */
+    }
+    
+    .product-title {
+        font-size: 1.15rem !important; /* Cỡ chữ to hơn chút xíu */
+        line-height: 1.3;
+        margin-bottom: 0.75rem;
+    }
+    
+    .game-meta {
+        gap: 0.5rem;
+        margin-bottom: 1.5rem !important; /* Tăng khoảng trống bên dưới meta */
+    }
+    
+    .meta-tag {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .product-price {
+        font-size: 1.15rem !important;
+        margin-top: auto !important; /* QUAN TRỌNG: Tự động đẩy giá tiền xuống sát góc dưới đáy thẻ */
+        padding-top: 0.5rem; 
+    }
+    
+    /* HUYỀN THOẠI COMING SOON MỚI */
+    .coming-soon-badge {
+        position: absolute !important;
+        /* Chỉnh tọa độ toán học để ôm sát góc 45 độ */
+        top: 22px !important;
+        left: -36px !important;
+        width: 150px !important; /* Kéo dài để vắt chéo hẳn góc */
+        height: 28px !important;
+        
+        /* Flexbox để ép chữ nằm giữa tâm tuyệt đối */
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        
+        /* Đã chỉnh font-size nhỏ lại từ 0.65rem xuống 0.55rem */
+        font-size: 0.55rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 1.5px !important;
+        text-transform: uppercase !important;
+        
+        /* Hiệu ứng màu Gradient rực rỡ cao cấp */
+        background: linear-gradient(135deg, #ff0055 0%, #ff6600 100%) !important;
+        color: #ffffff !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.6) !important;
+        
+        /* Đổ bóng ngoài + Highlight viền trong tạo khối 3D */
+        box-shadow: 0 4px 15px rgba(255, 0, 85, 0.5), 
+                    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+                    inset 0 -1px 2px rgba(0, 0, 0, 0.2) !important;
+        border: none !important; /* Bỏ viền trắng mờ nhìn thô cũ */
+        
+        transform: rotate(-45deg) !important;
+        z-index: 10 !important;
+        pointer-events: none !important; /* Không cho click nhầm vào ruy-băng */
+    }
+}

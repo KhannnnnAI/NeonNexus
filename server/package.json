@@ -1,0 +1,23 @@
+{
+  "name": "steam-auth-server",
+  "version": "1.0.0",
+  "description": "Simple server for Steam OpenID authentication",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@payos/node": "^2.0.4",
+    "axios": "^1.6.0",
+    "cors": "^2.8.6",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-session": "^1.17.3",
+    "moment": "^2.29.4",
+    "openid": "^2.0.12",
+    "qs": "^6.11.2",
+    "rss-parser": "^3.13.0",
+    "stripe": "^20.2.0"
+  }
+}
