@@ -26,7 +26,7 @@
           this.resizeTimer = null;
           this.themeObserver = null;
           this.pageMobileCSS = {
-            "index.html": "css/index.css?v=5",
+            "store.html": "css/index.css?v=5",
             'community.html': 'css/community-mobile.css?v=1',
             'account.html': 'css/account-mobile.css?v=1',
             'event.html': 'css/event-mobile.css?v=2',
@@ -38,11 +38,11 @@
         getCurrentPageName() {
           const path = window.location.pathname;
           const fileName = path.split('/').pop();
-          return fileName || 'index.html';
+          return fileName || 'store.html';
         }
         loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
         loadMobileCSS() {
-          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const isRoot = !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
           const prefix = isRoot ? '' : '../';
           const mobileCSSPath = this.pageMobileCSS[this.currentPage];
           const cacheBuster = new Date().getTime();
@@ -71,7 +71,7 @@
         }
         loadLightCSS(cacheBuster = new Date().getTime()) {
           if (!this.mobileCSS.light) {
-            const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+            const isRoot = !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
             const prefix = isRoot ? '' : '../';
             this.mobileCSS.light = document.createElement('link');
             this.mobileCSS.light.rel = 'stylesheet';
@@ -275,7 +275,7 @@
               <i data-lucide="lock" class="guest-overlay-icon"></i>
               <h3 class="guest-overlay-title">MEMBERSHIP LOCKED</h3>
               <p class="guest-overlay-msg">Login with <strong>Steam</strong> or <strong>Google</strong> to unlock membership rewards &amp; earn discount points!</p>
-              <a href="../index.html" class="guest-overlay-btn">
+              <a href="/" class="guest-overlay-btn">
                 <i data-lucide="log-in"></i>
                 LOGIN NOW
               </a>
@@ -350,7 +350,7 @@
             Please login to view your purchased keys
           </p>
           <a
-            href="../index.html"
+            href="/"
             class="back-home-btn"
             style="
               display: inline-flex;
@@ -432,7 +432,7 @@
             You haven't purchased any games yet. Start exploring the store!
           </p>
           <a
-            href="../index.html"
+            href="/"
             class="back-home-btn"
             style="
               display: inline-flex;
@@ -506,7 +506,7 @@
               <ul class="footer-links">
                 <li>
                   <a
-                    href="../index.html"
+                    href="/"
                     class="footer-link"
                     style="text-decoration: none; color: inherit"
                     >:: STORE</a
@@ -708,7 +708,7 @@
           
           <div class="sidebar-drawer-content">
             <nav class="sidebar-nav">
-              <a href="../index.html" class="sidebar-nav-item">
+              <a href="/" class="sidebar-nav-item">
                 <i data-lucide="home" class="sidebar-nav-icon"></i>
                 <span>Store Home</span>
               </a>
@@ -776,7 +776,7 @@
 
       // Logo click handler
       document.getElementById("logo-btn").addEventListener("click", () => {
-        window.location.href = "../index.html";
+        window.location.href = PathResolver.resolve('/store');
       });
 
       // Theme toggle
@@ -809,7 +809,7 @@
       if (loginBtn) {
         loginBtn.addEventListener("click", () => {
           // Redirect to home page to login
-          window.location.href = "../index.html";
+          window.location.href = PathResolver.resolve('/');
         });
       }
 
@@ -827,12 +827,12 @@
           const auth = window.__firebaseAuth;
           if (auth) {
             auth.signOut().then(() => {
-              window.location.href = "../index.html";
+              window.location.href = PathResolver.resolve('/');
             }).catch(() => {
-              window.location.href = "../index.html";
+              window.location.href = PathResolver.resolve('/');
             });
           } else {
-            window.location.href = "../index.html";
+            window.location.href = PathResolver.resolve('/');
           }
         });
       }

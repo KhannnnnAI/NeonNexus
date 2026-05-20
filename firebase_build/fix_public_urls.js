@@ -11,15 +11,17 @@ if (fs.existsSync(idxPath)) {
     fs.writeFileSync(idxPath, idx);
 }
 
-// Fix other htmls in public/html
-const htmlFiles = ['game.html', 'community.html', 'account.html', 'keygen.html'];
-for (const f of htmlFiles) {
-  const p = path.join(__dirname, 'public', 'html', f);
-  if (fs.existsSync(p)) {
-      let content = fs.readFileSync(p, 'utf8');
-      content = content.replace(/src=\"\.\.\/API\//g, 'src=\"' + baseURL);
-      content = content.replace(/import \"\.\.\/API\//g, 'import \"' + baseURL);
-      fs.writeFileSync(p, content);
-  }
+// Fix all htmls in public/html dynamically
+const htmlDir = path.join(__dirname, 'public', 'html');
+if (fs.existsSync(htmlDir)) {
+    fs.readdirSync(htmlDir).forEach(f => {
+        if (f.endsWith('.html')) {
+            const p = path.join(htmlDir, f);
+            let content = fs.readFileSync(p, 'utf8');
+            content = content.replace(/src=\"\.\.\/API\//g, 'src=\"' + baseURL);
+            content = content.replace(/import \"\.\.\/API\//g, 'import \"' + baseURL);
+            fs.writeFileSync(p, content);
+        }
+    });
 }
 console.log('Firebase public HTML replacements done!');

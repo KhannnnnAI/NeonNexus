@@ -8,6 +8,16 @@
     ],
     "redirects": [
       {
+        "source": "/html/store.html",
+        "destination": "/store",
+        "type": 301
+      },
+      {
+        "source": "/store.html",
+        "destination": "/store",
+        "type": 301
+      },
+      {
         "source": "/index.html",
         "destination": "/",
         "type": 301
@@ -144,6 +154,18 @@
       }
     ],
     "rewrites": [
+      {
+        "source": "/",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/home",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/store",
+        "destination": "/html/store.html"
+      },
       {
         "source": "/account",
         "destination": "/html/account.html"

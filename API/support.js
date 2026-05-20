@@ -166,7 +166,66 @@ document.addEventListener("DOMContentLoaded", () => {
     comLinkInput.style.cursor = 'not-allowed';
   };
 
+  const checkGuestLock = (user) => {
+    const wrapper = document.querySelector('.support-form-wrapper');
+    if (!wrapper) return;
+
+    // Remove any existing overlay first
+    const existingOverlay = wrapper.querySelector('.support-lock-overlay');
+    if (existingOverlay) {
+      existingOverlay.remove();
+    }
+
+    if (user && (user.isGuest || user.provider === 'guest')) {
+      // Create cyberpunk lock overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'support-lock-overlay';
+      overlay.innerHTML = `
+        <div class="lock-glow"></div>
+        <i data-lucide="shield-alert" class="lock-warning-icon"></i>
+        <h3 class="lock-title">ACCESS_RESTRICTED</h3>
+        <p class="lock-desc">GUEST ACCOUNTS ARE NOT PERMITTED TO INITIATE SUPPORT TICKETS. PLEASE LOG IN WITH A FULL ACCOUNT TO RESOLVE SYSTEM ERRORS.</p>
+        <button type="button" class="lock-login-btn support-submit-btn" style="width: auto; padding: 0.75rem 2rem;">
+          LOG IN / SIGN UP
+        </button>
+      `;
+
+      // Prevent interaction with form elements
+      const formElements = wrapper.querySelectorAll('input, select, textarea, button');
+      formElements.forEach(el => {
+        if (!el.classList.contains('lock-login-btn')) {
+          el.disabled = true;
+        }
+      });
+
+      // Bind button action to open login modal
+      const lockLoginBtn = overlay.querySelector('.lock-login-btn');
+      if (lockLoginBtn) {
+        lockLoginBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById('login-btn')?.click();
+        });
+      }
+
+      wrapper.appendChild(overlay);
+      
+      // Re-init lucide icons inside the overlay
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    } else {
+      // Re-enable form elements (except the ones that should be disabled naturally like bound email/account type)
+      const formElements = wrapper.querySelectorAll('input, select, textarea, button');
+      formElements.forEach(el => {
+        if (el.id !== 'ticket-email' && el.id !== 'ticket-account-type') {
+          el.disabled = false;
+        }
+      });
+    }
+  };
+
   const resetBoundAuthForm = () => {
+    checkGuestLock(null);
     boundAuthContext = null;
 
     if (!accountTypeSelect || !comLinkInput || !comLinkLabel) return;
@@ -186,6 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const bindLoggedInAccount = (user) => {
+    checkGuestLock(user);
+
     if (!user) {
       resetBoundAuthForm();
       return;
@@ -227,18 +288,34 @@ document.addEventListener("DOMContentLoaded", () => {
   // Bind support ticket to currently logged-in account
   resetBoundAuthForm();
 
-  const savedSteamUser = localStorage.getItem('steam_user');
-  if (savedSteamUser) {
-    try {
-      bindLoggedInAccount(JSON.parse(savedSteamUser));
-    } catch (e) {
- console.warn('Failed to parse steam_user from localStorage', e);
+  let initialUser = null;
+  try {
+    const rawSession = localStorage.getItem("dashboard_auth_session_v1");
+    if (rawSession) {
+      initialUser = JSON.parse(rawSession);
     }
+  } catch (e) {
+    console.warn('Failed to parse dashboard session on load', e);
+  }
+
+  if (!initialUser) {
+    const savedSteamUser = localStorage.getItem('steam_user');
+    if (savedSteamUser) {
+      try {
+        initialUser = JSON.parse(savedSteamUser);
+      } catch (e) {
+        console.warn('Failed to parse steam_user from localStorage', e);
+      }
+    }
+  }
+
+  if (initialUser) {
+    bindLoggedInAccount(initialUser);
   }
 
   if (window.__firebaseAuth) {
     const existingUser = window.__firebaseAuth.currentUser;
-    if (!savedSteamUser && existingUser && existingUser.providerData && existingUser.providerData.length > 0) {
+    if (existingUser && existingUser.providerData && existingUser.providerData.length > 0) {
       bindLoggedInAccount(existingUser);
     }
 

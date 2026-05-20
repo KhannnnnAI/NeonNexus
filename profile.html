@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Phạm Khánh Hưng - Hồ sơ công nghệ</title>
+  <meta content="Portfolio Hỗ trợ CNTT, Quản trị hệ thống và Thiết kế" name="description">
+  <meta name="author" content="Phạm Khánh Hưng">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#030712">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Phạm Khánh Hưng - Hồ sơ công nghệ">
+  <meta property="og:description" content="Portfolio Hỗ trợ CNTT, Quản trị hệ thống và Thiết kế.">
+  <meta property="og:url" content="https://khannnnnkza.id.vn/">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Phạm Khánh Hưng - Hồ sơ công nghệ">
+  <meta name="twitter:description" content="Portfolio Hỗ trợ CNTT, Quản trị hệ thống và Thiết kế.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80">
+  <link rel="canonical" href="https://khannnnnkza.id.vn/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+
+  <style>
+    /* ----- GLOBAL VARIABLES & RESET ----- */
+    :root {
+      --bg-base: #030712;
+      --bg-surface: #111827;
+      --bg-surface-hover: #1f2937;
+      --neon-cyan: #00f3ff;
+      --neon-purple: #bc13fe;
+      --text-main: #9ca3af;
+      --text-light: #f3f4f6;
+      --font-code: 'Fira Code', monospace;
+      --font-text: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-text);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      overflow-x: hidden;
+      /* Grid background for tech feel */
+      background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-code);
+      color: var(--text-light);
+    }
+
+    a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      color: var(--neon-purple);
+      text-shadow: 0 0 8px var(--neon-purple);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--neon-cyan);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.2);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 10px;
+      top: -50px;
+      z-index: 10000;
+      background: var(--neon-cyan);
+      color: #000;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: var(--font-code);
+      font-weight: 600;
+    }
+
+    .skip-link:focus {
+      top: 10px;
+    }
+
+    /* ----- HEADER / SIDEBAR ----- */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      transition: all ease-in-out 0.5s;
+      z-index: 9997;
+      padding: 0 15px;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(0, 243, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-toggle {
+      color: var(--neon-cyan);
+      font-size: 28px;
+      cursor: pointer;
+      position: fixed;
+      right: 15px;
+      top: 15px;
+      z-index: 9999;
+      background: var(--bg-surface);
+      border: 1px solid var(--neon-cyan);
+      padding: 5px 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+
+    .navmenu {
+      padding: 0;
+      z-index: 9998;
+    }
+
+    .navmenu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .navmenu a {
+      display: flex;
+      align-items: center;
+      color: var(--text-main);
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      font-family: var(--font-code);
+      font-size: 15px;
+      border-radius: 4px;
+      transition: all 0.3s;
+      border: 1px solid transparent;
+    }
+
+    .navmenu a i {
+      font-size: 20px;
+      margin-right: 10px;
+      color: var(--text-main);
+    }
+
+    .navmenu a::before {
+      content: ">_";
+      opacity: 0;
+      margin-right: -15px;
+      transition: 0.3s;
+      color: var(--neon-cyan);
+      font-weight: bold;
+    }
+
+    .navmenu a:hover, .navmenu a.active {
+      color: var(--neon-cyan);
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.1) inset;
+    }
+
+    .navmenu a:hover::before, .navmenu a.active::before {
+      opacity: 1;
+      margin-right: 10px;
+    }
+
+    .navmenu a:hover i, .navmenu a.active i {
+      color: var(--neon-cyan);
+      display: none; /* Hide icon to show >_ */
+    }
+
+    /* ----- MAIN LAYOUT ----- */
+    .main {
+      margin-left: 300px;
+    }
+
+    @media (max-width: 1199px) {
+      .header { left: -300px; }
+      .main { margin-left: 0; }
+      .mobile-nav-active .header { left: 0; }
+    }
+
+    /* ----- SECTIONS GENERAL ----- */
+    section { padding: 60px 0; overflow: hidden; }
+    .section-title { padding-bottom: 40px; position: relative; }
+    .section-title h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      color: var(--text-light);
+      position: relative;
+    }
+    .section-title h2::after {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 50px;
+      height: 3px;
+      background: var(--neon-cyan);
+      bottom: 0;
+      left: 0;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+    .section-title h2::before {
+      content: "< ";
+      color: var(--neon-purple);
+    }
+    .section-title h2::after { /* Need to overwrite for tag effect */
+      content: " />";
+      position: static;
+      color: var(--neon-purple);
+      background: none;
+      box-shadow: none;
+    }
+    .section-title h2 .line {
+      position: absolute; display: block; width: 60px; height: 2px; background: var(--neon-cyan); bottom: 0; left: 0; box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    /* ----- HERO SECTION ----- */
+    .hero {
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(to right, rgba(3, 7, 18, 0.9), rgba(3, 7, 18, 0.7)), url("https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=2070&q=80") top right;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: 64px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    .hero p {
+      color: var(--neon-cyan);
+      margin: 15px 0 0 0;
+      font-size: 26px;
+      font-family: var(--font-code);
+    }
+    .hero .typed-cursor { font-size: 26px; color: var(--neon-purple); }
+    .social-links { margin-top: 30px; }
+    .social-links a {
+      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+      line-height: 1;
+      margin-right: 15px;
+      border-radius: 4px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      transition: 0.3s;
+    }
+    .social-links a:hover {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    /* ----- ABOUT SECTION (Code Editor Style) ----- */
+    .about .img-fluid {
+      border: 3px solid var(--neon-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+      filter: grayscale(100%) contrast(110%);
+      transition: 0.5s;
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto;
+    }
+    .about .img-fluid:hover {
+      filter: grayscale(0%);
+      box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+    }
+    .about-content-box {
+      background: var(--bg-surface);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+    }
+    .editor-top {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+    .about ul { list-style: none; padding: 0; font-family: var(--font-code); font-size: 14px; }
+    .about ul li { padding-bottom: 10px; display: flex; align-items: center; white-space: nowrap; }
+    .about ul i { font-size: 16px; margin-right: 10px; color: var(--neon-cyan); }
+    .about ul strong { color: var(--neon-purple); margin-right: 5px; }
+
+    /* ----- STATS ----- */
+    .stats-item {
+      padding: 30px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats-item::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, rgba(0,243,255,0.1), transparent);
+      transform: skewX(-20deg);
+      transition: 0.5s;
+    }
+    .stats-item:hover::before { left: 150%; }
+    .stats-item i { font-size: 32px; color: var(--neon-cyan); margin-bottom: 15px; display: block;}
+    .stats-item span { font-size: 36px; font-weight: 700; color: var(--text-light); font-family: var(--font-code); }
+
+    /* ----- SKILLS (Neon Progress Bars) ----- */
+    .progress {
+      height: 25px;
+      display: block;
+      background: none;
+      border-radius: 0;
+      margin-bottom: 25px;
+    }
+    .progress .skill {
+      padding: 0; margin: 0 0 6px 0; display: block;
+      font-weight: 600; font-family: var(--font-code); color: var(--text-light);
+    }
+    .progress .skill .val { float: right; font-style: normal; color: var(--neon-cyan); }
+    .progress-bar-wrap {
+      background: var(--bg-surface);
+      height: 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan);
+      border-radius: 4px;
+      transition: width 1s ease-in-out;
+    }
+
+    /* ----- RESUME (Cyberpunk Timeline) ----- */
+    .resume-title { font-size: 26px; font-weight: 700; margin-top: 20px; margin-bottom: 20px; color: var(--text-light); font-family: var(--font-code); }
+    .resume-item {
+      padding: 0 0 20px 20px;
+      margin-top: -2px;
+      border-left: 2px solid rgba(0, 243, 255, 0.3);
+      position: relative;
+    }
+    .resume-item::before {
+      content: ""; position: absolute; width: 16px; height: 16px;
+      border-radius: 50px; left: -9px; top: 0;
+      background: var(--bg-base); border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+    .resume-item h4 { line-height: 18px; font-size: 18px; font-weight: 600; color: var(--neon-cyan); margin-bottom: 10px; }
+    .resume-item h5 { font-size: 14px; background: rgba(188, 19, 254, 0.1); border: 1px solid var(--neon-purple); padding: 5px 15px; display: inline-block; font-weight: 600; margin-bottom: 10px; color: var(--neon-purple); border-radius: 4px; font-family: var(--font-code); }
+    .resume-item ul { padding-left: 20px; }
+
+    /* ----- PORTFOLIO ----- */
+    .portfolio-filters { padding: 0; margin: 0 0 40px 0; list-style: none; text-align: center; }
+    .portfolio-filters li {
+      cursor: pointer; display: inline-block; padding: 8px 15px;
+      font-size: 14px; font-weight: 600; font-family: var(--font-code);
+      text-transform: uppercase; color: var(--text-main); transition: all 0.3s;
+      border: 1px solid rgba(255,255,255,0.1); margin: 0 5px; border-radius: 4px;
+    }
+    .portfolio-filters li:hover, .portfolio-filters li.filter-active {
+      color: var(--bg-base); background: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.5); border-color: var(--neon-cyan);
+    }
+    .portfolio-item { position: relative; overflow: hidden; border-radius: 8px; margin-bottom: 30px; }
+    .portfolio-item img { transition: 0.5s; width: 100%; border: 1px solid rgba(255,255,255,0.1); }
+    .portfolio-info {
+      position: absolute; inset: 0; background: rgba(3, 7, 18, 0.9); display: flex;
+      flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; transition: 0.5s; backdrop-filter: blur(5px);
+    }
+    .portfolio-item:hover .portfolio-info { opacity: 1; }
+    .portfolio-item:hover img { transform: scale(1.1); filter: grayscale(100%); }
+    .portfolio-info h4 { color: var(--text-light); font-size: 20px; }
+    .portfolio-info p { color: var(--neon-cyan); font-family: var(--font-code); font-size: 14px; }
+    .portfolio-info .preview-link, .portfolio-info .details-link {
+      font-size: 24px; color: #fff; margin: 0 10px; transition: 0.3s;
+    }
+    .portfolio-info .preview-link:hover, .portfolio-info .details-link:hover { color: var(--neon-cyan); }
+
+    /* ----- SERVICES (Glassmorphism Cards) ----- */
+    .service-item {
+      padding: 40px;
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      transition: all 0.3s;
+      height: 100%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .service-item:hover {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+      transform: translateY(-5px);
+    }
+    .service-item .icon {
+      margin-bottom: 20px;
+      display: inline-block;
+      width: 70px; height: 70px;
+      line-height: 70px;
+      background: rgba(0, 243, 255, 0.1);
+      border-radius: 50%;
+      color: var(--neon-cyan);
+      font-size: 32px;
+      border: 1px solid var(--neon-cyan);
+    }
+    .service-item h3 { font-size: 22px; margin-bottom: 15px; }
+
+    /* ----- CONTACT ----- */
+    .info-item {
+      padding: 30px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .info-item i {
+      font-size: 24px; color: var(--neon-cyan);
+      background: rgba(0, 243, 255, 0.1);
+      width: 50px; height: 50px;
+      display: flex; justify-content: center; align-items: center;
+      border-radius: 50%; border: 1px solid var(--neon-cyan); margin-right: 20px;
+    }
+    .php-email-form {
+      background: var(--bg-surface);
+      padding: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+    }
+    .php-email-form input, .php-email-form textarea {
+      background: var(--bg-base); color: var(--text-light);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-family: var(--font-code);
+    }
+    .php-email-form input:focus, .php-email-form textarea:focus {
+      background: var(--bg-base); border-color: var(--neon-cyan); box-shadow: 0 0 5px rgba(0, 243, 255, 0.5); color: var(--text-light);
+    }
+    .php-email-form button[type="submit"] {
+      background: transparent; color: var(--neon-cyan);
+      border: 1px solid var(--neon-cyan); padding: 10px 30px; border-radius: 4px;
+      font-family: var(--font-code); transition: 0.3s;
+    }
+    .php-email-form button[type="submit"]:hover {
+      background: var(--neon-cyan); color: var(--bg-base); box-shadow: 0 0 15px var(--neon-cyan);
+    }
+
+    /* ----- FOOTER ----- */
+    .footer {
+      padding: 30px 0; background: var(--bg-surface);
+      border-top: 1px solid rgba(255,255,255,0.05); text-align: center;
+    }
+    .footer .sitename { font-family: var(--font-code); color: var(--neon-cyan); margin-bottom: 15px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Phạm Khánh Hưng",
+      "jobTitle": "Hỗ trợ CNTT / Quản trị hệ thống / Thiết kế",
+      "url": "https://khannnnnkza.id.vn/",
+      "email": "hungtrang290@gmail.com",
+      "telephone": "0876695176",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bien Hoa",
+        "addressRegion": "Dong Nai",
+        "addressCountry": "VN"
+      },
+      "sameAs": [
+        "https://x.com/Khannnnn078",
+        "https://www.facebook.com/HungKhannnnn",
+        "https://www.instagram.com/khannnnnkza/",
+        "https://www.linkedin.com/in/khannnnn/"
+      ]
+    }
+  </script>
+</head>
+
+<body class="index-page">
+  <a class="skip-link" href="#main-content">Bỏ qua và chuyển đến nội dung chính</a>
+
+  <i class="header-toggle d-xl-none bi bi-list"></i>
+
+  <header id="header" class="header d-flex flex-column justify-content-center">
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="index.html"><i class="bi bi-arrow-left-circle navicon"></i><span>Trang chủ</span></a></li>
+        <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i><span>Tổng quan</span></a></li>
+        <li><a href="#about"><i class="bi bi-person navicon"></i><span>Giới thiệu</span></a></li>
+        <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i><span>Hồ sơ</span></a></li>
+        <li><a href="#portfolio"><i class="bi bi-images navicon"></i><span>Dự án</span></a></li>
+        <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i><span>Dịch vụ</span></a></li>
+        <li><a href="#contact"><i class="bi bi-envelope navicon"></i><span>Liên hệ</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content" class="main">
+
+    <section id="hero" class="hero section">
+      <div class="container" data-aos="zoom-in" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 text-center text-lg-start">
+            <h2>Phạm Khánh Hưng</h2>
+            <p>sys.role = [<span class="typed" data-typed-items="Lập trình viên, Hỗ trợ CNTT, Quản trị hệ thống, Nhà thiết kế"></span>]</p>
+            <div class="social-links">
+              <a href="https://x.com/Khannnnn078" target="_blank" rel="noopener noreferrer" aria-label="Trang cá nhân X"><i class="bi bi-twitter-x"></i></a>
+              <a href="https://www.facebook.com/HungKhannnnn" target="_blank" rel="noopener noreferrer" aria-label="Trang cá nhân Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/khannnnnkza/" target="_blank" rel="noopener noreferrer" aria-label="Trang cá nhân Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/khannnnn/" target="_blank" rel="noopener noreferrer" aria-label="Trang cá nhân LinkedIn"><i class="bi bi-linkedin"></i></a>
+              <a href="https://github.com/KhannnnnAI" target="_blank" rel="noopener noreferrer" aria-label="Trang cá nhân GitHub"><i class="bi bi-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Giới thiệu<div class="line"></div></h2>
+        <p>Đang chạy init_profile.sh... Dữ liệu hồ sơ đã tải thành công. Chuyên kết nối giữa công nghệ và thiết kế. Có kinh nghiệm về hỗ trợ CNTT, mạng và thiết kế sáng tạo.</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4 justify-content-center">
+          <div class="col-lg-4">
+            <img src="img/491278182_1206668937912037_5359128231424123650_n_644x722.jpg" class="img-fluid" alt="Ảnh đại diện phong cách công nghệ" loading="lazy" decoding="async">
+          </div>
+          <div class="col-lg-8 content">
+            <div class="about-content-box">
+              <div class="editor-top">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+              </div>
+              <h3 style="color: var(--neon-cyan); font-family: var(--font-code); margin-bottom: 20px;">> user.getDetails()</h3>
+              <div class="row">
+                <div class="col-lg-6">
+                  <ul>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Ngày sinh:</strong> <span>11/12/2006</span></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <a href="https://khannnnnkza.id.vn/" target="_blank" rel="noopener noreferrer">khannnnnkza.id.vn</a></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Điện thoại:</strong> <span>0876695176</span></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Địa điểm:</strong> <span>Hố Nai, Đồng Nai, Việt Nam</span></li>
+                  </ul>
+                </div>
+                <div class="col-lg-6">
+                  <ul>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Tuổi:</strong> <span>19</span></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Trình độ:</strong> <span>Thạc sĩ</span></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>hungtrang290@gmail.com</span></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Trạng thái:</strong> <span style="color: #27c93f;">[Sẵn_sàng_làm_việc]</span></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stats" class="stats section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center">
+              <i class="bi bi-emoji-smile"></i>
+              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Khách hàng hài lòng</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center">
+              <i class="bi bi-journal-richtext"></i>
+              <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Dự án</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center">
+              <i class="bi bi-headset"></i>
+              <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Giờ hỗ trợ</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item text-center">
+              <i class="bi bi-people"></i>
+              <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+              <p>Nút mạng</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="skills section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Kỹ năng<div class="line"></div></h2>
+        <p>Cấu hình và năng lực hiện tại của hệ thống.</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row skills-content">
+          <div class="col-lg-6">
+            <div class="progress">
+              <span class="skill"><span>Hỗ trợ CNTT</span> <i class="val">100%</i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="progress">
+              <span class="skill"><span>Kỹ năng CNTT</span> <i class="val">90%</i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="progress">
+              <span class="skill"><span>HTML</span> <i class="val">60%</i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="progress">
+              <span class="skill"><span>CSS</span> <i class="val">50%</i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="progress">
+              <span class="skill"><span>Mạng máy tính</span> <i class="val">80%</i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+            <div class="progress">
+              <span class="skill"><span>Adobe Illustrator</span> <i class="val">60%</i></span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resume" class="resume section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Nhật_ký_hệ_thống (Hồ sơ)<div class="line"></div></h2>
+        <p>Dòng thời gian dữ liệu kinh nghiệm và học vấn.</p>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="resume-title">Tóm tắt</h3>
+            <div class="resume-item pb-0">
+              <h4>Phạm Khánh Hưng</h4>
+              <p><em>Chuyên viên CNTT & thiết kế sáng tạo, làm việc theo mục tiêu và tiến độ, có kinh nghiệm xây dựng giải pháp lấy người dùng làm trung tâm từ ý tưởng đến triển khai.</em></p>
+              <ul>
+                <li>Hố Nai, Đồng Nai, Việt Nam</li>
+                <li>0876695176</li>
+                <li>hungtrang290@gmail.com</li>
+              </ul>
+            </div>
+            <h3 class="resume-title">Học vấn</h3>
+            <div class="resume-item">
+              <h4>Master of IT Support &amp; Network</h4>
+              <h5>2015 - 2016</h5>
+              <p><em>Viện Công nghệ, Việt Nam</em></p>
+              <p>Nghiên cứu và thực hành chuyên sâu về vận hành hệ thống, xử lý sự cố hạ tầng và tối ưu hiệu suất mạng nội bộ.</p>
+            </div>
+            <div class="resume-item">
+              <h4>Cử nhân Thiết kế</h4>
+              <h5>2010 - 2014</h5>
+              <p><em>Học viện Thiết kế, Việt Nam</em></p>
+              <p>Tập trung vào thiết kế trực quan, nhận diện thương hiệu và xây dựng trải nghiệm người dùng hiện đại.</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="resume-title">Kinh nghiệm</h3>
+            <div class="resume-item">
+              <h4>Chuyên viên CNTT cao cấp</h4>
+              <h5>2019 - Nay</h5>
+              <p><em>Công ty TechCorp, TP. Hồ Chí Minh</em></p>
+              <ul>
+                <li>Phụ trách thiết kế, phát triển và triển khai hệ thống mạng.</li>
+                <li>Phân công công việc cho nhóm IT và tư vấn kỹ thuật.</li>
+                <li>Giám sát, đánh giá chất lượng thiết bị phần cứng.</li>
+              </ul>
+            </div>
+            <div class="resume-item">
+              <h4>Chuyên viên Thiết kế Đồ họa</h4>
+              <h5>2017 - 2018</h5>
+              <p><em>Creative Studio, Đồng Nai, Việt Nam</em></p>
+              <ul>
+                <li>Triển khai nhiều hạng mục marketing (logo, infographic, bài thuyết trình).</li>
+                <li>Quản lý đồng thời tối đa 5 đầu việc/dự án trong môi trường áp lực cao.</li>
+                <li>Tư vấn cho khách hàng phương án thiết kế phù hợp với mục tiêu truyền thông.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio" class="portfolio section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Mô_đun (Dự án)<div class="line"></div></h2>
+        <p>Các dự án và kiến trúc mạng đã thực hiện gần đây.</p>
+      </div>
+
+      <div class="container">
+        <ul class="portfolio-filters" data-aos="fade-up" data-aos-delay="100">
+          <li data-filter="*" class="filter-active">Tất cả</li>
+          <li data-filter=".filter-app">Ứng dụng</li>
+          <li data-filter=".filter-product">Phần cứng</li>
+          <li data-filter=".filter-branding">Website</li>
+        </ul>
+
+        <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80" class="img-fluid" alt="Ảnh xem trước dự án ứng dụng di động" loading="lazy" decoding="async">
+            <div class="portfolio-info">
+              <h4>App_Beta_v1</h4>
+              <p>Ứng dụng di động</p>
+              <div>
+                <a href="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-product">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80" class="img-fluid" alt="Ảnh xem trước triển khai phần cứng và máy chủ" loading="lazy" decoding="async">
+            <div class="portfolio-info">
+              <h4>Server_Core</h4>
+              <p>Triển khai phần cứng</p>
+              <div>
+                <a href="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 portfolio-item filter-branding">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" class="img-fluid" alt="Ảnh xem trước dự án giao diện web" loading="lazy" decoding="async">
+            <div class="portfolio-info">
+              <h4>Web_Portal_X</h4>
+              <p>Giao diện web</p>
+              <div>
+                <a href="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80" data-gallery="portfolio-gallery" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="services section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Dịch vụ<div class="line"></div></h2>
+        <p>Các chức năng và năng lực có thể cung cấp.</p>
+      </div>
+
+      <div class="container">
+        <div class="row gy-4">
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item">
+              <div class="icon"><i class="bi bi-pc-display-horizontal"></i></div>
+              <h3>Hỗ trợ CNTT</h3>
+              <p>Khắc phục sự cố phần cứng, chẩn đoán hệ thống và cài đặt phần mềm.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item">
+              <div class="icon"><i class="bi bi-diagram-3"></i></div>
+              <h3>Cấu hình mạng</h3>
+              <p>Cài đặt router, switch và duy trì mạng nội bộ an toàn.</p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="service-item">
+              <div class="icon"><i class="bi bi-vector-pen"></i></div>
+              <h3>Thiết kế đồ họa</h3>
+              <p>Sử dụng Illustrator và công cụ hiện đại để tạo giao diện sạch, mang phong cách tương lai.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Ping_Me (Liên hệ)<div class="line"></div></h2>
+        <p>Thiết lập kết nối an toàn qua biểu mẫu bên dưới.</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-4">
+            <div class="info-item d-flex">
+              <i class="bi bi-geo-alt"></i>
+              <div>
+                <h3>Địa điểm</h3>
+                <p>Hố Nai, Đồng Nai, Việt Nam</p>
+              </div>
+            </div>
+            <div class="info-item d-flex">
+              <i class="bi bi-telephone"></i>
+              <div>
+                <h3>Gọi cho tôi</h3>
+                <p>0876695176</p>
+              </div>
+            </div>
+            <div class="info-item d-flex">
+              <i class="bi bi-envelope"></i>
+              <div>
+                <h3>Thư điện tử</h3>
+                <p>hungtrang290@gmail.com</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <form action="#" method="post" class="php-email-form">
+              <div class="row gy-4">
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="< họ_tên >" required>
+                </div>
+                <div class="col-md-6">
+                  <input type="email" class="form-control" name="email" placeholder="< email@domain.com >" required>
+                </div>
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="subject" placeholder="< chủ_đề >" required>
+                </div>
+                <div class="col-md-12">
+                  <textarea class="form-control" name="message" rows="6" placeholder="> Nhập nội dung tại đây..." required></textarea>
+                </div>
+                <div class="col-md-12 text-center">
+                  <button id="contact-send-btn" type="button">> GỬI_DỮ_LIỆU</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer position-relative">
+    <div class="container">
+      <h3 class="sitename">Phạm Khánh Hưng</h3>
+      <p>SYS.SHUTDOWN... KẾT_THÚC.</p>
+      <div class="copyright">
+        <span>&copy; Bản quyền</span> <strong class="px-1 sitename">Khannnnn</strong> <span>Đã đăng ký mọi quyền</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      "use strict";
+
+      /* Trình xử lý nút liên hệ an toàn hơn (thay thế inline JS) */
+      const contactSendBtn = document.getElementById('contact-send-btn');
+      if (contactSendBtn) {
+        contactSendBtn.addEventListener('click', () => {
+          alert('Gói dữ liệu đã được biên dịch. Chức năng gửi chưa được kết nối backend.');
+        });
+      }
+
+      /* Nút bật/tắt menu trên thiết bị di động */
+      const headerToggleBtn = document.querySelector('.header-toggle');
+      if(headerToggleBtn) {
+        headerToggleBtn.addEventListener('click', function() {
+          document.querySelector('body').classList.toggle('mobile-nav-active');
+          this.classList.toggle('bi-list');
+          this.classList.toggle('bi-x');
+        });
+      }
+
+      /* Ẩn menu di động khi bấm vào liên kết trong cùng trang */
+      document.querySelectorAll('#navmenu a').forEach(navmenu => {
+        navmenu.addEventListener('click', () => {
+          if (document.querySelector('.mobile-nav-active')) {
+            document.querySelector('body').classList.remove('mobile-nav-active');
+            headerToggleBtn.classList.toggle('bi-list');
+            headerToggleBtn.classList.toggle('bi-x');
+          }
+        });
+      });
+
+      /* Theo dõi mục menu theo vị trí cuộn */
+      let navmenulinks = document.querySelectorAll('.navmenu a');
+      const navmenuScrollspy = () => {
+        navmenulinks.forEach(navmenulink => {
+          if (!navmenulink.hash) return;
+          let section = document.querySelector(navmenulink.hash);
+          if (!section) return;
+          let position = window.scrollY + 200;
+          if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
+            document.querySelectorAll('.navmenu a.active').forEach(link => link.classList.remove('active'));
+            navmenulink.classList.add('active');
+          } else {
+            navmenulink.classList.remove('active');
+          }
+        })
+      }
+      window.addEventListener('load', navmenuScrollspy);
+      document.addEventListener('scroll', navmenuScrollspy);
+
+      /* Khởi tạo AOS */
+      AOS.init({
+        duration: 1000,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+      });
+
+      /* Khởi tạo Typed.js */
+      const selectTyped = document.querySelector('.typed');
+      if (selectTyped) {
+        let typed_strings = selectTyped.getAttribute('data-typed-items');
+        typed_strings = typed_strings.split(',');
+        new Typed('.typed', {
+          strings: typed_strings,
+          loop: true,
+          typeSpeed: 60,
+          backSpeed: 40,
+          backDelay: 2000
+        });
+      }
+
+      /* Khởi tạo PureCounter */
+      new PureCounter();
+
+      /* Khởi tạo GLightbox */
+      const glightbox = GLightbox({
+        selector: '.glightbox'
+      });
+
+      /* Khởi tạo Isotope (lọc dự án) */
+      let portfolionIsotope = document.querySelector('.portfolio-container');
+      if (portfolionIsotope) {
+        let portfolioFilter = portfolionIsotope.getAttribute('data-portfolio-filter') ? portfolionIsotope.getAttribute('data-portfolio-filter') : '*';
+        let portfolioLayout = portfolionIsotope.getAttribute('data-portfolio-layout') ? portfolionIsotope.getAttribute('data-portfolio-layout') : 'masonry';
+        let portfolioSort = portfolionIsotope.getAttribute('data-portfolio-sort') ? portfolionIsotope.getAttribute('data-portfolio-sort') : 'original-order';
+
+        window.addEventListener('load', () => {
+          let portfolioIsotope = new Isotope(document.querySelector('.portfolio-container'), {
+            itemSelector: '.portfolio-item',
+            layoutMode: portfolioLayout,
+            filter: portfolioFilter,
+            sortBy: portfolioSort
+          });
+
+          let menuFilters = document.querySelectorAll('.portfolio-filters li');
+          menuFilters.forEach(function(el) {
+            el.addEventListener('click', function() {
+              document.querySelector('.portfolio-filters .filter-active').classList.remove('filter-active');
+              this.classList.add('filter-active');
+              portfolioIsotope.arrange({
+                filter: this.getAttribute('data-filter')
+              });
+            });
+          });
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -18,7 +18,7 @@
           this.resizeTimer = null;
           this.themeObserver = null;
           this.pageMobileCSS = {
-            "index.html": "css/index.css?v=5",
+            "store.html": "css/index.css?v=5",
             'community.html': 'css/community-mobile.css?v=1',
             'account.html': 'css/account-mobile.css?v=1',
             'event.html': 'css/event-mobile.css?v=2',
@@ -30,11 +30,11 @@
         getCurrentPageName() {
           const path = window.location.pathname;
           const fileName = path.split('/').pop();
-          return fileName || 'index.html';
+          return fileName || 'store.html';
         }
         loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
         loadMobileCSS() {
-          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const isRoot = !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
           const prefix = isRoot ? '' : '../';
           const mobileCSSPath = this.pageMobileCSS[this.currentPage];
           const cacheBuster = new Date().getTime();
@@ -63,7 +63,7 @@
         }
         loadLightCSS(cacheBuster = new Date().getTime()) {
           if (!this.mobileCSS.light) {
-            const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+            const isRoot = !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
             const prefix = isRoot ? '' : '../';
             this.mobileCSS.light = document.createElement('link');
             this.mobileCSS.light.rel = 'stylesheet';
@@ -224,7 +224,7 @@
       <header class="header">
         <div class="container header-content">
           <!-- Logo -->
-          <a href="../index.html" class="logo" style="text-decoration: none">
+          <a href="/store" class="logo" style="text-decoration: none">
             <div class="logo-icon-wrapper">
               <div class="logo-glow"></div>
               <i data-lucide="zap" class="logo-icon"></i>
@@ -393,7 +393,7 @@
               <ul class="footer-links">
                 <li>
                   <a
-                    href="../index.html"
+                    href="/"
                     class="footer-link"
                     style="text-decoration: none; color: inherit"
                     >:: STORE</a
@@ -639,7 +639,11 @@
             <nav class="sidebar-nav">
               <a href="../index.html" class="sidebar-nav-item">
                 <i data-lucide="home" class="sidebar-nav-icon"></i>
-                <span>Store Home</span>
+                <span>Home</span>
+              </a>
+              <a href="store.html" class="sidebar-nav-item">
+                <i data-lucide="shopping-bag" class="sidebar-nav-icon"></i>
+                <span>Store</span>
               </a>
               <a href="trending.html" class="sidebar-nav-item">
                 <i data-lucide="flame" class="sidebar-nav-icon"></i>
@@ -647,7 +651,7 @@
               </a>
               <a href="event.html" class="sidebar-nav-item">
                 <i data-lucide="tag" class="sidebar-nav-icon"></i>
-                <span>Events</span>
+                <span>Event</span>
               </a>
               <a href="community.html" class="sidebar-nav-item">
                 <i data-lucide="users" class="sidebar-nav-icon"></i>
@@ -655,7 +659,7 @@
               </a>
               <a href="support.html" class="sidebar-nav-item">
                 <i data-lucide="help-circle" class="sidebar-nav-icon"></i>
-                <span>Support Center</span>
+                <span>Support</span>
               </a>
             </nav>
 

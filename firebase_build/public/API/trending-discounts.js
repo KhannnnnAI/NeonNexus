@@ -41,7 +41,7 @@ async function fetchFlashSaleDeal() {
 }
 
 async function loadTrendingDiscounts() {
-  const CACHE_KEY = 'flash_sale_deal_v17';
+  const CACHE_KEY = 'flash_sale_deal_v20';
   const CACHE_TTL = 30 * 60 * 1000; // 30 minutes
 
   // Try reading from cache first
@@ -49,7 +49,7 @@ async function loadTrendingDiscounts() {
     const raw = localStorage.getItem(CACHE_KEY);
     if (raw) {
       const cached = JSON.parse(raw);
-      if (cached && cached.time && (Date.now() - cached.time < CACHE_TTL) && cached.data) {
+      if (cached && cached.time && (Date.now() - cached.time < CACHE_TTL) && cached.data && cached.data.length >= 5) {
         _applyFlashSaleDeal(cached.data);
         return;
       }
@@ -158,27 +158,60 @@ async function loadTrendingDiscounts() {
   // ── Process Steam data if we got it ────────────────────────────────────────
 
   try {
-    if (!data || !data.specials) throw new Error('All Steam endpoints failed');
+    if (!data) throw new Error('No Steam data retrieved');
 
     const specials = data.specials?.items || [];
-    if (specials.length === 0) throw new Error('No Steam specials');
+    const topSellers = data.top_sellers?.items || [];
+    
+    // Combine items into a map to deduplicate by id
+    const allItemsMap = new Map();
+    
+    // Process top sellers first (so they are marked as popular)
+    topSellers.forEach(item => {
+      if (item.discounted) {
+        allItemsMap.set(item.id, { ...item, isTopSeller: true });
+      }
+    });
+    
+    // Process specials
+    specials.forEach(item => {
+      if (item.discounted) {
+        const existing = allItemsMap.get(item.id);
+        if (existing) {
+          allItemsMap.set(item.id, { ...existing, ...item, isSpecial: true });
+        } else {
+          allItemsMap.set(item.id, { ...item, isSpecial: true, isTopSeller: false });
+        }
+      }
+    });
+    
+    const candidates = Array.from(allItemsMap.values());
+    if (candidates.length === 0) throw new Error('No discounted items found');
 
-    // Filter: prefer AAA (original price >= $40 = 4000 cents), meaningful discount
-    let candidates = specials.filter(g =>
-      g.discounted &&
-      g.original_price >= 4000 &&
-      g.discount_percent >= 20
-    );
-    if (candidates.length === 0)
-      candidates = specials.filter(g => g.discounted && g.original_price >= 2000);
-    if (candidates.length === 0)
-      candidates = specials.filter(g => g.discounted);
-    if (candidates.length === 0) throw new Error('No discounted items');
-
-    candidates.sort((a, b) =>
-      b.discount_percent - a.discount_percent ||
-      b.original_price  - a.original_price
-    );
+    // Score candidates based on popularity and premium status
+    candidates.forEach(g => {
+      let score = 0;
+      
+      // 1. Top seller discount gets a massive boost (very famous!)
+      if (g.isTopSeller) score += 1000;
+      
+      // 2. High original price (AAA/AA game indication)
+      if (g.original_price >= 5999) { // $60+ game
+        score += 500;
+      } else if (g.original_price >= 3999) { // $40+ game
+        score += 300;
+      } else if (g.original_price >= 1999) { // $20+ game
+        score += 100;
+      }
+      
+      // 3. Discount weight (higher discount is more appealing)
+      score += g.discount_percent * 2;
+      
+      g.popularityScore = score;
+    });
+    
+    // Sort by popularity score descending
+    candidates.sort((a, b) => b.popularityScore - a.popularityScore);
 
     const top5 = candidates.slice(0, 5).map(g => ({
       source:             'steam',
@@ -188,8 +221,9 @@ async function loadTrendingDiscounts() {
       originalPrice:      (g.original_price / 100).toFixed(2),
       savings:            g.discount_percent,
       discountExpiration: (g.discount_expiration || 0) * 1000,
-      imageUrl:  'https://cdn.akamai.steamstatic.com/steam/apps/' + g.id + '/header.jpg',
-      thumb:     g.header_image || ''
+      imageUrl:           g.header_image || ('https://cdn.akamai.steamstatic.com/steam/apps/' + g.id + '/header.jpg'),
+      thumb:              g.header_image || '',
+      type:               g.type
     }));
 
     try { localStorage.setItem(CACHE_KEY, JSON.stringify({ time: Date.now(), data: top5 })); } catch (_) {}
@@ -239,8 +273,13 @@ function _applyFlashSaleDeal(deals) {
     let endTime = deal.discountExpiration; if (!endTime || endTime <= Date.now()) endTime = defaultEndTime;
     const fallbackImage = deal.thumb || `https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/${deal.steamAppID}/header.jpg`;
 
-    // Production-ready URL generation - link directly to Steam
-    const gameUrl = `https://store.steampowered.com/app/${deal.steamAppID}`;
+    // Production-ready URL generation - link directly to Steam based on type
+    let gameUrl = `https://store.steampowered.com/app/${deal.steamAppID}`;
+    if (deal.type === 1) {
+      gameUrl = `https://store.steampowered.com/sub/${deal.steamAppID}`;
+    } else if (deal.type === 2) {
+      gameUrl = `https://store.steampowered.com/bundle/${deal.steamAppID}`;
+    }
 
     // Always render original desktop version - mobile CSS will handle responsive
     return `

@@ -5,14 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google" content="notranslate">
   <meta name="description" content="NeonNexus - Steam Game Store - Premium authentic games at best prices">
-  <title>Trending AAA Games - NeonNexus</title>
+  <title>Steam Store - Premium Game Keys</title>
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
   <link rel="preconnect" href="https://nenonexus-digital-game-store.web.app" crossorigin>
-  <link rel="stylesheet" href="../css/index.css?v=4">
-  <link rel="stylesheet" href="../css/trending-mobile.css?v=12" media="(max-width: 900px)">
-  <link rel="stylesheet" href="../css/discounts-mobile.css" media="(max-width: 900px)">
-
+  <link rel="stylesheet" href="../css/index.css?v=5">
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest" defer></script>
 
@@ -110,6 +107,26 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <!-- CORS Client Configuration -->
+  <script src="../API/cors-client.js?v=1.0"></script>
+  <!-- Page-specific dropdown alignment -->
+  <style>
+    #user-dropdown {
+      left: 0 !important;
+      right: auto !important;
+      transform-origin: top left !important;
+    }
+    @keyframes dropdown-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 
   <!-- Path Resolver for Local/Server switching -->
   <script src="../API/path-resolver.js"></script>
@@ -125,8 +142,8 @@
     <header class="header">
       <div class="container header-content">
         <!-- Logo -->
-        <a href="/store" id="logo-btn" class="logo" style="text-decoration: none;">
-          <div class="logo-icon-wrapper">
+        <div id="logo-btn" class="logo">
+        <div class="logo-icon-wrapper">
             <div class="logo-glow"></div>
             <i data-lucide="zap" class="logo-icon"></i>
           </div>
@@ -134,9 +151,26 @@
             <span class="logo-text">NEON<span class="logo-accent">NEXUS</span></span>
             <span class="logo-subtitle">INFINITE STORE :: STEAM DEALS</span>
           </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-wrapper">
+          <div class="search-glow"></div>
+          <div class="search-container">
+            <i data-lucide="search" class="search-icon"></i>
+            <input 
+              type="text"
+              id="search-input"
+              placeholder="SEARCH FOR YOUR FAVORITE GAME..."
+              class="search-input"
+            />
+          </div>
+        </div>
+
+        <!-- NeonNexus Logo Link -->
+        <a href="https://store.steampowered.com/account/redeemwalletcode" target="_blank" class="header-logo-link" title="Redeem Steam Wallet Code">
+          <img src="../Image/steam-redeem-logo.svg" alt="NeonNexus" class="header-logo-image" decoding="async">
         </a>
-
-
 
         <!-- Currency Selector -->
         <div class="header-actions">
@@ -169,7 +203,7 @@
                 </div>
               </div>
               <div class="user-dropdown-divider"></div>
-            <a href="account.html" class="user-dropdown-item" style="text-decoration: none; color: inherit;">
+            <a href="/account" class="user-dropdown-item" style="text-decoration: none; color: inherit;">
               <i data-lucide="key" class="user-dropdown-icon"></i>
               <span>My Keys</span>
             </a>
@@ -180,12 +214,45 @@
             </div>
           </div>
 
-              </div>
+        <!-- Cart Button -->
+        <button id="cart-btn" class="cart-button">
+          <i data-lucide="shopping-cart" class="cart-icon"></i>
+          <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
+        </button>
+      </div>
     </header>
 
     <main class="container main-content">
       
+      <!-- Hero Banner Carousel -->
+      <div class="hero-banner" id="hero-carousel">
+        <div id="hero-carousel-inner" class="hero-carousel-inner">
+          <!-- Fallback/Initial slide -->
+          <div class="carousel-item active">
+            <img 
+              src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1600" 
+              alt="Hero" 
+              fetchpriority="high"
+              decoding="async"
+              class="hero-image"
+            />
+          </div>
 
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" id="carousel-prev" aria-label="Previous Slide" style="display: none;">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <button class="carousel-control-next" id="carousel-next" aria-label="Next Slide" style="display: none;">
+          <i data-lucide="chevron-right"></i>
+        </button>
+
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators" id="carousel-indicators" style="display: none;">
+          <button class="indicator-dot active" data-slide-to="0"></button>
+        </div>
+      </div>
 
       <!-- Main Layout: Sidebar + Content -->
       <div class="page-layout">
@@ -199,11 +266,11 @@
               <i data-lucide="home" class="sidebar-nav-icon"></i>
               <span>Home</span>
             </a>
-            <a href="store.html" class="sidebar-nav-item" id="nav-store">
+            <a href="store.html" class="sidebar-nav-item active" id="nav-store">
               <i data-lucide="shopping-bag" class="sidebar-nav-icon"></i>
               <span>Store</span>
             </a>
-            <a href="trending.html" class="sidebar-nav-item active" id="nav-trending">
+            <a href="trending.html" class="sidebar-nav-item" id="nav-trending">
               <i data-lucide="flame" class="sidebar-nav-icon"></i>
               <span>Trending</span>
             </a>
@@ -249,65 +316,40 @@
 
         <!-- RIGHT MAIN CONTENT -->
         <div class="page-main">
-          <!-- Trending Page Header -->
-          <div class="trending-header">
-            <div class="trending-header-content">
-              <div class="trending-header-badge">
-                <i data-lucide="zap" class="badge-icon"></i>
-                <span>LIVE TRENDING</span>
-              </div>
-              <h1 class="trending-title">
-                <i data-lucide="flame" class="trending-icon-fire"></i>
-                TRENDING <span class="text-cyan">AAA MASTERPIECES</span>
-              </h1>
-              <p class="trending-subtitle">Discover the most sought-after games with extraordinary player reviews</p>
+          <!-- Controls -->
+          <div class="controls">
+            <div class="categories" id="categories"></div>
+            
+            <div class="game-count">
+              <span id="game-count-text">SHOWING: 0 GAMES</span>
+              <div id="status-dot" class="status-dot"></div>
             </div>
           </div>
-
-          <!-- Section 1: New AAA Hits -->
-          <section class="trending-section">
-            <div class="section-header">
-              <div class="section-header-wrapper">
-                <div class="section-title">
-                  <span class="section-dot dot-cyan"></span>
-                  <h2>NEW AAA IN 2026</h2>
-                </div>
-                <p class="section-desc">The latest high-budget releases taking the world by storm</p>
-              </div>
-            </div>
-            
-            <div id="new-trending-grid" class="products-grid products-grid-enhanced">
-               <!-- Loading placeholders -->
-               <div class="loading-state">
-                 <i data-lucide="loader-2" class="loading-spinner"></i>
-               </div>
-            </div>
-          </section>
-
-          <!-- Section 2: Classic AAA Masterpieces -->
-          <section class="trending-section">
-            <div class="section-header">
-              <div class="section-header-wrapper">
-                <div class="section-title">
-                  <span class="section-dot dot-purple"></span>
-                  <h2>POPULAR AAA GAMES</h2>
-                </div>
-                <p class="section-desc">Timeless legends that every gamer must experience</p>
-              </div>
-            </div>
-            
-            <div id="classic-trending-grid" class="products-grid products-grid-enhanced">
-               <!-- Loading placeholders -->
-               <div class="loading-state">
-                 <i data-lucide="loader-2" class="loading-spinner"></i>
-               </div>
-            </div>
-          </section>
 
           <div id="error-state" class="error-state" style="display: none;">
             <i data-lucide="alert-circle" class="error-icon"></i>
             <p id="error-message"></p>
             <button onclick="location.reload()" class="error-retry-btn">Try reloading</button>
+          </div>
+
+          <!-- Loading State -->
+          <div id="loading-state" class="loading-state">
+            <i data-lucide="loader-2" class="loading-spinner"></i>
+            <p class="loading-text">CONNECTING_TO_SERVER...</p>
+          </div>
+
+          <!-- Products Grid -->
+          <div id="products-grid" class="products-grid" style="display: none;"></div>
+
+          <!-- Load More Button -->
+          <div id="load-more-container" class="load-more-container" style="display: none;">
+            <button id="load-more-btn" class="load-more-btn">
+              <i data-lucide="arrow-down-circle" class="load-more-icon"></i>
+              <span id="load-more-text">Load_More_Games</span>
+            </button>
+            <p id="filter-notice" class="filter-notice" style="display: none;">
+              :: LOAD MORE DISABLED WHILE FILTERING ::
+            </p>
           </div>
         </div>
 
@@ -339,8 +381,8 @@
             <h4 class="footer-heading footer-heading-cyan">Navigation</h4>
             <ul class="footer-links">
               <li><a href="/" class="footer-link" style="text-decoration: none; color: inherit;">:: STORE</a></li>
-              <li><a href="community.html" class="footer-link" style="text-decoration: none; color: inherit;">:: COMMUNITY</a></li>
-              <li><a href="support.html" class="footer-link" style="text-decoration:none;color:inherit">:: SUPPORT</a></li>
+              <li><a href="/community" class="footer-link" style="text-decoration: none; color: inherit;">:: COMMUNITY</a></li>
+              <li><a href="/support" class="footer-link" style="text-decoration:none;color:inherit">:: SUPPORT</a></li>
             </ul>
           </div>
 
@@ -348,10 +390,10 @@
           <div class="footer-column">
             <h4 class="footer-heading footer-heading-purple">Legal</h4>
             <ul class="footer-links">
-              <li><a href="privacy_policy.html" class="footer-link" style="text-decoration: none; color: inherit;">PRIVACY_POLICY</a></li>
+              <li><a href="/privacy-policy" class="footer-link" style="text-decoration: none; color: inherit;">PRIVACY_POLICY</a></li>
               <li>
   <a
-    href="terms_of_service.html"
+    href="/terms-of-service"
     class="footer-link"
     style="text-decoration: none; color: inherit"
     >TERMS_OF_SERVICE</a
@@ -496,7 +538,7 @@
         <div class="cart-footer">
           <div class="cart-total">
             <span class="cart-total-label">TOTAL_ESTIMATE</span>
-            <span id="cart-total-amount" class="cart-total-amount">0₫</span>
+            <span id="cart-total-amount" class="cart-total-amount">0?</span>
           </div>
           <button class="cart-checkout-btn">
             Checkout
@@ -550,7 +592,7 @@
         </div>
 
         <div class="login-footer">
-          <p>By logging in, you agree to our <a href="terms_of_service.html" class="text-cyan hover:underline">Terms</a> & <a href="privacy_policy.html" class="text-cyan hover:underline">Privacy Policy</a></p>
+          <p>By logging in, you agree to our <a href="/terms-of-service" class="text-cyan hover:underline">Terms</a> & <a href="/privacy-policy" class="text-cyan hover:underline">Privacy Policy</a></p>
         </div>
       </div>
     </div>
@@ -700,19 +742,20 @@
             </div>
 
             <!-- Total Amount -->
+            <!-- Total Amount -->
             <div class="checkout-total" style="display: flex; flex-direction: column; gap: 0.5rem;">
               <div id="checkout-subtotal-row" style="display: none; justify-content: space-between; color: #9ca3af; font-size: 0.9rem;">
                  <span>Subtotal:</span>
-                 <span id="checkout-subtotal">0₫</span>
+                 <span id="checkout-subtotal">0</span>
               </div>
               <div id="checkout-discount-row" style="display: none; justify-content: space-between; color: #fbbf24; font-size: 0.9rem;">
                  <span id="checkout-discount-label">Member Discount (0%):</span>
-                 <span id="checkout-discount-amount">-0₫</span>
+                 <span id="checkout-discount-amount">-0</span>
               </div>
               
               <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
                 <span class="total-label">TOTAL:</span>
-                <span id="checkout-total-amount" class="total-amount">0₫</span>
+                <span id="checkout-total-amount" class="total-amount">0?</span>
               </div>
             </div>
           </div>
@@ -774,7 +817,7 @@
               <span id="card-items-count">0 items</span>
               <span> - </span>
               <span class="summary-label">TOTAL:</span>
-              <span id="card-total" class="summary-amount">0₫</span>
+              <span id="card-total" class="summary-amount">0?</span>
             </div>
           </div>
 
@@ -813,7 +856,7 @@
               </div>
               <div class="info-row highlight">
                 <span class="info-label">Amount:</span>
-                <span id="vietqr-amount" class="info-value">0₫</span>
+                <span id="vietqr-amount" class="info-value">0?</span>
               </div>
               <div class="info-row highlight">
                 <span class="info-label">Message:</span>
@@ -838,7 +881,7 @@
 
             <div class="form-summary">
               <span class="summary-label">TOTAL:</span>
-              <span id="vietqr-total" class="summary-amount">0₫</span>
+              <span id="vietqr-total" class="summary-amount">0?</span>
             </div>
           </div>
 
@@ -865,10 +908,12 @@
               </div>
             </form>
 
+
+
             <div class="transaction-details">
               <div class="detail-row">
                 <span class="detail-label">Payment Amount:</span>
-                <span id="momo-amount" class="detail-value">0₫</span>
+                <span id="momo-amount" class="detail-value">0?</span>
               </div>
               <div class="detail-row">
                 <span class="detail-label">Transaction ID:</span>
@@ -885,7 +930,7 @@
               <span id="momo-items-count">0 items</span>
               <span> - </span>
               <span class="summary-label">TOTAL:</span>
-              <span id="momo-total" class="summary-amount">0₫</span>
+              <span id="momo-total" class="summary-amount">0?</span>
             </div>
           </div>
 
@@ -910,7 +955,7 @@
             <div class="transaction-details">
               <div class="detail-row">
                 <span class="detail-label">Payment Amount:</span>
-                <span id="zalopay-amount" class="detail-value">0₫</span>
+                <span id="zalopay-amount" class="detail-value">0?</span>
               </div>
               <div class="detail-row">
                 <span class="detail-label">Transaction ID:</span>
@@ -927,7 +972,7 @@
               <span id="zalopay-items-count">0 items</span>
               <span> - </span>
               <span class="summary-label">TOTAL:</span>
-              <span id="zalopay-total" class="summary-amount">0₫</span>
+              <span id="zalopay-total" class="summary-amount">0?</span>
             </div>
           </div>
 
@@ -949,71 +994,53 @@
     </div>
 
 
-    <!-- Trailer Modal -->
-    <div id="trailer-modal" class="trailer-modal" style="display: none;">
-      <div class="trailer-modal-backdrop"></div>
-      <div class="trailer-modal-content">
-        <button id="close-trailer-btn" class="trailer-close-btn">
-          <i data-lucide="x"></i>
-        </button>
-        <div class="trailer-header">
-          <h3 id="trailer-title" class="trailer-title">GAME TRAILER</h3>
-        </div>
-        <div class="trailer-video-container">
-            <iframe 
-                id="trailer-iframe"
-                src="" 
-                frameborder="0" 
-                allowfullscreen="true" 
-                scrolling="no" 
-                height="378" 
-                width="620">
-            </iframe>
-        </div>
-      </div>
-    </div>
-
+    
   </div>
 
-  <script src="../API/giftcodes.js?v=spa_v8"></script>
-  <script src="../API/cheapshark-api.js?v=spa_v8"></script>
-  <script src="../API/trailer-api.js?v=spa_v8"></script>
-  <script src="../API/auth.js?v=spa_v8"></script>
-  <script src="../API/trending-discounts.js"></script>
-  <script src="../API/trending.js"></script>
+  <script src="../API/giftcodes.js?v=fixed_v2"></script>
+  <script src="../API/cheapshark-api.js?v=fixed_v2"></script>
+  <script src="../API/auth.js?v=fixed_v3"></script>
   <script src="../API/theme-toggle.js?v=fixed_v2"></script>
-  <script>
-    // Initialize custom games page
-    document.addEventListener('DOMContentLoaded', () => {
-      loadCustomGames();
-    });  
-    // Add logo click functionality
-    const logoBtn = document.getElementById('logo-btn');
-    if (logoBtn) {
-      logoBtn.addEventListener('click', () => {
-        window.location.href = PathResolver.resolve('/store');
-      });
-    }
-  </script>
+  <script src="../API/trending-discounts.js?v=fixed_v2"></script>
 
+  <!-- CÁC THƯ VIỆN BÊN THỨ 3 (nếu có) -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- UTILS BẮT BUỘC PHẢI LOAD TRƯỚC -->
+  <script src="../API/image-utils.js"></script>
+  <script src="../API/software-list.js"></script>
+  <script src="../API/dlc-list.js"></script>
+
+  <!-- MAIN SCRIPT LOAD SAU CÙNG -->
+  <script src="../API/index.js"></script>
   <script>
     (function() {
       const initPage = () => {
-        if (window.lucide && typeof window.lucide.createIcons === 'function') {
-          window.lucide.createIcons();
-        }
+      if (window.lucide && typeof window.lucide.createIcons === 'function') {
+        window.lucide.createIcons();
+      }
 
-        // Mobile search toggle logic
-        const mobileSearchBtn = document.getElementById('mobile-search-btn');
-        const searchWrapper = document.querySelector('.search-wrapper');
-        
-        if(mobileSearchBtn && searchWrapper) {
-          mobileSearchBtn.addEventListener('click', () => {
-            searchWrapper.classList.toggle('mobile-active');
-          });
-        }
+      // Fetch and render live Flash Sale deal from CheapShark
+      if (typeof fetchFlashSaleDeal === 'function') {
+        fetchFlashSaleDeal();
+      }
+
+      // Mobile search toggle logic
+      const mobileSearchBtn = document.getElementById('mobile-search-btn');
+      const searchWrapper = document.querySelector('.search-wrapper');
+      
+      if(mobileSearchBtn && searchWrapper) {
+        mobileSearchBtn.addEventListener('click', () => {
+          searchWrapper.classList.toggle('mobile-active');
+        });
+      }
+      
+      // Add logo click functionality (already on homepage, but ensure consistency)
+      const logoBtn = document.getElementById('logo-btn');
+      if (logoBtn) {
+        logoBtn.style.cursor = 'pointer';
+      }
       };
-
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initPage);
       } else {

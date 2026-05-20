@@ -1,1048 +1,1476 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang="vi">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google" content="notranslate">
-  <meta name="description" content="NeonNexus - Steam Game Store - Premium authentic games at best prices">
-  <title>Steam Store - Premium Game Keys</title>
-  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-  <link rel="preconnect" href="https://unpkg.com" crossorigin>
-  <link rel="preconnect" href="https://nenonexus-digital-game-store.web.app" crossorigin>
-  <link rel="stylesheet" href="css/index.css?v=5">
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>NeonNexus - Đội Ngũ Phát Triển Cốt Lõi</title>
+  <meta content="Bảng quản lý nhân sự & năng lực kỹ thuật của 4 thành viên cốt lõi phát triển dự án NeonNexus." name="description">
+  <meta name="author" content="NeonNexus Team">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#030712">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NeonNexus - Đội Ngũ Phát Triển Cốt Lõi">
+  <meta property="og:description" content="Khám phá hồ sơ năng lực, kỹ năng và dự án của đội ngũ phát triển NeonNexus.">
+  <meta property="og:url" content="https://khannnnnkza.id.vn/">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NeonNexus - Đội Ngũ Phát Triển Cốt Lõi">
+  <meta name="twitter:description" content="Hồ sơ năng lực của đội ngũ kỹ thuật NeonNexus.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80">
 
-  <!-- Device-Specific Layout Manager -->
-   <script>
-    class MobileCSSManager {
-      constructor() {
-        this.isMobile = window.innerWidth <= 768 || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        this.mobileCSS = {};
-        this.resizeTimer = null;
-        this.themeObserver = null;
-        this.pageMobileCSS = {
-          "index.html": "css/index.css?v=5",
-          'community.html': 'css/community-mobile.css?v=1',
-          'account.html': 'css/account-mobile.css?v=1',
-          'event.html': 'css/event-mobile.css?v=2',
-          'trending.html': 'css/trending-mobile.css?v=11'
-        };
-        this.currentPage = this.getCurrentPageName();
-      }
-      init() { this.loadInitialCSS(); this.setupResizeListener(); this.setupThemeListener(); }
-      getCurrentPageName() {
-        const path = window.location.pathname;
-        const fileName = path.split('/').pop();
-        return fileName || 'index.html';
-      }
-      loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
-      loadMobileCSS() {
-        const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
-        const prefix = isRoot ? '' : '../';
-        const mobileCSSPath = this.pageMobileCSS[this.currentPage];
-        const cacheBuster = new Date().getTime();
-        if (mobileCSSPath && !this.mobileCSS.page) {
-          document.body.classList.add('mobile-view');
-          this.mobileCSS.page = document.createElement('link');
-          this.mobileCSS.page.rel = 'stylesheet';
-          const sep = mobileCSSPath.includes('?') ? '&' : '?';
-          this.mobileCSS.page.href = `${prefix}${mobileCSSPath}${sep}v=${cacheBuster}`;
-          this.mobileCSS.page.id = 'page-mobile-css';
-          document.head.appendChild(this.mobileCSS.page);
-        }
-        if (!this.mobileCSS.discounts) {
-          this.mobileCSS.discounts = document.createElement('link');
-          this.mobileCSS.discounts.rel = 'stylesheet';
-          this.mobileCSS.discounts.href = `${prefix}css/discounts-mobile.css?v=${cacheBuster}`;
-          this.mobileCSS.discounts.id = 'discounts-mobile-css';
-          document.head.appendChild(this.mobileCSS.discounts);
-        }
-        if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS(cacheBuster);
-      }
-      unloadMobileCSS() {
-        if (this.mobileCSS.page) { document.body.classList.remove('mobile-view'); this.mobileCSS.page.remove(); this.mobileCSS.page = null; }
-        if (this.mobileCSS.discounts) { this.mobileCSS.discounts.remove(); this.mobileCSS.discounts = null; }
-        this.unloadLightCSS();
-      }
-      loadLightCSS(cacheBuster = new Date().getTime()) {
-        if (!this.mobileCSS.light) {
-          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
-          const prefix = isRoot ? '' : '../';
-          this.mobileCSS.light = document.createElement('link');
-          this.mobileCSS.light.rel = 'stylesheet';
-          this.mobileCSS.light.href = `${prefix}css/discounts-light.css?v=${cacheBuster}`;
-          this.mobileCSS.light.id = 'discounts-light-css';
-          document.head.appendChild(this.mobileCSS.light);
-        }
-      }
-      unloadLightCSS() { if (this.mobileCSS.light) { this.mobileCSS.light.remove(); this.mobileCSS.light = null; } }
-      setupResizeListener() {
-        window.addEventListener('resize', () => {
-          clearTimeout(this.resizeTimer);
-          this.resizeTimer = setTimeout(() => {
-            const currentlyMobile = window.innerWidth <= 768;
-            if (currentlyMobile && !this.isMobile) { this.isMobile = true; this.loadMobileCSS(); }
-            else if (!currentlyMobile && this.isMobile) { this.isMobile = false; this.unloadMobileCSS(); }
-          }, 250);
-        });
-      }
-      setupThemeListener() {
-        this.themeObserver = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme' && this.isMobile) {
-              if (document.body.getAttribute('data-theme') === 'light') this.loadLightCSS();
-              else this.unloadLightCSS();
-            }
-          });
-        });
-        this.themeObserver.observe(document.body, { attributes: true, attributeFilter: ['data-theme'] });
-      }
-    }
-    const initMobileCSSManager = () => { if (!window.mobileCSSManager) { window.mobileCSSManager = new MobileCSSManager(); window.mobileCSSManager.init(); } };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initMobileCSSManager);
-    else initMobileCSSManager();
-  </script>
-  <!-- Firebase Compat SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <!-- CORS Client Configuration -->
-  <script src="API/cors-client.js?v=1.0"></script>
-  <!-- Page-specific dropdown alignment -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet">
+
   <style>
-    #user-dropdown {
-      left: 0 !important;
-      right: auto !important;
-      transform-origin: top left !important;
+    /* ROG Official Font */
+    @font-face {
+      font-family: 'ROG Lyons';
+      src: url('./font/ROGLyonsTypeRegular3.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
     }
-    @keyframes dropdown-fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+    /* ----- GLOBAL VARIABLES & RESET ----- */
+    :root {
+      --bg-base: #030712;
+      --bg-surface: #111827;
+      --bg-surface-hover: #1f2937;
+      --neon-cyan: #00f3ff;
+      --neon-purple: #bc13fe;
+      --neon-green: #39ff14;
+      --neon-amber: #ffb100;
+      --text-main: #9ca3af;
+      --text-light: #f3f4f6;
+      --font-code: 'Fira Code', monospace;
+      --font-text: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-text);
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      overflow-x: hidden;
+      /* Grid background for tech feel */
+      background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-code);
+      color: var(--text-light);
+    }
+
+    a {
+      color: var(--neon-cyan);
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    a:hover {
+      color: var(--neon-purple);
+      text-shadow: 0 0 8px var(--neon-purple);
+    }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--neon-cyan);
+      outline-offset: 2px;
+      box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.2);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 10px;
+      top: -50px;
+      z-index: 10000;
+      background: var(--neon-cyan);
+      color: #000;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-family: var(--font-code);
+      font-weight: 600;
+    }
+
+    .skip-link:focus {
+      top: 10px;
+    }
+
+    /* ----- HEADER / SIDEBAR ----- */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 300px;
+      transition: all ease-in-out 0.5s;
+      z-index: 9997;
+      padding: 40px 20px 20px 20px;
+      background: rgba(3, 7, 18, 0.85);
+      backdrop-filter: blur(10px);
+      border-right: 1px solid rgba(0, 243, 255, 0.15);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .header-toggle {
+      color: var(--neon-cyan);
+      font-size: 28px;
+      cursor: pointer;
+      position: fixed;
+      right: 15px;
+      top: 15px;
+      z-index: 9999;
+      background: var(--bg-surface);
+      border: 1px solid var(--neon-cyan);
+      padding: 5px 10px;
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+    }
+
+    .navmenu {
+      padding: 0;
+      z-index: 9998;
+    }
+
+    .navmenu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .navmenu a {
+      display: flex;
+      align-items: center;
+      color: var(--text-main);
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      font-family: var(--font-code);
+      font-size: 15px;
+      border-radius: 4px;
+      transition: all 0.3s;
+      border: 1px solid transparent;
+    }
+
+    .navmenu a i {
+      font-size: 20px;
+      margin-right: 10px;
+      color: var(--text-main);
+    }
+
+    .navmenu a::before {
+      content: ">_";
+      opacity: 0;
+      margin-right: -15px;
+      transition: 0.3s;
+      color: var(--neon-cyan);
+      font-weight: bold;
+    }
+
+    .navmenu a:hover, .navmenu a.active {
+      color: var(--neon-cyan);
+      background: rgba(0, 243, 255, 0.05);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.1) inset;
+    }
+
+    .navmenu a:hover::before, .navmenu a.active::before {
+      opacity: 1;
+      margin-right: 10px;
+    }
+
+    .navmenu a:hover i, .navmenu a.active i {
+      color: var(--neon-cyan);
+      display: none; /* Hide icon to show >_ */
+    }
+
+    /* ----- MAIN LAYOUT ----- */
+    .main {
+      margin-left: 300px;
+    }
+
+    @media (max-width: 1199px) {
+      .header { left: -300px; }
+      .main { margin-left: 0; }
+      .mobile-nav-active .header { left: 0; }
+    }
+
+    /* ----- SECTIONS GENERAL ----- */
+    section { padding: 60px 0; overflow: hidden; }
+    .section-title { padding-bottom: 40px; position: relative; }
+    .section-title h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      color: var(--text-light);
+      position: relative;
+    }
+    .section-title h2::after {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 50px;
+      height: 3px;
+      background: var(--neon-cyan);
+      bottom: 0;
+      left: 0;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+    .section-title h2::before {
+      content: "< ";
+      color: var(--neon-purple);
+    }
+    .section-title h2::after { /* Need to overwrite for tag effect */
+      content: " />";
+      position: static;
+      color: var(--neon-purple);
+      background: none;
+      box-shadow: none;
+    }
+    .section-title h2 .line {
+      position: absolute; display: block; width: 60px; height: 2px; background: var(--neon-cyan); bottom: 0; left: 0; box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    /* ----- HERO SECTION ----- */
+    .hero {
+      width: 100%;
+      height: 90vh;
+      background: linear-gradient(to right, rgba(3, 7, 18, 0.95), rgba(3, 7, 18, 0.75)), url("https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=2070&q=80") top right;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .hero h2 {
+      margin: 0;
+      font-size: 56px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    }
+    .hero p {
+      color: var(--neon-cyan);
+      margin: 15px 0 0 0;
+      font-size: 24px;
+      font-family: var(--font-code);
+    }
+    .hero .typed-cursor { font-size: 24px; color: var(--neon-purple); }
+
+    /* ----- TEAM SECTION ----- */
+    .member-card {
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 30px 20px;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .member-card.node-cyan { --member-glow: var(--neon-cyan); }
+    .member-card.node-purple { --member-glow: var(--neon-purple); }
+    .member-card.node-green { --member-glow: var(--neon-green); }
+    .member-card.node-amber { --member-glow: var(--neon-amber); }
+
+    .member-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 4px;
+      background: var(--member-glow);
+      opacity: 0.4;
+      transition: 0.3s;
+    }
+    .member-card:hover, .member-card.active {
+      border-color: var(--member-glow);
+      box-shadow: 0 0 20px var(--member-glow);
+      transform: translateY(-8px);
+    }
+    .member-card:hover::before, .member-card.active::before {
+      opacity: 1;
+      box-shadow: 0 0 10px var(--member-glow);
+    }
+    .card-header-console {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-family: var(--font-code);
+      font-size: 12px;
+    }
+    .node-id {
+      color: var(--member-glow);
+      font-weight: 700;
+    }
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+    }
+    .status-indicator::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+    .status-indicator.online { color: #27c93f; }
+    .status-indicator.idle { color: var(--neon-purple); }
+    .status-indicator.compiling { color: var(--neon-cyan); animation: pulse 1.5s infinite; }
+    .status-indicator.monitoring { color: #ffb100; }
+
+    .avatar-container {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 20px auto;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+      transition: 0.3s;
+    }
+    .member-card:hover .avatar-container, .member-card.active .avatar-container {
+      border-color: var(--member-glow);
+      box-shadow: 0 0 15px var(--member-glow);
+    }
+    .avatar-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(110%);
+      transition: 0.5s;
+    }
+    .member-card:hover img, .member-card.active img {
+      filter: grayscale(0%) contrast(100%);
+    }
+    .scanline {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.25) 50%
+      ), linear-gradient(
+        90deg,
+        rgba(255, 0, 0, 0.06),
+        rgba(0, 255, 0, 0.02),
+        rgba(0, 0, 255, 0.06)
+      );
+      background-size: 100% 4px, 6px 100%;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+    .scanline::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(0, 243, 255, 0.08) 10%,
+        transparent 20%
+      );
+      animation: scanline-move 8s linear infinite;
+    }
+
+    .member-card h3 {
+      font-size: 20px;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+    .role-title {
+      font-size: 13px;
+      color: var(--member-glow);
+      font-family: var(--font-code);
+      margin-bottom: 15px;
+    }
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .tech-tags span {
+      font-family: var(--font-code);
+      font-size: 11px;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      color: var(--text-main);
+    }
+    .access-btn {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--member-glow);
+      color: var(--member-glow);
+      font-family: var(--font-code);
+      font-size: 13px;
+      padding: 8px 0;
+      border-radius: 4px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    .member-card:hover .access-btn, .member-card.active .access-btn {
+      background: var(--member-glow);
+      color: #000;
+      box-shadow: 0 0 10px var(--member-glow);
+      font-weight: 600;
+    }
+
+    /* ----- DYNAMIC DOSSIER THEMING ----- */
+    #main-content {
+      --dossier-color: var(--neon-cyan);
+      --dossier-color-muted: rgba(0, 243, 255, 0.15);
+    }
+
+    .dossier-wrapper {
+      border: 1px solid var(--dossier-color-muted);
+      border-radius: 12px;
+      background: rgba(17, 24, 39, 0.4);
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.3s;
+    }
+
+    .glitch-anim {
+      animation: console-glitch 0.25s ease-in-out;
+    }
+
+    @keyframes console-glitch {
+      0% { opacity: 0.9; filter: hue-rotate(0deg) skewX(0deg); }
+      25% { opacity: 0.5; filter: hue-rotate(90deg) skewX(2deg) blur(1px); }
+      50% { opacity: 0.8; filter: hue-rotate(180deg) skewX(-2deg); }
+      75% { opacity: 0.4; filter: hue-rotate(270deg) skewX(1deg) blur(1px); }
+      100% { opacity: 1; filter: hue-rotate(360deg) skewX(0deg); }
+    }
+
+    /* ----- DOSSIER SECTION (Code Editor Style) ----- */
+    .dossier .img-fluid {
+      border: 3px solid var(--dossier-color);
+      border-radius: 50%;
+      box-shadow: 0 0 25px var(--dossier-color-muted);
+      filter: grayscale(100%) contrast(110%);
+      transition: 0.5s;
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+      margin: 0 auto;
+    }
+    .dossier .img-fluid:hover {
+      filter: grayscale(0%);
+      box-shadow: 0 0 30px var(--dossier-color);
+    }
+    .about-content-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--dossier-color-muted);
+      border-radius: 8px;
+      padding: 20px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+    .editor-top {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+    .dossier ul { list-style: none; padding: 0; font-family: var(--font-code); font-size: 14px; }
+    .dossier ul li { padding-bottom: 10px; display: flex; align-items: center; white-space: nowrap; }
+    .dossier ul i { font-size: 16px; margin-right: 10px; color: var(--dossier-color); transition: color 0.3s; }
+    .dossier ul strong { color: var(--dossier-color); margin-right: 5px; transition: color 0.3s; }
+
+    /* ----- STATS ----- */
+    .stats-item {
+      padding: 30px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats-item::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(to right, transparent, var(--dossier-color-muted), transparent);
+      transform: skewX(-20deg);
+      transition: 0.5s;
+    }
+    .stats-item:hover::before { left: 150%; }
+    .stats-item i { font-size: 32px; color: var(--dossier-color); margin-bottom: 15px; display: block; transition: color 0.3s; }
+    .stats-item span { font-size: 36px; font-weight: 700; color: var(--text-light); font-family: var(--font-code); }
+
+    /* ----- SKILLS (Neon Progress Bars) ----- */
+    .progress {
+      height: 35px;
+      display: block;
+      background: none;
+      border-radius: 0;
+      margin-bottom: 25px;
+    }
+    .progress .skill {
+      padding: 0; margin: 0 0 6px 0; display: block;
+      font-weight: 600; font-family: var(--font-code); color: var(--text-light);
+    }
+    .progress .skill .val { float: right; font-style: normal; color: var(--dossier-color); transition: color 0.3s; }
+    .progress-bar-wrap {
+      background: var(--bg-surface);
+      height: 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 1.2s cubic-bezier(0.1, 0.8, 0.2, 1);
+    }
+
+    /* ----- RESUME (Cyberpunk Timeline) ----- */
+    .resume-title { font-size: 26px; font-weight: 700; margin-top: 20px; margin-bottom: 20px; color: var(--text-light); font-family: var(--font-code); }
+    .resume-item {
+      padding: 0 0 20px 20px;
+      margin-top: -2px;
+      border-left: 2px solid var(--dossier-color-muted);
+      position: relative;
+      transition: border-left-color 0.3s;
+    }
+    .resume-item::before {
+      content: ""; position: absolute; width: 16px; height: 16px;
+      border-radius: 50px; left: -9px; top: 0;
+      background: var(--bg-base); border: 2px solid var(--dossier-color);
+      box-shadow: 0 0 10px var(--dossier-color);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .resume-item h4 { line-height: 18px; font-size: 18px; font-weight: 600; color: var(--dossier-color); margin-bottom: 10px; transition: color 0.3s; }
+    .resume-item h5 { font-size: 14px; padding: 5px 15px; display: inline-block; font-weight: 600; margin-bottom: 10px; border-radius: 4px; font-family: var(--font-code); transition: all 0.3s; }
+    .resume-item ul { padding-left: 20px; }
+
+    /* ----- PORTFOLIO ----- */
+    .portfolio-filters { padding: 0; margin: 0 0 40px 0; list-style: none; text-align: center; }
+    .portfolio-filters li {
+      cursor: pointer; display: inline-block; padding: 8px 15px;
+      font-size: 14px; font-weight: 600; font-family: var(--font-code);
+      text-transform: uppercase; color: var(--text-main); transition: all 0.3s;
+      border: 1px solid rgba(255,255,255,0.1); margin: 0 5px; border-radius: 4px;
+    }
+    .portfolio-filters li:hover, .portfolio-filters li.filter-active {
+      color: var(--bg-base);
+      background: var(--dossier-color);
+      box-shadow: 0 0 15px var(--dossier-color-muted);
+      border-color: var(--dossier-color);
+    }
+    .portfolio-item { position: relative; overflow: hidden; border-radius: 8px; margin-bottom: 30px; display: none; }
+    .portfolio-item img { transition: 0.5s; width: 100%; border: 1px solid rgba(255,255,255,0.1); object-fit: cover; height: 230px; }
+    .portfolio-info {
+      position: absolute; inset: 0; background: rgba(3, 7, 18, 0.9); display: flex;
+      flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; transition: 0.5s; backdrop-filter: blur(5px);
+    }
+    .portfolio-item:hover .portfolio-info { opacity: 1; }
+    .portfolio-item:hover img { transform: scale(1.1); filter: grayscale(100%); }
+    .portfolio-info h4 { color: var(--text-light); font-size: 20px; }
+    .portfolio-info p { color: var(--dossier-color); font-family: var(--font-code); font-size: 14px; transition: color 0.3s; }
+    .portfolio-info .preview-link {
+      font-size: 24px; color: #fff; margin: 0 10px; transition: 0.3s;
+    }
+    .portfolio-info .preview-link:hover { color: var(--dossier-color); }
+
+    /* ----- SERVICES (Glassmorphism Cards) ----- */
+    .service-item {
+      padding: 40px;
+      background: rgba(17, 24, 39, 0.6);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      transition: all 0.3s;
+      height: 100%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+    .service-item:hover {
+      border-color: var(--dossier-color);
+      box-shadow: 0 0 20px var(--dossier-color-muted);
+      transform: translateY(-5px);
+    }
+    .service-item .icon {
+      margin-bottom: 20px;
+      display: inline-block;
+      width: 70px; height: 70px;
+      line-height: 70px;
+      background: var(--dossier-color-muted);
+      border-radius: 50%;
+      color: var(--dossier-color);
+      font-size: 32px;
+      border: 1px solid var(--dossier-color);
+      transition: all 0.3s;
+    }
+    .service-item h3 { font-size: 22px; margin-bottom: 15px; }
+
+    /* ----- CONTACT ----- */
+    .info-item {
+      padding: 30px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    .info-item i {
+      font-size: 24px; color: var(--dossier-color);
+      background: var(--dossier-color-muted);
+      width: 50px; height: 50px;
+      display: flex; justify-content: center; align-items: center;
+      border-radius: 50%; border: 1px solid var(--dossier-color); margin-right: 20px;
+      transition: all 0.3s;
+    }
+    .php-email-form {
+      background: var(--bg-surface);
+      padding: 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);
+    }
+    .php-email-form input, .php-email-form textarea {
+      background: var(--bg-base); color: var(--text-light);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-family: var(--font-code);
+    }
+    .php-email-form input:focus, .php-email-form textarea:focus {
+      background: var(--bg-base); border-color: var(--dossier-color); box-shadow: 0 0 5px var(--dossier-color-muted); color: var(--text-light);
+    }
+    .php-email-form button[type="button"] {
+      background: transparent; color: var(--dossier-color);
+      border: 1px solid var(--dossier-color); padding: 10px 30px; border-radius: 4px;
+      font-family: var(--font-code); transition: 0.3s;
+      cursor: pointer;
+    }
+    .php-email-form button[type="button"]:hover {
+      background: var(--dossier-color); color: var(--bg-base); box-shadow: 0 0 15px var(--dossier-color);
+      font-weight: 600;
+    }
+
+    /* ----- FOOTER ----- */
+    .footer {
+      padding: 30px 0; background: var(--bg-surface);
+      border-top: 1px solid rgba(255,255,255,0.05); text-align: center;
+    }
+    .footer .sitename { font-family: var(--font-code); color: var(--neon-cyan); margin-bottom: 15px; }
+
+    /* Keyframe Animations */
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+
+    @keyframes scanline-move {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
       }
     }
+    /* Logo Styles */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+      text-decoration: none;
+      margin-bottom: 2rem;
+      padding: 0 5px;
+    }
+    .logo-icon-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-glow {
+      position: absolute;
+      inset: -5px;
+      background-color: var(--neon-cyan);
+      filter: blur(10px);
+      opacity: 0.3;
+      border-radius: 50%;
+      transition: opacity 0.3s ease;
+    }
+    .logo:hover .logo-glow {
+      opacity: 0.8;
+    }
+    .logo-icon {
+      width: 2rem;
+      height: 2rem;
+      color: var(--neon-cyan);
+      fill: rgba(0,0,0,0);
+      position: relative;
+      filter: drop-shadow(0 0 5px var(--neon-cyan));
+    }
+    .logo-text-wrapper {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+    .logo-text {
+      font-family: 'ROG Lyons', var(--font-code);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--text-light);
+      text-transform: uppercase;
+    }
+    .logo-accent {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    }
+
   </style>
-
-  <!-- Path Resolver for Local/Server switching -->
-  <script src="API/path-resolver.js"></script>
 </head>
-<body>
-  <div id="app" class="min-h-screen bg-dark text-gray-100 overflow-x-hidden relative">
-    
-    <!-- Tech Background -->
-    <div class="tech-bg"></div>
-    <div class="tech-gradient"></div>
 
-    <!-- Header -->
-    <header class="header">
-      <div class="container header-content">
-        <!-- Logo -->
-        <div id="logo-btn" class="logo">
-        <div class="logo-icon-wrapper">
-            <div class="logo-glow"></div>
-            <i data-lucide="zap" class="logo-icon"></i>
-          </div>
-          <div class="logo-text-wrapper">
-            <span class="logo-text">NEON<span class="logo-accent">NEXUS</span></span>
-            <span class="logo-subtitle">INFINITE STORE :: STEAM DEALS</span>
-          </div>
-        </div>
+<body class="index-page">
+  <a class="skip-link" href="#main-content">Bỏ qua và chuyển đến nội dung chính</a>
 
-        <!-- Search -->
-        <div class="search-wrapper">
-          <div class="search-glow"></div>
-          <div class="search-container">
-            <i data-lucide="search" class="search-icon"></i>
-            <input 
-              type="text"
-              id="search-input"
-              placeholder="SEARCH FOR YOUR FAVORITE GAME..."
-              class="search-input"
-            />
-          </div>
-        </div>
+  <i class="header-toggle d-xl-none bi bi-list"></i>
 
-        <!-- NeonNexus Logo Link -->
-        <a href="https://store.steampowered.com/account/redeemwalletcode" target="_blank" class="header-logo-link" title="Redeem Steam Wallet Code">
-          <img src="Image/steam-redeem-logo.svg" alt="NeonNexus" class="header-logo-image" decoding="async">
-        </a>
-
-        <!-- Currency Selector -->
-        <div class="header-actions">
-          <!-- Mobile Search Toggle -->
-          <button id="mobile-search-btn" class="theme-toggle mobile-search-btn" aria-label="Toggle search">
-            <i data-lucide="search" class="theme-icon"></i>
-          </button>
-
-          <!-- Theme Toggle -->
-          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-            <i data-lucide="moon" class="theme-icon" id="theme-icon"></i>
-          </button>
-          
-          <!-- Currency fixed to VND -->
-
-          <!-- Login Button / User Profile -->
-          <div class="user-section">
-            <button id="login-btn" class="login-btn">
-              <i data-lucide="user" class="login-icon"></i>
-              <span class="login-text">LOGIN</span>
-            </button>
-            
-            <!-- User Dropdown (Hidden by default) -->
-            <div id="user-dropdown" class="user-dropdown" style="display: none;">
-              <div class="user-dropdown-header">
-                <img id="user-dropdown-avatar" src="" alt="Avatar" class="user-dropdown-avatar">
-                <div class="user-dropdown-info">
-                  <span id="user-dropdown-name" class="user-dropdown-name">User</span>
-                  <span class="user-dropdown-status">ONLINE</span>
-                </div>
-              </div>
-              <div class="user-dropdown-divider"></div>
-            <a href="/account" class="user-dropdown-item" style="text-decoration: none; color: inherit;">
-              <i data-lucide="key" class="user-dropdown-icon"></i>
-              <span>My Keys</span>
-            </a>
-            <button id="logout-btn" class="user-dropdown-item">
-              <i data-lucide="log-out" class="user-dropdown-icon"></i>
-              <span>Logout</span>
-            </button>
-            </div>
-          </div>
-
-        <!-- Cart Button -->
-        <button id="cart-btn" class="cart-button">
-          <i data-lucide="shopping-cart" class="cart-icon"></i>
-          <span id="cart-badge" class="cart-badge" style="display: none;">0</span>
-        </button>
+  <header id="header" class="header d-flex flex-column justify-content-start">
+    <!-- Logo -->
+    <div id="logo-btn" class="logo" onclick="window.location.href='#hero'">
+      <div class="logo-icon-wrapper">
+        <div class="logo-glow"></div>
+        <i data-lucide="zap" class="logo-icon"></i>
       </div>
-    </header>
-
-    <main class="container main-content">
-      
-      <!-- Hero Banner Carousel -->
-      <div class="hero-banner" id="hero-carousel">
-        <div id="hero-carousel-inner" class="hero-carousel-inner">
-          <!-- Fallback/Initial slide -->
-          <div class="carousel-item active">
-            <img 
-              src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1600" 
-              alt="Hero" 
-              fetchpriority="high"
-              decoding="async"
-              class="hero-image"
-            />
-          </div>
-
-        </div>
-
-        <!-- Carousel Controls -->
-        <button class="carousel-control-prev" id="carousel-prev" aria-label="Previous Slide" style="display: none;">
-          <i data-lucide="chevron-left"></i>
-        </button>
-        <button class="carousel-control-next" id="carousel-next" aria-label="Next Slide" style="display: none;">
-          <i data-lucide="chevron-right"></i>
-        </button>
-
-        <!-- Carousel Indicators -->
-        <div class="carousel-indicators" id="carousel-indicators" style="display: none;">
-          <button class="indicator-dot active" data-slide-to="0"></button>
-        </div>
-      </div>
-
-      <!-- Main Layout: Sidebar + Content -->
-      <div class="page-layout">
-
-        <!-- LEFT SIDEBAR -->
-        <aside class="page-sidebar">
-
-          <!-- Sidebar Nav -->
-          <nav class="sidebar-nav">
-            <a href="/" class="sidebar-nav-item active" id="nav-home">
-              <i data-lucide="home" class="sidebar-nav-icon"></i>
-              <span>Home</span>
-            </a>
-            <a href="/trending" class="sidebar-nav-item" id="nav-trending">
-              <i data-lucide="flame" class="sidebar-nav-icon"></i>
-              <span>Trending</span>
-            </a>
-            <a href="/event" class="sidebar-nav-item" id="nav-event">
-              <i data-lucide="tag" class="sidebar-nav-icon"></i>
-              <span>Event</span>
-            </a>
-            <a href="/community" class="sidebar-nav-item" id="nav-community">
-              <i data-lucide="users" class="sidebar-nav-icon"></i>
-              <span>Community</span>
-            </a>
-            <a href="/support" class="sidebar-nav-item" id="nav-support">
-              <i data-lucide="help-circle" class="sidebar-nav-icon"></i>
-              <span>Support</span>
-            </a>
-            <a href="/privacy-policy" class="sidebar-nav-item" id="nav-privacy">
-              <i data-lucide="shield" class="sidebar-nav-icon"></i>
-              <span>Privacy Policy</span>
-            </a>
-            <a href="/terms-of-service" class="sidebar-nav-item" id="nav-terms">
-              <i data-lucide="file-text" class="sidebar-nav-icon"></i>
-              <span>Terms of Service</span>
-            </a>
-          </nav>
-
-          <!-- Discounts Section -->
-          <div class="sidebar-section">
-            <div class="sidebar-section-header">
-              <div class="sidebar-section-title">
-                <span class="sidebar-section-dot"></span>
-                <h3>DISCOUNTS</h3>
-              </div>
-            </div>
-
-            <!-- 5 AAA Deals Container -->
-            <div id="discount-games-list" class="discount-games-list">
-              <!-- Rendered via JS -->
-            </div>
-          </div>
-
-          
-        </aside>
-
-        <!-- RIGHT MAIN CONTENT -->
-        <div class="page-main">
-          <!-- Controls -->
-          <div class="controls">
-            <div class="categories" id="categories"></div>
-            
-            <div class="game-count">
-              <span id="game-count-text">SHOWING: 0 GAMES</span>
-              <div id="status-dot" class="status-dot"></div>
-            </div>
-          </div>
-
-          <div id="error-state" class="error-state" style="display: none;">
-            <i data-lucide="alert-circle" class="error-icon"></i>
-            <p id="error-message"></p>
-            <button onclick="location.reload()" class="error-retry-btn">Try reloading</button>
-          </div>
-
-          <!-- Loading State -->
-          <div id="loading-state" class="loading-state">
-            <i data-lucide="loader-2" class="loading-spinner"></i>
-            <p class="loading-text">CONNECTING_TO_SERVER...</p>
-          </div>
-
-          <!-- Products Grid -->
-          <div id="products-grid" class="products-grid" style="display: none;"></div>
-
-          <!-- Load More Button -->
-          <div id="load-more-container" class="load-more-container" style="display: none;">
-            <button id="load-more-btn" class="load-more-btn">
-              <i data-lucide="arrow-down-circle" class="load-more-icon"></i>
-              <span id="load-more-text">Load_More_Games</span>
-            </button>
-            <p id="filter-notice" class="filter-notice" style="display: none;">
-              :: LOAD MORE DISABLED WHILE FILTERING ::
-            </p>
-          </div>
-        </div>
-
-      </div><!-- end .page-layout -->
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-line"></div>
-      
-      <div class="container">
-        <!-- Top Grid -->
-        <div class="footer-grid">
-          <!-- Column 1: Logo & Info -->
-          <div class="footer-column">
-            <div class="footer-brand">
-              <i data-lucide="zap" class="footer-brand-icon"></i>
-              <span class="footer-brand-text">NEON<span class="footer-brand-accent">NEXUS</span></span>
-            </div>
-            <div class="footer-info">
-              <p>System Status: <span class="text-white">ONLINE</span></p>
-              <p>Version: <span class="text-white">1.0.4</span></p>
-              <p>Server: <span class="text-white">Asia-Pacific (VietNam)</span></p>
-            </div>
-          </div>
-
-          <!-- Column 2: Navigation -->
-          <div class="footer-column">
-            <h4 class="footer-heading footer-heading-cyan">Navigation</h4>
-            <ul class="footer-links">
-              <li><a href="/" class="footer-link" style="text-decoration: none; color: inherit;">:: STORE</a></li>
-              <li><a href="/community" class="footer-link" style="text-decoration: none; color: inherit;">:: COMMUNITY</a></li>
-              <li><a href="/support" class="footer-link" style="text-decoration:none;color:inherit">:: SUPPORT</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3: Legal -->
-          <div class="footer-column">
-            <h4 class="footer-heading footer-heading-purple">Legal</h4>
-            <ul class="footer-links">
-              <li><a href="/privacy-policy" class="footer-link" style="text-decoration: none; color: inherit;">PRIVACY_POLICY</a></li>
-              <li>
-  <a
-    href="/terms-of-service"
-    class="footer-link"
-    style="text-decoration: none; color: inherit"
-    >TERMS_OF_SERVICE</a
-  >
-</li>
-
-            </ul>
-          </div>
-
-          <!-- Column 4: Secure Payment -->
-          <div class="footer-column">
-            <h4 class="footer-heading footer-heading-gray">Secure Payment</h4>
-            <div class="payment-icons">
-              <div class="payment-icon payment-card">
-                <i data-lucide="credit-card"></i>
-              </div>
-              <div class="payment-icon payment-bank">
-                <i data-lucide="building-2"></i>
-              </div>
-              <div class="payment-icon payment-momo">
-                <img src="Image/MOMO-Logo-App.png" alt="MoMo" class="payment-logo" loading="lazy" decoding="async">
-              </div>
-              <div class="payment-icon payment-zalopay">
-                <img src="Image/idv2DAbjER_1769330590719.jpeg" alt="ZaloPay" class="payment-logo" loading="lazy" decoding="async">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Support Info Grid -->
-        <div class="support-grid">
-          <!-- Contact Support -->
-          <div class="support-card support-card-cyan">
-            <div class="support-glow support-glow-cyan"></div>
-            <div class="support-header">
-              <i data-lucide="phone" class="support-icon"></i>
-              <h4 class="support-title">CONTACT_SUPPORT</h4>
-            </div>
-            <div class="support-content">
-              <p class="support-item">
-                <i data-lucide="phone" class="support-item-icon"></i>
-                <span>Hotline: <span class="text-white">1900-9679</span></span>
-              </p>
-              <p class="support-item">
-                <i data-lucide="globe" class="support-item-icon"></i>
-                <span>International: <span class="text-white">+84 28 3910 9679</span></span>
-              </p>
-              <p class="support-item">
-                <i data-lucide="mail" class="support-item-icon"></i>
-                <span>Email: <span class="text-white">support@neonnexus.com</span></span>
-              </p>
-              <p class="support-item">
-                <i data-lucide="message-circle" class="support-item-icon"></i>
-                <span>Live Chat: <span class="text-white">24/7</span></span>
-              </p>
-            </div>
-          </div>
-
-          <!-- Support Hours -->
-          <div class="support-card support-card-purple">
-            <div class="support-glow support-glow-purple"></div>
-            <div class="support-header">
-              <i data-lucide="clock" class="support-icon"></i>
-              <h4 class="support-title">SUPPORT_HOURS</h4>
-            </div>
-            <div class="support-content">
-              <p class="support-item">
-                <i data-lucide="clock" class="support-item-icon"></i>
-                <span>Mon - Fri: <span class="text-white">08:00 - 22:00</span></span>
-              </p>
-              <p class="support-item">
-                <i data-lucide="clock" class="support-item-icon"></i>
-                <span>Sat - Sun: <span class="text-white">09:00 - 20:00</span></span>
-              </p>
-              <p class="support-item">
-                <i data-lucide="zap" class="support-item-icon"></i>
-                <span>Response: <span class="text-white">&lt; 1 hour</span></span>
-              </p>
-            </div>
-          </div>
-
-          <!-- Social Connect -->
-          <div class="support-card support-card-cyan">
-            <div class="support-glow support-glow-cyan"></div>
-            <div class="support-header">
-              <i data-lucide="message-square" class="support-icon"></i>
-              <h4 class="support-title">SOCIAL_CONNECT</h4>
-            </div>
-            <div class="social-icons">
-              <a href="https://www.facebook.com/NeonNexuss" target="_blank" class="social-icon social-facebook">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
-                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                </svg>
-              </a>
-              <a href="#" class="social-icon social-x">
-                <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <a href="#" class="social-icon social-discord">
-                <svg width="20" height="20" fill="white" viewBox="0 0 71 55">
-                  <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718  48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"/>
-                </svg>
-              </a>
-              <a href="#" class="social-icon social-youtube">
-                <svg width="20" height="20" fill="#FF0000" viewBox="0 0 24 24">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Copyright -->
-        <div class="footer-copyright">
-          <p>
-            © 2026 Neon<span class="footer-brand-accent">Nexus</span> DIGITAL STORE. ALL_RIGHTS_RESERVED.
-            <span class="footer-separator">|</span>
-            POWERED_BY_<span class="text-cyan">CHEAPSHARK</span>
-          </p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Cart Drawer -->
-    <div id="cart-drawer" class="cart-drawer" style="display: none;">
-      <div class="cart-backdrop"></div>
-      
-      <div class="cart-panel">
-        <div class="cart-header">
-          <h2 class="cart-title">
-            <i data-lucide="tag" class="cart-title-icon"></i>
-            <span>CART_CONTENTS [<span id="cart-header-count">0</span>]</span>
-          </h2>
-          <button id="close-cart-btn" class="cart-close-btn">
-            <i data-lucide="x"></i>
-          </button>
-        </div>
-
-        <div id="cart-items" class="cart-items"></div>
-
-        <div class="cart-footer">
-          <div class="cart-total">
-            <span class="cart-total-label">TOTAL_ESTIMATE</span>
-            <span id="cart-total-amount" class="cart-total-amount">0?</span>
-          </div>
-          <button class="cart-checkout-btn">
-            Checkout
-            <i data-lucide="chevron-right" class="cart-checkout-icon"></i>
-          </button>
-        </div>
+      <div class="logo-text-wrapper">
+        <span class="logo-text">NEON<span class="logo-accent">NEXUS</span></span>
       </div>
     </div>
 
-    <!-- Login Modal -->
-    <div id="login-modal" class="login-modal" style="display: none;">
-      <div class="login-modal-backdrop"></div>
-      <div class="login-modal-content">
-        <button id="close-login-btn" class="modal-close-btn">
-          <i data-lucide="x"></i>
-        </button>
-        
-        <div class="login-header">
-          <div class="login-logo">
-            <i data-lucide="zap" class="text-cyan"></i>
-            <span class="text-white">NEON<span class="text-cyan">NEXUS</span></span>
+    <nav id="navmenu" class="navmenu">
+      <ul>
+        <li><a href="#hero" class="active"><i class="bi bi-house navicon"></i><span>Tổng quan</span></a></li>
+        <li><a href="#team"><i class="bi bi-people navicon"></i><span>Thành viên</span></a></li>
+        <li><a href="#dossier"><i class="bi bi-person navicon"></i><span>Hồ sơ chi tiết</span></a></li>
+        <li><a href="#store-redirect"><i class="bi bi-shop navicon"></i><span>Cửa hàng</span></a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main-content" class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section">
+      <div class="container" data-aos="zoom-in" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-9 text-center text-lg-start">
+            <h2>NeonNexus Core Team</h2>
+            <p>sys.status = [<span class="typed" data-typed-items="Tứ trụ lập trình, 4 node đã sẵn sàng"></span>]</p>
           </div>
-          <h3 class="login-title">UNLIMITED GAMING</h3>
-          <p class="login-subtitle">Connect your experience</p>
-        </div>
-
-        <div class="login-options">
-          <!-- Google Login -->
-          <button id="google-login-btn" class="social-login-btn google-btn">
-            <div class="social-icon-wrapper">
-                  <img src="Image/google-logo.svg" alt="Google logo" loading="lazy" decoding="async">
-            </div>
-            <span>Sign in with Google</span>
-          </button>
-
-          <!-- Steam Login -->
-          <button id="steam-login-btn" class="social-login-btn steam-btn">
-            <div class="social-icon-wrapper">
-                  <img src="Image/steam-svgrepo-com.svg" alt="Steam logo" loading="lazy" decoding="async">
-            </div>
-            <span>Sign in with Steam</span>
-          </button>
-
-            <!-- Guest Login -->
-            <button id="guest-login-btn" class="social-login-btn guest-btn">
-              <div class="social-icon-wrapper">
-                  <i data-lucide="user"></i>
-              </div>
-              <span>Continue as Guest</span>
-            </button>
-        </div>
-
-        <div class="login-footer">
-          <p>By logging in, you agree to our <a href="/terms-of-service" class="text-cyan hover:underline">Terms</a> & <a href="/privacy-policy" class="text-cyan hover:underline">Privacy Policy</a></p>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- Login Required Notification -->
-    <div id="login-required-modal" class="login-modal" style="display: none;">
-      <div class="login-modal-backdrop"></div>
-      <div class="login-modal-content">
-        <button id="close-login-required-btn" class="modal-close-btn">
-          <i data-lucide="x"></i>
-        </button>
-        
-        <div class="login-header">
-          <div class="login-logo" style="color: #fbbf24;">
-            <i data-lucide="zap" class="text-yellow-500" style="color: #fbbf24;"></i>
+    <!-- Team Members Grid Section -->
+    <section id="team" class="team section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Các thành viên (Core Nodes)<div class="line"></div></h2>
+        <p>Bảng tổng quan trạng thái và vai trò của 4 thành viên chủ chốt phát triển hệ thống.</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-4">
+          <!-- Member 1 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="member-card node-cyan active" data-node="node_01" id="card-node_01">
+              <div class="card-header-console">
+                <span class="node-id">NODE_01</span>
+                <span class="status-indicator online">ONLINE</span>
+              </div>
+              <div class="avatar-container">
+                <img src="./Image/PhamKhanhHung.jpg" alt="Phạm Khánh Hưng">
+                <div class="scanline"></div>
+              </div>
+              <div class="text-center">
+                <h3>Phạm Khánh Hưng</h3>
+                <p class="role-title">Lead Team Developer & Backend</p>
+                <div class="tech-tags">
+                  <span>Node.js</span>
+                  <span>SysAdmin</span>
+                  <span>API</span>
+                </div>
+                <button class="access-btn" type="button">> TRUY CẬP</button>
+              </div>
+            </div>
           </div>
-          <h3 class="login-title" style="color: #fbbf24;">LOGIN REQUIRED</h3>
-          <p class="login-subtitle">Please sign in to add items to your cart</p>
-        </div>
 
-        <div class="login-options">
-          <!-- Google Login -->
-          <button id="login-required-google-btn" class="social-login-btn google-btn">
-            <div class="social-icon-wrapper">
-                  <img src="Image/google-logo.svg" alt="Google logo" loading="lazy" decoding="async">
+          <!-- Member 2 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="member-card node-purple" data-node="node_02" id="card-node_02">
+              <div class="card-header-console">
+                <span class="node-id">NODE_02</span>
+                <span class="status-indicator idle">IDLE</span>
+              </div>
+              <div class="avatar-container">
+                <img src="./Image/DoanNguyenAnhPhuc.jpg" alt="Đoàn Nguyễn Anh Phúc">
+                <div class="scanline"></div>
+              </div>
+              <div class="text-center">
+                <h3>Đoàn Nguyễn Anh Phúc</h3>
+                <p class="role-title">UI/UX & Frontend</p>
+                <div class="tech-tags">
+                  <span>UI/UX</span>
+                  <span>CSS3</span>
+                </div>
+                <button class="access-btn" type="button">> TRUY CẬP</button>
+              </div>
             </div>
-            <span>Sign in with Google</span>
-          </button>
+          </div>
 
-          <!-- Steam Login -->
-          <button id="login-required-steam-btn" class="social-login-btn steam-btn">
-            <div class="social-icon-wrapper">
-                  <img src="Image/steam-svgrepo-com.svg" alt="Steam logo" loading="lazy" decoding="async">
+          <!-- Member 3 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="member-card node-green" data-node="node_03" id="card-node_03">
+              <div class="card-header-console">
+                <span class="node-id">NODE_03</span>
+                <span class="status-indicator compiling">COMPILING</span>
+              </div>
+              <div class="avatar-container">
+                <img src="./Image/PhamNguyenThienANh.jpg" alt="Phạm Nguyễn Thiên Anh">
+                <div class="scanline"></div>
+              </div>
+              <div class="text-center">
+                <h3>Phạm Nguyễn Thiên Anh</h3>
+                <p class="role-title">Documentation & QA Specialist</p>
+                <div class="tech-tags">
+                  <span>Documentation</span>
+                  <span>Testing</span>
+                </div>
+                <button class="access-btn" type="button">> TRUY CẬP</button>
+              </div>
             </div>
-            <span>Sign in with Steam</span>
-          </button>
+          </div>
 
-          <!-- Guest Login -->
-          <button id="login-required-guest-btn" class="social-login-btn guest-btn">
-            <div class="social-icon-wrapper">
-                <i data-lucide="user"></i>
+          <!-- Member 4 -->
+          <div class="col-lg-3 col-md-6">
+            <div class="member-card node-amber" data-node="node_04" id="card-node_04">
+              <div class="card-header-console">
+                <span class="node-id">NODE_04</span>
+                <span class="status-indicator monitoring">MONITORING</span>
+              </div>
+              <div class="avatar-container">
+                <img src="./Image/NguyenVanDangKhoa.jpg" alt="Nguyễn Văn Đăng Khoa">
+                <div class="scanline"></div>
+              </div>
+              <div class="text-center">
+                <h3>Nguyễn Văn Đăng Khoa</h3>
+                <p class="role-title">Presenter & PR</p>
+                <div class="tech-tags">
+                  <span>Presenter</span>
+                  <span>PR</span>
+                </div>
+                <button class="access-btn" type="button">> TRUY CẬP</button>
+              </div>
             </div>
-            <span>Continue as Guest</span>
-          </button>
-        </div>
-
-        <div class="login-footer">
-          <p style="color: #9ca3af;">Cart functionality requires authentication</p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
+    <!-- Selected Member Dossier Section -->
+    <section id="dossier" class="dossier section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Hồ sơ chi tiết: <span id="dossier-node-title" style="color: var(--dossier-color);">NODE_01</span><div class="line"></div></h2>
+        <p id="dossier-console-log">> FETCHING NODE_01 DATA... SUCCESS</p>
+      </div>
 
-
-
-    <!-- Checkout Modal -->
-    <div id="checkout-modal" class="checkout-modal">
-      <div class="checkout-modal-overlay"></div>
-      <div class="checkout-modal-container">
-        <div class="checkout-header">
-          <h2 class="checkout-title">CHECKOUT</h2>
-          <button id="close-checkout-btn" class="checkout-close-btn">
-            <i data-lucide="x"></i>
-          </button>
-        </div>
-
-        <!-- Step Indicator -->
-        <div class="checkout-steps">
-          <div class="checkout-step completed">
-            <div class="step-circle">
-              <i data-lucide="shopping-cart"></i>
+      <div class="container dossier-wrapper" id="dossier-wrapper-card" data-aos="fade-up" data-aos-delay="100">
+        <div id="dossier-content-wrapper">
+          <!-- Main Personal Info Row -->
+          <div class="row gy-4 justify-content-center align-items-center">
+            <div class="col-lg-4 text-center">
+              <img id="dossier-img" src="./Image/PhamKhanhHung.jpg" class="img-fluid" alt="Ảnh đại diện" loading="lazy" decoding="async">
             </div>
-            <span class="step-label">Cart</span>
-          </div>
-          <div class="step-connector completed"></div>
-          <div class="checkout-step active">
-            <div class="step-circle">
-              <i data-lucide="credit-card"></i>
-            </div>
-            <span class="step-label">Payment</span>
-          </div>
-          <div class="step-connector"></div>
-          <div class="checkout-step">
-            <div class="step-circle">
-              <i data-lucide="check-circle"></i>
-            </div>
-            <span class="step-label">Confirm</span>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="checkout-content">
-          
-          <!-- Step 1: Payment Method Selection -->
-          <div id="payment-selection" class="checkout-section active">
-            <h3 class="section-title">Select Payment Method</h3>
-            
-            <div class="payment-methods-grid">
-              <!-- International Card -->
-              <div class="payment-method-card" data-method="card">
-                <div class="payment-icon">
-                  <img src="Image/11078490.png" alt="Card" class="payment-method-logo" loading="lazy" decoding="async">
+            <div class="col-lg-8 content">
+              <div class="about-content-box">
+                <div class="editor-top">
+                  <div class="dot red"></div>
+                  <div class="dot yellow"></div>
+                  <div class="dot green"></div>
                 </div>
-                <h4 class="payment-name">BANK CARD</h4>
-                <p class="payment-desc">Fast payment with international credit/debit cards</p>
-                <div class="payment-logos">
-                  <img src="Image/visa.svg" alt="VISA" class="card-logo-img" loading="lazy" decoding="async">
-                  <img src="Image/mastercard.svg" alt="Mastercard" class="card-logo-img" loading="lazy" decoding="async">
-                </div>
-              </div>
-
-              <!-- VietQR -->
-              <div class="payment-method-card" data-method="vietqr">
-                <div class="payment-icon">
-                  <img src="Image/viet_qr_1.png" alt="VietQR" class="payment-method-logo" loading="lazy" decoding="async">
-                </div>
-                <h4 class="payment-name">VIETQR</h4>
-                <p class="payment-desc">Scan QR code for direct bank transfer</p>
-                <div class="payment-logos">
-                  <span class="bank-logo">QR CODE</span>
-                </div>
-              </div>
-
-              <!-- Momo -->
-              <div class="payment-method-card" data-method="momo">
-                <div class="payment-icon">
-                  <img src="Image/MOMO-Logo-App.png" alt="MoMo" class="payment-method-logo" loading="lazy" decoding="async">
-                </div>
-                <h4 class="payment-name">MOMO</h4>
-                <p class="payment-desc">Popular e-wallet, convenient payment</p>
-                <div class="payment-logos">
-                  <span class="momo-logo">MOMO</span>
-                </div>
-              </div>
-
-              <!-- ZaloPay -->
-              <div class="payment-method-card" data-method="zalopay">
-                <div class="payment-icon">
-                  <img src="Image/idv2DAbjER_1769330590719.jpeg" alt="ZaloPay" class="payment-method-logo" loading="lazy" decoding="async">
-                </div>
-                <h4 class="payment-name">ZALOPAY</h4>
-                <p class="payment-desc">Direct payment using the Zalo app</p>
-                <div class="payment-logos">
-                  <span class="zalopay-logo">ZALOPAY</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Total Amount -->
-            <!-- Total Amount -->
-            <div class="checkout-total" style="display: flex; flex-direction: column; gap: 0.5rem;">
-              <div id="checkout-subtotal-row" style="display: none; justify-content: space-between; color: #9ca3af; font-size: 0.9rem;">
-                 <span>Subtotal:</span>
-                 <span id="checkout-subtotal">0</span>
-              </div>
-              <div id="checkout-discount-row" style="display: none; justify-content: space-between; color: #fbbf24; font-size: 0.9rem;">
-                 <span id="checkout-discount-label">Member Discount (0%):</span>
-                 <span id="checkout-discount-amount">-0</span>
-              </div>
-              
-              <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 0.5rem; border-top: 1px solid rgba(255,255,255,0.1);">
-                <span class="total-label">TOTAL:</span>
-                <span id="checkout-total-amount" class="total-amount">0?</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 2: Card Payment Form -->
-          <div id="card-form" class="checkout-section payment-form">
-            <div class="selected-method">
-              <div class="method-badge card-badge">
-                <i data-lucide="credit-card"></i>
-                <span>BANK CARD</span>
-                <div class="badge-logos">
-                  <img src="Image/visa.svg" alt="VISA" class="badge-logo-img" loading="lazy" decoding="async">
-                  <img src="Image/mastercard.svg" alt="MC" class="badge-logo-img" loading="lazy" decoding="async">
-                </div>
-              </div>
-            </div>
-
-            <form class="payment-form-content">
-              <div class="form-group">
-                <label for="card-number">Card Number</label>
-                <div class="input-with-icon header-search-input">
-                  <i data-lucide="credit-card"></i>
-                  <div id="card-number" class="stripe-element-container"></div>
-                </div>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="card-expiry">Expiration Date</label>
-                  <div class="input-with-icon header-search-input">
-                    <i data-lucide="calendar"></i>
-                    <div id="card-expiry" class="stripe-element-container"></div>
+                <h3 style="color: var(--dossier-color); font-family: var(--font-code); margin-bottom: 20px;" id="dossier-query">> user.getDetails()</h3>
+                
+                <p id="dossier-desc" class="mb-4">Đang chạy init_profile.sh... Dữ liệu hồ sơ đã tải thành công. Chuyên kết nối giữa công nghệ và thiết kế. Có kinh nghiệm về hỗ trợ CNTT, mạng và thiết kế sáng tạo.</p>
+                
+                <div class="row">
+                  <div class="col-lg-6">
+                    <ul id="dossier-details-left">
+                      <li><i class="bi bi-chevron-right"></i> <strong>Ngày sinh:</strong> <span>11/12/2006</span></li>
+                      <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <a href="https://khannnnnkza.id.vn/" target="_blank" rel="noopener noreferrer">khannnnnkza.id.vn</a></li>
+                      <li><i class="bi bi-chevron-right"></i> <strong>Điện thoại:</strong> <span>0876695176</span></li>
+                      <li><i class="bi bi-chevron-right"></i> <strong>Địa điểm:</strong> <span>Hố Nai, Đồng Nai</span></li>
+                    </ul>
                   </div>
-                </div>
-                <div class="form-group">
-                  <label for="card-cvv">CVV</label>
-                  <div class="input-with-icon header-search-input">
-                    <i data-lucide="shield"></i>
-                    <div id="card-cvv" class="stripe-element-container"></div>
+                  <div class="col-lg-6">
+                    <ul id="dossier-details-right">
+                      <li><i class="bi bi-chevron-right"></i> <strong>Tuổi:</strong> <span>20</span></li>
+                      <li><i class="bi bi-chevron-right"></i> <strong>Trình độ:</strong> <span>Đại học</span></li>
+                      <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>hungtrang290@gmail.com</span></li>
+                      <li><i class="bi bi-chevron-right"></i> <strong>Trạng thái:</strong> <span style="color: #27c93f;">[Sẵn_sàng_làm_việc]</span></li>
+                    </ul>
                   </div>
                 </div>
               </div>
-
-              <div class="form-group">
-                <label for="card-holder">Card Holder Name</label>
-                <div class="input-with-icon">
-                  <i data-lucide="user"></i>
-                  <input type="text" id="card-holder" placeholder="Full name">
-                </div>
-              </div>
-
-              <div class="security-note">
-                <i data-lucide="lock"></i>
-                <span>SSL Secured Payment</span>
-              </div>
-            </form>
-
-            <div class="form-summary">
-              <span id="card-items-count">0 items</span>
-              <span> - </span>
-              <span class="summary-label">TOTAL:</span>
-              <span id="card-total" class="summary-amount">0?</span>
             </div>
           </div>
 
-          <!-- Step 3: VietQR Payment -->
-          <div id="vietqr-form" class="checkout-section payment-form">
-            <div class="selected-method">
-              <div class="method-badge vietqr-badge">
-                <i data-lucide="qr-code"></i>
-                <span>VIETQR</span>
-              </div>
-            </div>
 
-            <div class="qr-container">
-              <div class="qr-code-box">
-                <div id="qr-code-image" class="qr-code-placeholder">
-                  <i data-lucide="qr-code"></i>
-                  <p>QR code will appear here</p>
-                </div>
-              </div>
-              <p class="qr-instruction">Scan QR code to pay</p>
-            </div>
 
-            <div class="payment-info-box">
-              <h4>TRANSFER INFORMATION</h4>
-              <div class="info-row">
-                <span class="info-label">Bank:</span>
-                <span class="info-value">MB Bank</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Account Number:</span>
-                <span class="info-value">0123456789</span>
-              </div>
-              <div class="info-row">
-                <span class="info-label">Account Holder:</span>
-                <span class="info-value">NEONNEXUS</span>
-              </div>
-              <div class="info-row highlight">
-                <span class="info-label">Amount:</span>
-                <span id="vietqr-amount" class="info-value">0?</span>
-              </div>
-              <div class="info-row highlight">
-                <span class="info-label">Message:</span>
-                <span id="vietqr-content" class="info-value">NEONORDER123456</span>
-              </div>
-            </div>
-
-            <div class="instructions-box">
-              <div class="instruction-item">
-                <i data-lucide="smartphone"></i>
-                <span>Step 1: Open bank app</span>
-              </div>
-              <div class="instruction-item">
-                <i data-lucide="scan"></i>
-                <span>Step 2: Scan QR code</span>
-              </div>
-              <div class="instruction-item">
-                <i data-lucide="check-circle"></i>
-                <span>Step 3: Confirm payment</span>
-              </div>
-            </div>
-
-            <div class="form-summary">
-              <span class="summary-label">TOTAL:</span>
-              <span id="vietqr-total" class="summary-amount">0?</span>
+          <!-- Skills Section -->
+          <div class="mt-5">
+            <h3 class="resume-title">> Cấu hình kỹ năng (System Capabilities)</h3>
+            <div id="dossier-skills-container" class="mt-4">
+              <!-- Dynamically populated progress bars -->
             </div>
           </div>
 
-          <!-- Step 4: Momo Payment -->
-          <div id="momo-form" class="checkout-section payment-form">
-            <div class="selected-method">
-              <div class="method-badge momo-badge">
-                <i data-lucide="smartphone"></i>
-                <span>MOMO E-Wallet</span>
-              </div>
-            </div>
-
-            <div class="ewallet-logo-display">
-              <div class="momo-logo-large">MoMo</div>
-            </div>
-
-            <form class="payment-form-content">
-              <div class="form-group">
-                <label for="momo-phone">Momo Phone Number</label>
-                <div class="input-with-icon">
-                  <i data-lucide="phone"></i>
-                  <input type="tel" id="momo-phone" placeholder="0912 345 678" maxlength="12">
-                </div>
-              </div>
-            </form>
-
-
-
-            <div class="transaction-details">
-              <div class="detail-row">
-                <span class="detail-label">Payment Amount:</span>
-                <span id="momo-amount" class="detail-value">0?</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Transaction ID:</span>
-                <span id="momo-transaction-id" class="detail-value">TRANS_NX123456</span>
-              </div>
-            </div>
-
-            <div class="security-badge momo-security">
-              <i data-lucide="shield-check"></i>
-              <span>Secured by Momo</span>
-            </div>
-
-            <div class="form-summary">
-              <span id="momo-items-count">0 items</span>
-              <span> - </span>
-              <span class="summary-label">TOTAL:</span>
-              <span id="momo-total" class="summary-amount">0?</span>
-            </div>
-          </div>
-
-          <!-- Step 5: ZaloPay Payment -->
-          <div id="zalopay-form" class="checkout-section payment-form">
-            <div class="selected-method">
-              <div class="method-badge zalopay-badge">
-                <i data-lucide="wallet"></i>
-                <span>ZALOPAY E-Wallet</span>
-              </div>
-            </div>
-
-            <div class="ewallet-logo-display">
-              <div class="zalopay-logo-large">ZaloPay</div>
-            </div>
-
-            <div class="zalopay-redirect-message" style="text-align: center; margin: 2rem 0; color: #22d3ee;">
-              <i data-lucide="loader-2" class="spin-animation" style="width: 40px; height: 40px; margin-bottom: 1rem;"></i>
-              <p>Redirecting to ZaloPay payment gateway...</p>
-            </div>
-
-            <div class="transaction-details">
-              <div class="detail-row">
-                <span class="detail-label">Payment Amount:</span>
-                <span id="zalopay-amount" class="detail-value">0?</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Transaction ID:</span>
-                <span id="zalopay-transaction-id" class="detail-value">TRANS_ZP123456</span>
-              </div>
-            </div>
-
-            <div class="security-badge zalopay-security">
-              <i data-lucide="shield-check"></i>
-              <span>Secured by ZaloPay</span>
-            </div>
-
-            <div class="form-summary">
-              <span id="zalopay-items-count">0 items</span>
-              <span> - </span>
-              <span class="summary-label">TOTAL:</span>
-              <span id="zalopay-total" class="summary-amount">0?</span>
-            </div>
-          </div>
 
         </div>
+      </div>
+    </section>
 
-        <!-- Footer Actions -->
-        <div class="checkout-footer">
-          <button id="checkout-back-btn" class="checkout-btn-secondary">
-            <i data-lucide="chevron-left"></i>
-            BACK
-          </button>
-          <button id="checkout-continue-btn" class="checkout-btn-primary">
-            <span id="continue-btn-text">CONTINUE</span>
-            <i data-lucide="chevron-right"></i>
-          </button>
+
+
+
+    <!-- Store Redirect Section -->
+    <section id="store-redirect" class="contact section">
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Cổng_Cửa_Hàng (Neon Store)<div class="line"></div></h2>
+        <p>Trải nghiệm hệ thống phân phối key game Steam bản quyền hàng đầu với các ưu đãi cực khủng.</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row justify-content-center">
+          <div class="col-lg-7 text-center">
+            <div class="php-email-form d-flex flex-column align-items-center justify-content-center p-5">
+              <i class="bi bi-cart4" style="font-size: 64px; color: var(--dossier-color); text-shadow: 0 0 15px var(--dossier-color-muted); display: block; margin-bottom: 20px;"></i>
+              <h3 class="mb-4" style="font-family: var(--font-code); color: var(--text-light);">> NEONNEXUS_STORE.EXE</h3>
+              <p class="text-center mb-4" style="font-size: 15px; color: var(--text-main); line-height: 1.6;">Nhấn vào nút bên dưới để truy cập vào hệ thống cửa hàng, tìm kiếm các tựa game yêu thích và tận hưởng các đợt giảm giá sốc lên tới 90%.</p>
+              <button id="store-access-btn" type="button" onclick="window.location.href='html/store.html'">> TRUY_CẬP_CỬA_HÀNG</button>
+            </div>
+          </div>
         </div>
+      </div>
+    </section>
 
+  </main>
+
+  <footer id="footer" class="footer position-relative">
+    <div class="container">
+      <h3 class="sitename">NeonNexus Development Team</h3>
+      <p>SYS.SHUTDOWN... KẾT_THÚC PHIÊN LÀM VIỆC.</p>
+      <div class="copyright">
+        <span>&copy; Bản quyền</span> <strong class="px-1 sitename">NeonNexus</strong> <span>Đã đăng ký mọi quyền</span>
       </div>
     </div>
+  </footer>
 
-
-    
-  </div>
-
-  <script src="API/giftcodes.js?v=fixed_v2"></script>
-  <script src="API/cheapshark-api.js?v=fixed_v2"></script>
-  <script src="API/auth.js?v=fixed_v3"></script>
-  <script src="API/theme-toggle.js?v=fixed_v2"></script>
-  <script src="API/trending-discounts.js?v=fixed_v2"></script>
-
-  <!-- CÁC THƯ VIỆN BÊN THỨ 3 (nếu có) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- UTILS BẮT BUỘC PHẢI LOAD TRƯỚC -->
-  <script src="API/image-utils.js"></script>
-  <script src="API/software-list.js"></script>
-  <script src="API/dlc-list.js"></script>
-
-  <!-- MAIN SCRIPT LOAD SAU CÙNG -->
-  <script src="API/index.js"></script>
   <script>
-    (function() {
-      const initPage = () => {
+    document.addEventListener('DOMContentLoaded', () => {
+      "use strict";
+
+      /* Khởi tạo Lucide Icons */
       if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();
       }
 
-      // Fetch and render live Flash Sale deal from CheapShark
-      if (typeof fetchFlashSaleDeal === 'function') {
-        fetchFlashSaleDeal();
-      }
-
-      // Mobile search toggle logic
-      const mobileSearchBtn = document.getElementById('mobile-search-btn');
-      const searchWrapper = document.querySelector('.search-wrapper');
-      
-      if(mobileSearchBtn && searchWrapper) {
-        mobileSearchBtn.addEventListener('click', () => {
-          searchWrapper.classList.toggle('mobile-active');
+      /* Bật tắt menu trên thiết bị di động */
+      const headerToggleBtn = document.querySelector('.header-toggle');
+      if (headerToggleBtn) {
+        headerToggleBtn.addEventListener('click', function() {
+          document.querySelector('body').classList.toggle('mobile-nav-active');
+          this.classList.toggle('bi-list');
+          this.classList.toggle('bi-x');
         });
       }
-      
-      // Add logo click functionality (already on homepage, but ensure consistency)
-      const logoBtn = document.getElementById('logo-btn');
-      if (logoBtn) {
-        logoBtn.style.cursor = 'pointer';
+
+      /* Ẩn menu di động khi nhấn vào link */
+      document.querySelectorAll('#navmenu a').forEach(navmenu => {
+        navmenu.addEventListener('click', () => {
+          if (document.querySelector('.mobile-nav-active')) {
+            document.querySelector('body').classList.remove('mobile-nav-active');
+            headerToggleBtn.classList.toggle('bi-list');
+            headerToggleBtn.classList.toggle('bi-x');
+          }
+        });
       }
+      );
+
+      /* Theo dõi vị trí cuộn */
+      let navmenulinks = document.querySelectorAll('.navmenu a');
+      const navmenuScrollspy = () => {
+        const isAtBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 50);
+        if (isAtBottom) {
+          document.querySelectorAll('.navmenu a.active').forEach(link => link.classList.remove('active'));
+          const lastLink = navmenulinks[navmenulinks.length - 1];
+          if (lastLink) lastLink.classList.add('active');
+          return;
+        }
+
+        navmenulinks.forEach(navmenulink => {
+          if (!navmenulink.hash) return;
+          let section = document.querySelector(navmenulink.hash);
+          if (!section) return;
+          let position = window.scrollY + 200;
+          if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
+            document.querySelectorAll('.navmenu a.active').forEach(link => link.classList.remove('active'));
+            navmenulink.classList.add('active');
+          } else {
+            navmenulink.classList.remove('active');
+          }
+        })
+      }
+      window.addEventListener('load', navmenuScrollspy);
+      document.addEventListener('scroll', navmenuScrollspy);
+
+      /* Khởi tạo AOS */
+      AOS.init({
+        duration: 1000,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false
+      });
+
+      /* Khởi tạo Typed.js tại Hero */
+      const selectTyped = document.querySelector('.typed');
+      if (selectTyped) {
+        let typed_strings = selectTyped.getAttribute('data-typed-items');
+        typed_strings = typed_strings.split(',');
+        new Typed('.typed', {
+          strings: typed_strings,
+          loop: true,
+          typeSpeed: 60,
+          backSpeed: 40,
+          backDelay: 2000
+        });
+      }
+
+      /* Khởi tạo GLightbox */
+      const glightbox = GLightbox({
+        selector: '.glightbox'
+      });
+
+      // Data of 4 Members
+      const teamData = {
+        node_01: {
+          name: "Phạm Khánh Hưng",
+          id: "NODE_01",
+          color: "var(--neon-cyan)",
+          colorRgba: "rgba(0, 243, 255, 0.15)",
+          role: "Lead Developer & SysAdmin",
+          status: "[ACTIVE_CORE]",
+          description: "Đang chạy init_profile.sh... Dữ liệu hồ sơ đã tải thành công. Chuyên kết nối giữa công nghệ và thiết kế. Có kinh nghiệm về hỗ trợ CNTT, mạng và thiết kế sáng tạo hệ thống.",
+          avatar: "./Image/PhamKhanhHung.jpg",
+          details: {
+            left: [
+              { label: "Ngày sinh", val: "11/12/2006" },
+              { label: "Website", val: "khannnnnkza.id.vn", isLink: true, linkUrl: "https://khannnnnkza.id.vn/" },
+              { label: "Điện thoại", val: "0876695176" },
+              { label: "Địa điểm", val: "Hố Nai, Đồng Nai" }
+            ],
+            right: [
+              { label: "Tuổi", val: "20" },
+              { label: "Trình độ", val: "Đại học" },
+              { label: "Email", val: "hungtrang290@gmail.com" },
+              { label: "Trạng thái", val: "[Sẵn_sàng_làm_việc]", isStatus: true, statusColor: "#27c93f" }
+            ]
+          },
+          stats: [
+            { val: 232, label: "Khách hàng hài lòng" },
+            { val: 521, label: "Dự án" },
+            { val: 1463, label: "Giờ hỗ trợ" },
+            { val: 15, label: "Nút mạng" }
+          ],
+          skills: [
+            { name: "Hỗ trợ CNTT", val: 100 },
+            { name: "Kỹ năng CNTT", val: 90 },
+            { name: "HTML & CSS", val: 70 },
+            { name: "Mạng máy tính", val: 80 },
+            { name: "Node.js Backend", val: 85 },
+            { name: "Adobe Illustrator", val: 60 }
+          ],
+          resume: {
+            summary: {
+              name: "Phạm Khánh Hưng",
+              desc: "Chuyên viên CNTT & thiết kế sáng tạo, làm việc theo mục tiêu và tiến độ, có kinh nghiệm xây dựng giải pháp lấy người dùng làm trung tâm từ ý tưởng đến triển khai.",
+              items: ["Hố Nai, Đồng Nai", "0876695176", "hungtrang290@gmail.com"]
+            },
+            education: [
+              { title: "Master of IT Support & Network", date: "2015 - 2016", school: "Viện Công nghệ, Việt Nam", desc: "Nghiên cứu và thực hành chuyên sâu về vận hành hệ thống, xử lý sự cố hạ tầng và tối ưu hiệu suất mạng nội bộ." },
+              { title: "Cử nhân Thiết kế", date: "2010 - 2014", school: "Học viện Thiết kế, Việt Nam", desc: "Tập trung vào thiết kế trực quan, nhận diện thương hiệu và xây dựng trải nghiệm người dùng hiện đại." }
+            ],
+            experience: [
+              { title: "Chuyên viên CNTT cao cấp", date: "2019 - Nay", company: "Công ty TechCorp, TP. Hồ Chí Minh", desc: "Phụ trách thiết kế, phát triển và triển khai hệ thống mạng. Phân công công việc cho nhóm IT và tư vấn kỹ thuật. Giám sát, đánh giá chất lượng thiết bị phần cứng." },
+              { title: "Chuyên viên Thiết kế Đồ họa", date: "2017 - 2018", company: "Creative Studio, Đồng Nai, Việt Nam", desc: "Triển khai nhiều hạng mục marketing (logo, infographic, bài thuyết trình). Quản lý đồng thời tối đa 5 đầu việc/dự án trong môi trường áp lực cao." }
+            ]
+          }
+        },
+        node_02: {
+          name: "Đoàn Nguyễn Anh Phúc",
+          id: "NODE_02",
+          color: "var(--neon-purple)",
+          colorRgba: "rgba(188, 19, 254, 0.15)",
+          role: "Lead UI/UX & Frontend Developer",
+          status: "[DESIGNING]",
+          description: "Khởi động module design_core.sh... Đã nạp bảng vẽ và thư viện CSS. Đam mê tạo ra các giao diện người dùng đẹp mắt, sắc nét và có độ phản hồi cao với cảm hứng cyberpunk.",
+          avatar: "./Image/DoanNguyenAnhPhuc.jpg",
+          details: {
+            left: [
+              { label: "Ngày sinh", val: "24/09/2006" },
+              { label: "Website", val: "doannguyenanhphuc.id.vn", isLink: true, linkUrl: "https://doannguyenanhphuc.id.vn/" },
+              { label: "Điện thoại", val: "0933995450" },
+              { label: "Địa điểm", val: "Biên Hòa, Đồng Nai" }
+            ],
+            right: [
+              { label: "Tuổi", val: "20" },
+              { label: "Trình độ", val: "Đại học" },
+              { label: "Email", val: "anhphucdoannguyen@gmail.com" },
+              { label: "Trạng thái", val: "[Sẵn_sàng_làm_việc]", isStatus: true, statusColor: "#27c93f" }
+            ]
+          },
+          stats: [
+            { val: 180, label: "Khách hàng hài lòng" },
+            { val: 340, label: "Bản thiết kế" },
+            { val: 950, label: "Giờ sáng tạo" },
+            { val: 12, label: "Thương hiệu" }
+          ],
+          skills: [
+            { name: "Thiết kế UI/UX", val: 95 },
+            { name: "HTML5 / CSS3", val: 90 },
+            { name: "JavaScript", val: 85 },
+            { name: "Figma & Adobe Illustrator", val: 90 },
+            { name: "Animations & Transitions", val: 85 },
+            { name: "Responsive Design", val: 95 }
+          ],
+          resume: {
+            summary: {
+              name: "Đoàn Nguyễn Anh Phúc",
+              desc: "Nhà thiết kế giao diện và phát triển Frontend với hơn 3 năm kinh nghiệm trong việc biến các ý tưởng phức tạp thành giao diện trực quan và dễ sử dụng.",
+              items: ["Biên Hòa, Đồng Nai", "0933995450", "anhphucdoannguyen@gmail.com"]
+            },
+            education: [
+              { title: "Kỹ sư Thiết kế Đồ họa & UI/UX", date: "2018 - 2021", school: "Đại học FPT, Việt Nam", desc: "Tập trung chuyên sâu về trải nghiệm người dùng, tương tác người - máy và thiết kế mỹ thuật số." },
+              { title: "Chứng chỉ Frontend Developer chuyên nghiệp", date: "2017", school: "Aptech Vietnam", desc: "Đào tạo bài bản về lập trình web hiện đại: HTML5, CSS3, JavaScript và các framework phổ biến." }
+            ],
+            experience: [
+              { title: "UI/UX Designer chính", date: "2021 - Nay", company: "NeonNexus Studio, Việt Nam", desc: "Thiết kế toàn bộ giao diện cho nền tảng bán key game NeonNexus. Xây dựng thư viện component UI thống nhất và hướng dẫn sử dụng CSS chung." },
+              { title: "Lập trình viên Frontend", date: "2018 - 2021", company: "Creative Studio, TP. HCM", desc: "Phát triển giao diện web cho các dự án thương mại điện tử lớn, tối ưu hóa tốc độ tải trang frontend và độ tương thích trình duyệt." }
+            ]
+          }
+        },
+        node_03: {
+          name: "Phạm Nguyễn Thiên Anh",
+          id: "NODE_03",
+          color: "var(--neon-green)",
+          colorRgba: "rgba(57, 255, 20, 0.15)",
+          role: "Documentation & QA Specialist",
+          status: "[COMPILING]",
+          description: "Đang phân tích tài liệu hệ thống... Trạng thái kiểm tra: Đạt. Chuyên gia xây dựng tài liệu kỹ thuật chi tiết, lập trình kiểm thử và đảm bảo tính nhất quán của hệ thống.",
+          avatar: "./Image/PhamNguyenThienANh.jpg",
+          details: {
+            left: [
+              { label: "Ngày sinh", val: "12/01/2006" },
+              { label: "Website", val: "phamnguyenthienanh.id.vn", isLink: true, linkUrl: "https://phamnguyenthienanh.id.vn/" },
+              { label: "Điện thoại", val: "0949550902" },
+              { label: "Địa điểm", val: "Hố Nai, Đồng Nai" }
+            ],
+            right: [
+              { label: "Tuổi", val: "20" },
+              { label: "Trình độ", val: "Đại học" },
+              { label: "Email", val: "pntanh12@gmail.com" },
+              { label: "Trạng thái", val: "[Sẵn_sàng_làm_việc]", isStatus: true, statusColor: "#27c93f" }
+            ]
+          },
+          stats: [
+            { val: 195, label: "Khách hàng hài lòng" },
+            { val: 410, label: "Cổng API" },
+            { val: 1200, label: "Triển khai Server" },
+            { val: 8, label: "Di trú Database" }
+          ],
+          skills: [
+            { name: "Viết tài liệu kỹ thuật", val: 95 },
+            { name: "Kiểm thử phần mềm (QA)", val: 90 },
+            { name: "Cấu hình hệ thống", val: 85 },
+            { name: "Kiểm thử tự động", val: 90 }
+          ],
+          resume: {
+            summary: {
+              name: "Phạm Nguyễn Thiên Anh",
+              desc: "Chuyên gia tài liệu kỹ thuật và QA với niềm đam mê sâu sắc cho việc tối ưu quy trình và đảm bảo chất lượng hệ thống.",
+              items: ["Đồng Nai, Việt Nam", "0949550902", "pntanh12@gmail.com"]
+            },
+            education: [
+              { title: "Sinh viên CNTT", date: "2024 - Nay", school: "Đại học Công nghệ", desc: "Tập trung học tập lập trình, quản lý chất lượng phần mềm và xây dựng tài liệu kỹ thuật." }
+            ],
+            experience: [
+              { title: "QA & Documentation Specialist", date: "2024 - Nay", company: "NeonNexus Team", desc: "Biên soạn các tài liệu phân tích hệ thống, hướng dẫn triển khai API và kiểm thử các tính năng phân phối game." }
+            ]
+          }
+        },
+        node_04: {
+          name: "Nguyễn Văn Đăng Khoa",
+          id: "NODE_04",
+          color: "var(--neon-amber)",
+          colorRgba: "rgba(255, 177, 0, 0.15)",
+          role: "Presenter & PR",
+          status: "[MONITORING]",
+          description: "Đang tối ưu cổng tương tác truyền thông... Trạng thái kết nối: Hoạt động. Chuyên viên PR, thuyết trình giải pháp hệ thống và xây dựng mối quan hệ đối tác tin cậy cho toàn bộ máy chủ.",
+          avatar: "./Image/NguyenVanDangKhoa.jpg",
+          details: {
+            left: [
+              { label: "Ngày sinh", val: "22/02/2006" },
+              { label: "Website", val: "nguyenvandangkhoa.id.vn", isLink: true, linkUrl: "https://nguyenvandangkhoa.id.vn/" },
+              { label: "Điện thoại", val: "0389467462" },
+              { label: "Địa điểm", val: "Biên Hòa, Đồng Nai" }
+            ],
+            right: [
+              { label: "Tuổi", val: "20" },
+              { label: "Trình độ", val: "Đại học" },
+              { label: "Email", val: "dk2k62202@gmail.com" },
+              { label: "Trạng thái", val: "[Sẵn_sàng_làm_việc]", isStatus: true, statusColor: "#27c93f" }
+            ]
+          },
+          stats: [
+            { val: 150, label: "Khách hàng bảo vệ" },
+            { val: 650, label: "Lỗ hổng đã vá" },
+            { val: 1100, label: "Giờ Audit" },
+            { val: 42, label: "Hệ thống an toàn" }
+          ],
+          skills: [
+            { name: "Lập kế hoạch PR & Truyền thông", val: 95 },
+            { name: "Kỹ năng thuyết trình", val: 90 },
+            { name: "Bảo mật & Chống gian lận", val: 80 },
+            { name: "Phát triển đối tác", val: 85 }
+          ],
+          resume: {
+            summary: {
+              name: "Nguyễn Văn Đăng Khoa",
+              desc: "Chuyên viên PR kiêm thuyết trình hệ thống chuyên nghiệp với khả năng giao tiếp ấn tượng và tư duy quản lý dự án tối ưu.",
+              items: ["Biên Hòa, Đồng Nai, Việt Nam", "0389467462", "dk2k62202@gmail.com"]
+            },
+            education: [
+              { title: "Sinh viên CNTT", date: "2023 - Nay", school: "Đại học", desc: "Tập trung nghiên cứu truyền thông công nghệ và vận hành dự án." }
+            ],
+            experience: [
+              { title: "PR Lead & Presenter", date: "2024 - Nay", company: "Dự án NeonNexus", desc: "Xây dựng hình ảnh thương hiệu và chuẩn bị tài liệu giới thiệu hệ thống đến người dùng." }
+            ]
+          }
+        }
       };
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initPage);
-      } else {
-        initPage();
+
+      // Number count animation function
+      function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+          if (!startTimestamp) startTimestamp = timestamp;
+          const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+          obj.innerHTML = Math.floor(progress * (end - start) + start);
+          if (progress < 1) {
+            window.requestAnimationFrame(step);
+          }
+        };
+        window.requestAnimationFrame(step);
       }
-    })();
+
+      // Filter settings for Isotope
+      let currentMemberFilter = '.node_01';
+      let currentCategoryFilter = '';
+
+      function arrangeIsotope() {
+        const items = document.querySelectorAll('.portfolio-item');
+        const filterStr = currentMemberFilter + currentCategoryFilter;
+        
+        items.forEach(item => {
+          if (item.matches(filterStr)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // Re-layout AOS to capture new display states
+        AOS.refresh();
+      }
+
+      // Main function to select a member node
+      function selectMember(nodeId) {
+        const data = teamData[nodeId];
+        if (!data) return;
+
+        // Remove active class from other cards and add to clicked
+        document.querySelectorAll('.member-card').forEach(c => c.classList.remove('active'));
+        const activeCard = document.getElementById(`card-${nodeId}`);
+        if (activeCard) activeCard.classList.add('active');
+
+        // Apply Glitch animation to dossier wrapper
+        const wrapper = document.getElementById('dossier-wrapper-card');
+        wrapper.classList.remove('glitch-anim');
+        void wrapper.offsetWidth; // Trigger reflow to restart CSS animation
+        wrapper.classList.add('glitch-anim');
+
+        // Update Dossier content after a small delay (mid-glitch)
+        setTimeout(() => {
+          // Set dynamic theme colors
+          const mainContent = document.getElementById('main-content');
+          mainContent.style.setProperty('--dossier-color', data.color);
+          mainContent.style.setProperty('--dossier-color-muted', data.colorRgba);
+
+          // Update titles & logs
+          document.getElementById('dossier-node-title').innerText = data.id;
+          document.getElementById('dossier-console-log').innerText = `> FETCHING ${data.id} DATA... SUCCESS`;
+          document.getElementById('dossier-query').innerText = `> user.getDetails()`;
+          document.getElementById('dossier-desc').innerText = data.description;
+
+          // Update Avatar
+          document.getElementById('dossier-img').src = data.avatar;
+
+          // Update Info lists
+          const renderDetailsList = (list) => {
+            return list.map(item => {
+              let valHtml = `<span>${item.val}</span>`;
+              if (item.isLink) {
+                valHtml = `<a href="${item.linkUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--dossier-color);">${item.val}</a>`;
+              } else if (item.isStatus) {
+                valHtml = `<span style="color: ${item.statusColor || '#27c93f'};">${item.val}</span>`;
+              }
+              return `<li><i class="bi bi-chevron-right"></i> <strong>${item.label}:</strong> ${valHtml}</li>`;
+            }).join('');
+          };
+
+          document.getElementById('dossier-details-left').innerHTML = renderDetailsList(data.details.left);
+          document.getElementById('dossier-details-right').innerHTML = renderDetailsList(data.details.right);
+
+
+          // Generate dynamic skills
+          const skillsContainer = document.getElementById('dossier-skills-container');
+          const mid = Math.ceil(data.skills.length / 2);
+          const col1 = data.skills.slice(0, mid);
+          const col2 = data.skills.slice(mid);
+
+          const renderCol = (skillsList) => {
+            let html = '<div class="col-lg-6">';
+            skillsList.forEach(s => {
+              html += `
+                <div class="progress">
+                  <span class="skill"><span>${s.name}</span> <i class="val" style="color: var(--dossier-color);">${s.val}%</i></span>
+                  <div class="progress-bar-wrap">
+                    <div class="progress-bar" role="progressbar" style="width: 0%; background: var(--dossier-color); box-shadow: 0 0 10px var(--dossier-color);" aria-valuenow="${s.val}" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              `;
+            });
+            html += '</div>';
+            return html;
+          };
+
+          skillsContainer.innerHTML = `<div class="row">${renderCol(col1)}${renderCol(col2)}</div>`;
+
+          // Animate progress bars widths
+          setTimeout(() => {
+            skillsContainer.querySelectorAll('.progress-bar').forEach(bar => {
+              const val = bar.getAttribute('aria-valuenow');
+              bar.style.width = val + '%';
+            });
+          }, 50);
+
+
+          // Update Isotope Member Filter
+          currentMemberFilter = `.${nodeId}`;
+          // Reset category filters active styling
+          document.querySelectorAll('.portfolio-filters li').forEach(li => li.classList.remove('filter-active'));
+          const allBtn = document.getElementById('filter-all-btn');
+          if (allBtn) allBtn.classList.add('filter-active');
+          currentCategoryFilter = '';
+          
+          arrangeIsotope();
+        }, 125);
+      }
+
+      // Add click listeners to member cards
+      document.querySelectorAll('.member-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const nodeId = card.getAttribute('data-node');
+          selectMember(nodeId);
+          
+          // Scroll to dossier section
+          const dossierSection = document.getElementById('dossier');
+          if (dossierSection) {
+            dossierSection.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Portfolio category filtering click events
+      document.querySelectorAll('.portfolio-filters li').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.portfolio-filters li').forEach(li => li.classList.remove('filter-active'));
+          this.classList.add('filter-active');
+          
+          const filterVal = this.getAttribute('data-filter');
+          currentCategoryFilter = filterVal === '*' ? '' : filterVal;
+          arrangeIsotope();
+        });
+      });
+
+      // Load initial state (Node 01)
+      window.addEventListener('load', () => {
+        selectMember('node_01');
+      });
+
+      // Store redirect action
+      const storeBtn = document.getElementById('store-access-btn');
+      if (storeBtn) {
+        storeBtn.addEventListener('click', () => {
+          console.log("Redirecting to NeonNexus Store...");
+        });
+      }
+    });
   </script>
 </body>
+
 </html>

@@ -617,7 +617,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (loginRequiredModal && loginRequiredSteamBtn) loginRequiredSteamBtn.addEventListener('click', () => { loginRequiredModal.style.display = 'none'; document.getElementById('steam-login-btn').click(); });
   
   const logoBtn = document.getElementById('logo-btn');
-  if (logoBtn) logoBtn.addEventListener('click', () => { window.location.href = window.location.pathname; });
+  if (logoBtn) logoBtn.addEventListener('click', () => { window.location.href = (typeof PathResolver !== 'undefined') ? PathResolver.resolve('/') : '/'; });
 
   // CHECKOUT LOGIC
   let selectedPaymentMethod = null;
@@ -854,13 +854,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       // VIETQR / PAYOS
       if (selectedPaymentMethod === 'vietqr') {
         btnText.textContent = 'GENERATING QR CODE...';
-        const pathParts = window.location.pathname.split('/'); pathParts.pop();
-        const basePath = pathParts.join('/');
-        const redirectUrl = `${window.location.origin}${basePath}/keygen`;
+        // Dùng URL tuyệt đối cố định để tránh lỗi thiếu .html trên Firebase Hosting
+        const returnUrl = `${window.location.origin}/html/keygen.html`;
         const cancelUrl = window.location.href;
         const response = await fetch(`${API_BASE}/api/create-payos-payment`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount, returnUrl: redirectUrl, cancelUrl })
+          body: JSON.stringify({ amount, returnUrl, cancelUrl })
         });
         const data = await response.json();
         if (data.checkoutUrl) { cart = []; saveCart(); localStorage.setItem('payment_method', 'vietqr'); window.location.href = data.checkoutUrl; }

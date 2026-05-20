@@ -862,7 +862,7 @@ app.post('/api/create-payos-payment', async (req, res) => {
       orderCode: orderCode,
       amount: Math.round(Number(amount)), // Ensure integer
       description: (description || 'Thanh toan don hang').slice(0, 25), // PayOS might limit chars
-      cancelUrl: cancelUrl || process.env.DEFAULT_CANCEL_URL || 'https://nenonexus-digital-game-store.web.app/index.html',
+      cancelUrl: cancelUrl || process.env.DEFAULT_CANCEL_URL || 'https://nenonexus-digital-game-store.web.app/',
       returnUrl: returnUrl || process.env.DEFAULT_RETURN_URL || 'https://nenonexus-digital-game-store.web.app/html/keygen.html'
     };
 

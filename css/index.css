@@ -4189,10 +4189,20 @@ textarea.support-form-control {
 
 [data-theme="light"] .support-form-control,
 [data-theme="light"] .cyber-file-display,
-[data-theme="light"] .cyber-select-options,
 [data-theme="light"] .support-faq-item {
   background: #ffffff;
   border-color: rgba(8, 145, 178, 0.35);
+}
+[data-theme="light"] .cyber-select-options{
+  background: #ffffff;
+  border-color: rgba(8, 145, 178, 0.35);
+}
+[data-theme="light"] .cyber-select-option {
+  color: #0f172a;
+}
+[data-theme="light"] .cyber-select-option:hover {
+  background: rgba(8, 145, 178, 0.12);
+  color: #0891b2;
 }
 
 [data-theme="light"] .support-form-control::placeholder {
@@ -7525,4 +7535,98 @@ html[data-theme="light"] .section-header .section-title h2,
   [data-theme="light"] .sidebar {
     background: rgba(255, 255, 255, 0.95);
   }
+}
+
+/* Support Lock Screen Overlay */
+.support-lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 15, 30, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  z-index: 100;
+  border-radius: 14px;
+  padding: 2.5rem;
+  text-align: center;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  box-shadow: inset 0 0 40px rgba(239, 68, 68, 0.12), 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: lockFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes lockFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lock-warning-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+  color: #ef4444;
+  filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.5));
+  animation: lockPulse 2s infinite ease-in-out;
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.5));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 25px rgba(239, 68, 68, 0.85));
+  }
+}
+
+.lock-title {
+  font-family: 'ROG Lyons', monospace;
+  font-size: 1.6rem;
+  color: #ef4444;
+  letter-spacing: 0.15em;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.lock-desc {
+  color: #9ca3af;
+  font-size: 0.95rem;
+  max-width: 380px;
+  line-height: 1.6;
+  margin: 0 0 0.5rem 0;
+}
+
+.lock-login-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer;
+}
+
+.lock-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.6) !important;
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%) !important;
+}
+
+/* Light Mode Overrides for Lock Screen */
+[data-theme="light"] .support-lock-overlay {
+  background: rgba(254, 242, 242, 0.96);
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: inset 0 0 40px rgba(239, 68, 68, 0.05), 0 10px 30px rgba(239, 68, 68, 0.05);
+}
+
+[data-theme="light"] .lock-desc {
+  color: #4b5563;
 }

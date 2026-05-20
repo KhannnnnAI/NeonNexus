@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       loading.innerHTML = `
         <i data-lucide="alert-circle" style="width: 48px; height: 48px; color: #f87171;"></i>
         <p style="margin-top: 1rem; color: #f87171; font-family: 'ROG Viet', sans-serif;">GAME NOT FOUND</p>
-        <a href="../index.html" style="margin-top: 1rem; color: var(--accent-primary);">← Back to Store</a>
+        <a href="${window.url('')}" style="margin-top: 1rem; color: var(--accent-primary);">← Back to Store</a>
       `;
     }
     if (window.lucide) lucide.createIcons();
@@ -1250,13 +1250,12 @@ window.addEventListener('user-logout', () => {
       // VIETQR / PAYOS
       if (selectedPaymentMethod === 'vietqr') {
         btnText.textContent = 'GENERATING QR CODE...';
-        const pathParts = window.location.pathname.split('/'); pathParts.pop();
-        const basePath = pathParts.join('/');
-        const redirectUrl = `${window.location.origin}${basePath}/keygen`;
+        // Dùng URL tuyệt đối cố định để tránh lỗi thiếu .html trên Firebase Hosting
+        const returnUrl = `${window.location.origin}/html/keygen.html`;
         const cancelUrl = window.location.href;
         const response = await fetch(`${SERVER_URL}/api/create-payos-payment`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ amount, returnUrl: redirectUrl, cancelUrl })
+          body: JSON.stringify({ amount, returnUrl, cancelUrl })
         });
         const data = await response.json();
         if (data.checkoutUrl) { cart = []; saveCart(); localStorage.setItem('payment_method', 'vietqr'); window.location.href = data.checkoutUrl; }

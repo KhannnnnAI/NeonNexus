@@ -18,7 +18,7 @@
           this.resizeTimer = null;
           this.themeObserver = null;
           this.pageMobileCSS = {
-            "index.html": "css/index.css?v=5",
+            "store.html": "css/index.css?v=5",
             'community.html': 'css/community-mobile.css?v=1',
             'account.html': 'css/account-mobile.css?v=1',
             'event.html': 'css/event-mobile.css?v=2',
@@ -30,11 +30,11 @@
         getCurrentPageName() {
           const path = window.location.pathname;
           const fileName = path.split('/').pop();
-          return fileName || 'index.html';
+          return fileName || 'store.html';
         }
         loadInitialCSS() { if (this.isMobile) this.loadMobileCSS(); }
         loadMobileCSS() {
-          const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+          const isRoot = !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
           const prefix = isRoot ? '' : '../';
           const mobileCSSPath = this.pageMobileCSS[this.currentPage];
           const cacheBuster = new Date().getTime();
@@ -63,7 +63,7 @@
         }
         loadLightCSS(cacheBuster = new Date().getTime()) {
           if (!this.mobileCSS.light) {
-            const isRoot = this.currentPage === 'index.html' || !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
+            const isRoot = !window.location.pathname.includes('/html/') && !window.location.pathname.includes('/dashboard/');
             const prefix = isRoot ? '' : '../';
             this.mobileCSS.light = document.createElement('link');
             this.mobileCSS.light.rel = 'stylesheet';
@@ -119,20 +119,20 @@
         // Check ZaloPay Fail/Cancel
         if (zaloStatus !== null && zaloStatus !== "1") {
           localStorage.removeItem("purchasedItems");
-          window.location.replace("../index.html");
+          window.location.replace(PathResolver.resolve('/'));
           return;
         }
 
         // Check MoMo Fail/Cancel
         if (momoResultCode !== null && momoResultCode !== "0") {
           localStorage.removeItem("purchasedItems");
-          window.location.replace("../index.html");
+          window.location.replace(PathResolver.resolve('/'));
           return;
         }
 
         if (momoErrorCode !== null && momoErrorCode !== "0") {
           localStorage.removeItem("purchasedItems");
-          window.location.replace("../index.html");
+          window.location.replace(PathResolver.resolve('/'));
           return;
         }
       })();
@@ -402,7 +402,7 @@
       </div>
 
       <div style="text-align: center">
-        <a href="../index.html" class="back-home-btn">
+        <a href="/store" class="back-home-btn">
           <i data-lucide="home"></i>
           BACK TO HOME
         </a>
